@@ -1,0 +1,309 @@
+/* Style pour le bouton de paiement */
+button[name="checkout"],
+.cart__checkout,
+.cart-checkout {
+  background: linear-gradient(to right, #1e2b4e, #394775) !important;
+  color: white !important;
+  width: 100% !important;
+  padding: 15px !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  border: none !important;
+  transition: all 0.3s ease !important;
+  margin-top: 10px !important;
+  cursor: pointer !important;
+}
+
+button[name="checkout"]:hover,
+.cart__checkout:hover,
+.cart-checkout:hover {
+  background: linear-gradient(to right, #394775, #1e2b4e) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+
+/* ===== S'ASSURER QUE LES BARRES DE DÉFILEMENT FONCTIONNENT PARTOUT ===== */
+
+/* S'assurer que les barres de défilement fonctionnent pour tous les éléments de liste */
+dl.product-options-list,
+.cart-item dl,
+.cart-item__details dl {
+  max-height: 120px !important;
+  overflow-y: auto !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #aaa #f5f5f5 !important;
+}
+
+dl.product-options-list::-webkit-scrollbar,
+.cart-item dl::-webkit-scrollbar,
+.cart-item__details dl::-webkit-scrollbar {
+  width: 6px !important;
+  background-color: #f5f5f5 !important;
+}
+
+dl.product-options-list::-webkit-scrollbar-thumb,
+.cart-item dl::-webkit-scrollbar-thumb,
+.cart-item__details dl::-webkit-scrollbar-thumb {
+  background-color: #aaa !important;
+  border-radius: 10px !important;
+}
+
+dl.product-options-list::-webkit-scrollbar-track,
+.cart-item dl::-webkit-scrollbar-track,
+.cart-item__details dl::-webkit-scrollbar-track {
+  background-color: #f5f5f5 !important;
+  border-radius: 10px !important;
+}
+
+
+
+/* Effet hover */
+.cart-remove-button:hover,
+.cart-item__remove-button:hover,
+.cart-item__remove:hover,
+.cart-drawer__remove:hover,
+[data-cart-remove]:hover,
+button[data-cart-remove]:hover,
+.cart-item__remove-wrapper a:hover,
+.button--tertiary[aria-label*="Remove"]:hover,
+.remove-from-cart-button:hover,
+.cart__remove:hover,
+a[href*="cart/change"]:hover,
+a[href*="cart/update"]:hover,
+a[href*="remove"]:hover,
+.cart__remove-wrapper a:hover,
+.cart-item__link-remove:hover,
+.js-remove-button:hover,
+.cart-item button[type="button"]:hover,
+.cart__update-remove .text-link:hover,
+.cart-item .text-link:hover {
+  background-color: #d32f2f !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Améliorer l'affichage du prix total */
+.cart-subtotal,
+.cart__footer-item,
+.cart-footer__item,
+.cart__total,
+.totals {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  padding: 10px 0 !important;
+  margin-bottom: 10px !important;
+}
+
+.cart-subtotal-value,
+.cart__total-price,
+.totals__total-value,
+.cart-footer__value {
+  font-weight: 700 !important;
+  font-size: 18px !important;
+  color: #d32f2f !important; /* Rouge plus élégant */
+  text-align: right !important;
+  margin-left: auto !important;
+}
+
+/* S'assurer que le titre "SOUS-TOTAL" est bien aligné */
+.cart-subtotal-title,
+.cart__total-title,
+.totals__total,
+.cart-footer__label {
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  text-transform: uppercase !important;
+  margin: 0 !important;
+}
+
+/* Supprimer le prix qui s'affiche à droite */
+.cart-item__totals .price,
+.cart-item__price-wrapper .price,
+.cart-drawer__price,
+.cart-drawer__totals,
+.cart-drawer-item__price,
+.cart-drawer__item-price-container,
+td[data-label="Total"],
+.line-item__price,
+.cart-item__line-price,
+.cart__item-total,
+.cart__price-wrapper--end,
+.cart-item__price--end,
+.cart-drawer__item-price {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+/* Supprimer le mot "TOTAL" */
+th[data-label="Total"],
+.cart-header__column--total,
+.cart__column-label--total,
+.cart__header-total,
+.cart-header__total,
+.cart__item-total-header,
+.cart-column--total,
+.cart__column-heading--total,
+.cart-table__heading--total,
+.cart-items__heading--total,
+th:last-child:contains("TOTAL") {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Supprimer la colonne TOTAL entière */
+[data-label="Total"],
+.cart__column--total,
+.cart-column--total,
+.cart-items__heading--total,
+.cart-items__column--total,
+td:last-child:has(> .price),
+th:last-child {
+  display: none !important;
+}
+
+/* Masquer le texte "TOTAL" de façon générique */
+th:contains("TOTAL"),
+th:contains("Total"),
+[data-label="TOTAL"],
+[data-label="Total"],
+.cart-header__column:last-child,
+.cart__header-items th:last-child,
+.cart-items th:last-child,
+.cart__column-label:last-child,
+td[headers="cart-total"],
+.cart__column:last-child th,
+.cart-header__column--end,
+.cart-header > div:last-child {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Autre approche - masquer tous les éléments contenant le texte "TOTAL" */
+*:not(script):not(style):not(link):contains("TOTAL"),
+*:not(script):not(style):not(link):contains("Total") {
+  display: none !important;
+}
+
+/* Changer la couleur du prix en vert */
+.price,
+.price--end,
+.totals__total-value,
+.cart-item__price-wrapper .price,
+.cart-item__totals .price,
+[data-ymq-item-key],
+.ymq_item_original_price,
+.ymq_item_final_price,
+.ymq_item_original_line_price,
+.ymq_item_final_line_price,
+.ymq_cart_total_price,
+.cart__total-price {
+  color: #2ecc71 !important; /* Vert */
+}
+
+/* Style pour les valeurs de variante en Poppins gras */
+.product-option dd,
+.product-option__value,
+.cart-item__variant-option-value,
+[class*="variant-option"] span:last-child,
+[class*="line-item-property"] span:last-child {
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 700 !important;
+  color: #000 !important;
+}
+
+/* Style normal pour les libellés des options */
+.product-option dt,
+.product-option__label,
+.cart-item__variant-option-label {
+  font-weight: normal !important;
+}
+
+
+/* Réduction agressive des espacements en haut de la page panier */
+body.template-cart .page-width,
+body.template-cart [class*="section-"],
+body.template-cart [class*="section-"] > div,
+body.template-cart .gradient,
+body.template-cart .page-width > div:first-child,
+body.template-cart main > div:first-child,
+body.template-cart .section-padding,
+body.template-cart .isolate {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* Réduire les espaces vides partout dans le panier */
+body.template-cart div[style*="margin-top"],
+body.template-cart div[style*="padding-top"],
+body.template-cart .title-wrapper-with-link {
+  margin-top: 20px !important;
+  padding-top: 20px !important;
+}
+
+/* ===== Style pour le champ Code Promo dans le panier ===== */
+.cart-discount {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.cart-discount label {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  color: #1e2b4e;
+}
+
+.cart-discount input[type="text"] {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cart-discount button {
+  background: linear-gradient(to right, #1e2b4e, #394775);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cart-discount button:hover {
+  background: linear-gradient(to right, #394775, #1e2b4e);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#discount-feedback {
+  font-size: 14px;
+  margin-top: 8px;
+  color: red;
+}
