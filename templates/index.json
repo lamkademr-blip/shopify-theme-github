@@ -489,8 +489,8 @@
             "caption": "",
             "heading": "Personnalisation Volant : Quelles Options Existent",
             "text": "<ul><li>Insertions carbone ou jantes en alliage design</li><li>Palettes de changement de vitesses r\u00e9tro\u00e9clair\u00e9es</li><li>Surpiq\u00fbres contrast\u00e9es personnalisables</li><li>Boutons multim\u00e9dias compatibles avec les syst\u00e8mes MMI ou Virtual Cockpit</li></ul>",
-            "button_label": "Texte du bouton",
-            "button_link": "#"
+            "button_label": "",
+            "button_link": ""
           }
         },
         "row_WfFd7T": {
@@ -500,7 +500,7 @@
             "caption": "",
             "heading": "Quelle Diff\u00e9rence entre un volant sport et un volant voiture basique ?",
             "text": "<p>Avec son diam\u00e8tre r\u00e9duit et ses\u00a0<strong>poign\u00e9es alv\u00e9ol\u00e9es</strong>\u00a0, le volant voiture sport optimise la r\u00e9activit\u00e9. Les mat\u00e9riaux premium (cuir Nappa, alcantara) r\u00e9sistent \u00e0 l'usure tout en gardant un grip ferme \u2013 id\u00e9al pour les acc\u00e9l\u00e9rations en sortie de virage. Compatible avec la plupart des\u00a0<strong>bo\u00eetes automatiques\u00a0</strong>et manuelles.</p>",
-            "button_label": "Texte du bouton",
+            "button_label": "",
             "button_link": ""
           }
         }
