@@ -143,7 +143,7 @@
                           <img
                             srcset="{{ block.settings.image | image_url: width: block.settings.image_width }}, {{ block.settings.image | image_url: width: image_size_2x }} 2x"
                             src="{{ block.settings.image | image_url: width: 760 }}"
-                            alt="{{ block.settings.image.alt | escape }}"
+                            alt="{% render 'safe-alt', image: block.settings.image, fallback: shop.name %}"
                             loading="lazy"
                             width="{{ block.settings.image.width }}"
                             height="{{ block.settings.image.height }}"

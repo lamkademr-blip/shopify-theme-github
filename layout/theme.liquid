@@ -22,10 +22,12 @@
     </title>
 
     {% if template.name == 'index' %}
-      <meta name="description" content="Découvrez Les As du Volant : volants de voiture personnalisés haut de gamme. Deviens maître de ton destin, ta voiture, ton style.">
+      <meta name="description" content="Les As du Volant : volants de voiture personnalisés haut de gamme, sur mesure et artisanaux. Volants sport, simracing, cuir et carbone. Personnalisation premium pour votre véhicule à commander en ligne.">
     {% elsif page_description %}
       <meta name="description" content="{{ page_description | escape }}">
     {% endif %}
+
+    {% render 'breadcrumb-jsonld' %}
 
     {% render 'meta-tags' %}
 
