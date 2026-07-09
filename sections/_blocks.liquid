@@ -1,5 +1,6 @@
 {{ 'custom-blocks.css' | asset_url | stylesheet_tag }}
 <div class="custom-blocks-section" style="max-width: var(--page-width); margin: 0 auto;">
+  {% content_for 'blocks' %}
   {%- for block in section.blocks -%}
     {%- case block.type -%}
 
@@ -325,6 +326,14 @@
   "class": "section",
   "settings": [],
   "blocks": [
+    {
+      "type": "@theme",
+      "name": "Theme blocks"
+    },
+    {
+      "type": "@app",
+      "name": "App blocks"
+    },
     {
       "type": "ai_gen_block_3d3f0ee",
       "name": "Hero Overlay CTA",
