@@ -52,28 +52,21 @@
         </div>
 
       {%- when 'ai_gen_block_4cda2bf' -%}
-        {# Video showcase #}
-        <div class="video-showcase-block" style="padding:{{ block.settings.padding_desktop | default: 64 }}px 20px; background:{{ block.settings.background_color | default: '#fff' }};">
-          <div style="max-width:{{ block.settings.max_width | default: 1200 }}px; margin:0 auto; display:flex; flex-wrap:wrap; gap:{{ block.settings.gap_desktop | default: 48 }}px; align-items:center;">
-            <div style="flex:1; min-width:300px; order:2;">
-              {%- if block.settings.title != '' -%}
-                <h2 style="font-size:{{ block.settings.title_size_desktop | default: 42 }}px; color:{{ block.settings.title_color | default: '#000' }}; margin:0 0 {{ block.settings.text_gap | default: 24 }}px; font-weight:600;">{{ block.settings.title }} {% if block.settings.title_highlight != '' %}<span style="background:{{ block.settings.title_gradient | default: 'linear-gradient(135deg, #06f, #0af)' }}; -webkit-background-clip:text; -webkit-text-fill-color:transparent;">{{ block.settings.title_highlight }}</span>{% endif %}</h2>
-              {%- endif -%}
-              {%- if block.settings.description != '' -%}
-                <div style="font-size:{{ block.settings.text_size_desktop | default: 18 }}px; color:{{ block.settings.text_color | default: '#000' }}; line-height:1.6;">{{ block.settings.description }}</div>
-              {%- endif -%}
-              {%- if block.settings.show_badge and block.settings.badge_text != '' -%}
-                <span style="display:inline-block; margin-top:16px; padding:8px 16px; background:{{ block.settings.badge_background | default: '#e0f0ff' }}; color:{{ block.settings.badge_text_color | default: '#06f' }}; border:1px solid {{ block.settings.badge_border_color | default: '#96bdec' }}; border-radius:20px; font-size:14px;">{{ block.settings.badge_text }}</span>
-              {%- endif -%}
-              {%- if block.settings.button_text != '' -%}
-                <a href="{{ block.settings.button_url }}" style="display:inline-block; margin-top:24px; padding:{{ block.settings.button_padding_desktop | default: 18 }}px 36px; background:{{ block.settings.button_gradient | default: 'linear-gradient(135deg, #06f, #0af)' }}; color:{{ block.settings.button_text_color | default: '#fff' }}; font-size:{{ block.settings.button_text_size | default: 16 }}px; border-radius:{{ block.settings.button_border_radius | default: 50 }}px; text-decoration:none; font-weight:600; box-shadow:{{ block.settings.button_shadow | default: '0 8px 24px rgba(0,102,255,0.25)' }};">{{ block.settings.button_text }}</a>
-              {%- endif -%}
-            </div>
-            <div style="flex:1; min-width:300px; order:1;">
-              {%- if block.settings.video_url != '' -%}
-                <video src="{{ block.settings.video_url }}" {% if block.settings.enable_autoplay %}autoplay muted loop playsinline{% endif %} style="width:{{ block.settings.video_width_desktop | default: 55 }}%; border-radius:{{ block.settings.video_border_radius | default: 20 }}px; display:block; box-shadow:{{ block.settings.video_shadow | default: '0 10px 30px rgba(0,102,255,0.08)' }};"></video>
-              {%- endif -%}
-            </div>
+        {# Text content block (no video) #}
+        <div class="text-content-block" style="padding:{{ block.settings.padding_desktop | default: 64 }}px 20px; background:{{ block.settings.background_color | default: '#fff' }}; text-align:center;">
+          <div style="max-width:{{ block.settings.max_width | default: 800 }}px; margin:0 auto;">
+            {%- if block.settings.title != '' -%}
+              <h2 style="font-size:{{ block.settings.title_size_desktop | default: 42 }}px; color:{{ block.settings.title_color | default: '#000' }}; margin:0 0 {{ block.settings.text_gap | default: 24 }}px; font-weight:600;">{{ block.settings.title }} {% if block.settings.title_highlight != '' %}<span style="background:{{ block.settings.title_gradient | default: 'linear-gradient(135deg, #06f, #0af)' }}; -webkit-background-clip:text; -webkit-text-fill-color:transparent;">{{ block.settings.title_highlight }}</span>{% endif %}</h2>
+            {%- endif -%}
+            {%- if block.settings.description != '' -%}
+              <div style="font-size:{{ block.settings.text_size_desktop | default: 18 }}px; color:{{ block.settings.text_color | default: '#000' }}; line-height:1.6;">{{ block.settings.description }}</div>
+            {%- endif -%}
+            {%- if block.settings.show_badge and block.settings.badge_text != '' -%}
+              <span style="display:inline-block; margin-top:16px; padding:8px 16px; background:{{ block.settings.badge_background | default: '#e0f0ff' }}; color:{{ block.settings.badge_text_color | default: '#06f' }}; border:1px solid {{ block.settings.badge_border_color | default: '#96bdec' }}; border-radius:20px; font-size:14px;">{{ block.settings.badge_text }}</span>
+            {%- endif -%}
+            {%- if block.settings.button_text != '' -%}
+              <a href="{{ block.settings.button_url }}" style="display:inline-block; margin-top:24px; padding:{{ block.settings.button_padding_desktop | default: 18 }}px 36px; background:{{ block.settings.button_gradient | default: 'linear-gradient(135deg, #06f, #0af)' }}; color:{{ block.settings.button_text_color | default: '#fff' }}; font-size:{{ block.settings.button_text_size | default: 16 }}px; border-radius:{{ block.settings.button_border_radius | default: 50 }}px; text-decoration:none; font-weight:600; box-shadow:{{ block.settings.button_shadow | default: '0 8px 24px rgba(0,102,255,0.25)' }};">{{ block.settings.button_text }}</a>
+            {%- endif -%}
           </div>
         </div>
 
