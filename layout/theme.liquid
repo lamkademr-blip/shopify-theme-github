@@ -454,15 +454,9 @@
           {{ 'custom-cart.css'}}
 </script>
     <style>
-  /* Fix flèches du slider qui débordent sur la top bar - seulement en homepage */
+  /* Cache les flèches du slider sur la top bar en homepage */
   body.template-index .announcement-bar .slider-button {
-    z-index: 1 !important;
-  }
-
-  body.template-index .utility-bar,
-  body.template-index .announcement-bar {
-    position: relative;
-    z-index: 10;
+    display: none !important;
   }
 </style>
 <!-- Meta Pixel Code -->

@@ -200,14 +200,7 @@ slideshow-component:not(.page-width) .slider-buttons {
   transform: scale(0.8);
 }
 
-/* Fix slider button overlapping the top bar on homepage */
+/* Cache les flèches du slider sur la top bar en homepage */
 body.template-index .announcement-bar .slider-button {
-  z-index: 1 !important;
-}
-
-/* Ensure the top bar stays visually above */
-body.template-index .utility-bar,
-body.template-index .announcement-bar {
-  position: relative;
-  z-index: 10;
+  display: none !important;
 }
