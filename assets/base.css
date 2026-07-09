@@ -3701,14 +3701,12 @@ height: 15px !important;
   display: none !important;
 }
 
-/* Correction : flèche du slideshow qui dépasse sur la top bar en page d'accueil */
-body.template-index .slideshow__button,
-body.template-index .slider-button,
-body.template-index .flickity-prev-next-button {
-  z-index: 1 !important;
+/* Cache les flèches de navigation dans l'annonce bar (les messages défilent auto) */
+.announcement-bar .slider-button {
+  display: none !important;
 }
 
-/* Assure que la barre du haut reste bien au-dessus */
+/* La barre en haut garde un z-index correct */
 body.template-index .announcement-bar,
 body.template-index .top-bar {
   position: relative;
