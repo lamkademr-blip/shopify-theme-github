@@ -1,0 +1,356 @@
+{{ 'custom-blocks.css' | asset_url | stylesheet_tag }}
+<div class="custom-blocks-section" style="max-width: var(--page-width); margin: 0 auto;">
+  {%- for block in section.blocks -%}
+    {%- case block.type -%}
+
+      {%- when 'ai_gen_block_3d3f0ee' -%}
+        {# Hero overlay avec CTA #}
+        {%- assign bg = block.settings.background_image | default: '' -%}
+        {%- assign overlay_opacity = block.settings.overlay_opacity | default: 0.5 -%}
+        <div class="hero-overlay-block" style="position:relative; overflow:hidden; padding:{{ block.settings.padding_top | default: 60 }}px {{ block.settings.padding_right | default: 40 }}px {{ block.settings.padding_bottom | default: 60 }}px {{ block.settings.padding_left | default: 40 }}px; background:{{ block.settings.background_color | default: '#111' }};">
+          {%- if bg != '' -%}
+            <div style="position:absolute; inset:0; background-image:url('{{ bg | img_url: '1920x' }}'); background-size:cover; background-position:center; opacity:{{ overlay_opacity }};"></div>
+          {%- endif -%}
+          <div style="position:relative; z-index:2; max-width:{{ block.settings.content_max_width | default: 600 }}px; text-align:left;">
+            {%- if block.settings.eyebrow_text != '' -%}
+              <p style="font-size:{{ block.settings.eyebrow_size | default: 12 }}px; letter-spacing:{{ block.settings.eyebrow_spacing | default: 0.2 }}em; color:{{ block.settings.eyebrow_color | default: '#fff' }}; opacity:{{ block.settings.eyebrow_opacity | default: 0.9 }}; margin:0 0 12px;">{{ block.settings.eyebrow_text }}</p>
+            {%- endif -%}
+            <h2 style="font-size:{{ block.settings.headline_size | default: 44 }}px; font-weight:{{ block.settings.headline_weight | default: 300 }}; letter-spacing:{{ block.settings.headline_spacing | default: 0.1 }}em; line-height:{{ block.settings.headline_line_height | default: 1.1 }}; color:{{ block.settings.headline_color | default: '#fff' }}; margin:0 0 24px;">{{ block.settings.headline_text }}</h2>
+            <div style="display:flex; flex-wrap:wrap; gap:16px;">
+              {%- if block.settings.primary_label != '' -%}
+                <a href="{{ block.settings.primary_link }}" style="display:inline-block; padding:{{ block.settings.button_padding_vertical | default: 16 }}px {{ block.settings.button_padding_horizontal | default: 32 }}px; background:{{ block.settings.primary_bg | default: '#fff' }}; color:{{ block.settings.primary_text | default: '#000' }}; font-size:{{ block.settings.button_font_size | default: 14 }}px; font-weight:600; border-radius:{{ block.settings.button_border_radius | default: 0 }}px; text-decoration:none; text-transform:uppercase;">{{ block.settings.primary_label }}</a>
+              {%- endif -%}
+              {%- if block.settings.secondary_label != '' -%}
+                <a href="{{ block.settings.secondary_link }}" style="display:inline-block; padding:{{ block.settings.button_padding_vertical | default: 16 }}px {{ block.settings.button_padding_horizontal | default: 32 }}px; background:{{ block.settings.secondary_bg | default: '#25D366' }}; color:{{ block.settings.secondary_text | default: '#fff' }}; font-size:{{ block.settings.button_font_size | default: 14 }}px; font-weight:600; border-radius:{{ block.settings.button_border_radius | default: 0 }}px; text-decoration:none; text-transform:uppercase;">{{ block.settings.secondary_label }}</a>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+
+      {%- when 'ai_gen_block_41aa14c' -%}
+        {# Content + Image #}
+        {%- assign layout = block.settings.layout | default: 'image_text' -%}
+        <div class="content-image-block" style="padding:{{ block.settings.section_padding | default: 20 }}px 0; background:{{ block.settings.background_color | default: '#fff' }}; border-radius:{{ block.settings.border_radius | default: 0 }}px;">
+          <div style="display:flex; flex-direction:{% if layout == 'text_image' %}row-reverse{% else %}row{% endif %}; flex-wrap:wrap; gap:{{ block.settings.gap | default: 40 }}px; align-items:center;">
+            {%- if block.settings.image != '' -%}
+              <div style="flex:1; min-width:300px;">
+                <img src="{{ block.settings.image | img_url: '800x' }}" alt="" style="width:100%; height:auto; border-radius:{{ block.settings.image_border_radius | default: 8 }}px; display:block;">
+              </div>
+            {%- endif -%}
+            <div style="flex:1; min-width:300px; text-align:{{ block.settings.text_alignment | default: 'left' }};">
+              {%- if block.settings.heading != '' -%}
+                <h2 style="font-size:{{ block.settings.heading_size | default: 32 }}px; font-weight:{{ block.settings.heading_weight | default: 600 }}; color:{{ block.settings.heading_color | default: '#000' }}; margin:0 0 {{ block.settings.text_spacing | default: 20 }}px;">{{ block.settings.heading }}</h2>
+              {%- endif -%}
+              {%- if block.settings.text_content != '' -%}
+                <div style="font-size:{{ block.settings.text_size | default: 16 }}px; font-weight:{{ block.settings.text_weight | default: 400 }}; color:{{ block.settings.text_color | default: '#333' }}; line-height:{{ block.settings.line_height | default: 1.5 }};">{{ block.settings.text_content }}</div>
+              {%- endif -%}
+              {%- if block.settings.button_text != '' -%}
+                <a href="{{ block.settings.button_link }}" style="display:inline-block; margin-top:{{ block.settings.text_spacing | default: 20 }}px; padding:{{ block.settings.button_padding_vertical | default: 12 }}px {{ block.settings.button_padding_horizontal | default: 24 }}px; background:{{ block.settings.button_background_color | default: '#000' }}; color:{{ block.settings.button_text_color | default: '#fff' }}; font-size:{{ block.settings.button_text_size | default: 14 }}px; font-weight:{{ block.settings.button_text_weight | default: 600 }}; border-radius:{{ block.settings.button_border_radius | default: 4 }}px; text-decoration:none;">{{ block.settings.button_text }}</a>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+
+      {%- when 'ai_gen_block_4cda2bf' -%}
+        {# Video showcase #}
+        <div class="video-showcase-block" style="padding:{{ block.settings.padding_desktop | default: 64 }}px 20px; background:{{ block.settings.background_color | default: '#fff' }};">
+          <div style="max-width:{{ block.settings.max_width | default: 1200 }}px; margin:0 auto; display:flex; flex-wrap:wrap; gap:{{ block.settings.gap_desktop | default: 48 }}px; align-items:center;">
+            <div style="flex:1; min-width:300px; order:2;">
+              {%- if block.settings.title != '' -%}
+                <h2 style="font-size:{{ block.settings.title_size_desktop | default: 42 }}px; color:{{ block.settings.title_color | default: '#000' }}; margin:0 0 {{ block.settings.text_gap | default: 24 }}px; font-weight:600;">{{ block.settings.title }} {% if block.settings.title_highlight != '' %}<span style="background:{{ block.settings.title_gradient | default: 'linear-gradient(135deg, #06f, #0af)' }}; -webkit-background-clip:text; -webkit-text-fill-color:transparent;">{{ block.settings.title_highlight }}</span>{% endif %}</h2>
+              {%- endif -%}
+              {%- if block.settings.description != '' -%}
+                <div style="font-size:{{ block.settings.text_size_desktop | default: 18 }}px; color:{{ block.settings.text_color | default: '#000' }}; line-height:1.6;">{{ block.settings.description }}</div>
+              {%- endif -%}
+              {%- if block.settings.show_badge and block.settings.badge_text != '' -%}
+                <span style="display:inline-block; margin-top:16px; padding:8px 16px; background:{{ block.settings.badge_background | default: '#e0f0ff' }}; color:{{ block.settings.badge_text_color | default: '#06f' }}; border:1px solid {{ block.settings.badge_border_color | default: '#96bdec' }}; border-radius:20px; font-size:14px;">{{ block.settings.badge_text }}</span>
+              {%- endif -%}
+              {%- if block.settings.button_text != '' -%}
+                <a href="{{ block.settings.button_url }}" style="display:inline-block; margin-top:24px; padding:{{ block.settings.button_padding_desktop | default: 18 }}px 36px; background:{{ block.settings.button_gradient | default: 'linear-gradient(135deg, #06f, #0af)' }}; color:{{ block.settings.button_text_color | default: '#fff' }}; font-size:{{ block.settings.button_text_size | default: 16 }}px; border-radius:{{ block.settings.button_border_radius | default: 50 }}px; text-decoration:none; font-weight:600; box-shadow:{{ block.settings.button_shadow | default: '0 8px 24px rgba(0,102,255,0.25)' }};">{{ block.settings.button_text }}</a>
+              {%- endif -%}
+            </div>
+            <div style="flex:1; min-width:300px; order:1;">
+              {%- if block.settings.video_url != '' -%}
+                <video src="{{ block.settings.video_url }}" {% if block.settings.enable_autoplay %}autoplay muted loop playsinline{% endif %} style="width:{{ block.settings.video_width_desktop | default: 55 }}%; border-radius:{{ block.settings.video_border_radius | default: 20 }}px; display:block; box-shadow:{{ block.settings.video_shadow | default: '0 10px 30px rgba(0,102,255,0.08)' }};"></video>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+
+      {%- when 'ai_gen_block_516848c' -%}
+        {# Gradient hero with CTA #}
+        <div class="gradient-cta-block" style="padding:{{ block.settings.padding_top | default: 100 }}px {{ block.settings.padding_horizontal | default: 60 }}px {{ block.settings.padding_bottom | default: 120 }}px; text-align:{{ block.settings.text_alignment | default: 'center' }}; background:linear-gradient(180deg, {{ block.settings.gradient_color_1 | default: '#fff' }}, {{ block.settings.gradient_color_2 | default: '#fff' }}, {{ block.settings.gradient_color_3 | default: '#fff' }}, {{ block.settings.gradient_color_4 | default: '#fff' }}, {{ block.settings.gradient_color_5 | default: '#fff' }});">
+          <div style="max-width:{{ block.settings.content_max_width | default: 900 }}px; margin:0 auto; display:flex; flex-direction:column; gap:{{ block.settings.content_spacing | default: 24 }}px;">
+            <h2 style="font-size:{{ block.settings.headline_size | default: 40 }}px; font-weight:{{ block.settings.headline_weight | default: 400 }}; letter-spacing:{{ block.settings.headline_letter_spacing | default: 1 }}px; color:{{ block.settings.headline_color | default: '#000' }}; max-width:{{ block.settings.headline_max_width | default: 720 }}px; margin:0 auto;">{{ block.settings.headline }}</h2>
+            {%- if block.settings.subtext != '' -%}
+              <p style="font-size:{{ block.settings.subtext_size | default: 18 }}px; color:{{ block.settings.subtext_color | default: '#000' }}; max-width:{{ block.settings.subtext_max_width | default: 680 }}px; margin:0 auto;">{{ block.settings.subtext }}</p>
+            {%- endif -%}
+            {%- if block.settings.highlight != '' -%}
+              <p style="font-size:{{ block.settings.highlight_size | default: 14 }}px; color:{{ block.settings.highlight_color | default: '#8e9ad6' }}; margin:0;">{{ block.settings.highlight }}</p>
+            {%- endif -%}
+            {%- if block.settings.button_text != '' -%}
+              <a href="{{ block.settings.button_link }}" style="display:inline-flex; align-items:center; justify-content:center; gap:8px; margin:0 auto; padding:{{ block.settings.button_padding_vertical | default: 18 }}px {{ block.settings.button_padding_horizontal | default: 40 }}px; background:{{ block.settings.button_background | default: '#25d366' }}; color:{{ block.settings.button_text_color | default: '#fff' }}; font-size:{{ block.settings.button_font_size | default: 16 }}px; border-radius:{{ block.settings.button_border_radius | default: 0 }}px; text-decoration:none; font-weight:600;">{% if block.settings.show_whatsapp_icon %}<svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>{% endif %}{{ block.settings.button_text }}</a>
+            {%- endif -%}
+          </div>
+        </div>
+
+      {%- when 'ai_gen_block_5b9c4c6' -%}
+        {# How-it-works steps #}
+        <div class="steps-block" style="padding:{{ block.settings.padding_top | default: 80 }}px {{ block.settings.padding_horizontal | default: 60 }}px {{ block.settings.padding_bottom | default: 80 }}px; background:linear-gradient({{ block.settings.gradient_direction | default: 'to bottom right' }}, {{ block.settings.gradient_color_1 | default: '#fff' }}, {{ block.settings.gradient_color_2 | default: '#fff' }}); text-align:{{ block.settings.alignment | default: 'center' }};">
+          {%- if block.settings.eyebrow_text != '' -%}
+            <p style="font-size:{{ block.settings.eyebrow_size | default: 17 }}px; letter-spacing:{{ block.settings.eyebrow_letter_spacing | default: 2 }}px; color:{{ block.settings.eyebrow_color | default: '#000' }}; margin:0 0 40px;">{{ block.settings.eyebrow_text }}</p>
+          {%- endif -%}
+          <div style="display:grid; grid-template-columns:repeat({{ block.settings.columns_desktop | default: 4 }}, 1fr); gap:{{ block.settings.gap | default: 48 }}px;">
+            {%- for i in (1..4) -%}
+              {%- assign enabled_key = 'step_' | append: i | append: '_enabled' -%}
+              {%- assign title_key = 'step_' | append: i | append: '_title' -%}
+              {%- assign desc_key = 'step_' | append: i | append: '_description' -%}
+              {%- assign icon_key = 'step_' | append: i | append: '_icon' -%}
+              {%- assign num_key = 'step_' | append: i | append: '_number' -%}
+              {%- if block.settings[enabled_key] -%}
+                <div class="step-card">
+                  {%- if block.settings[icon_key] != '' -%}
+                    <div style="width:{{ block.settings.icon_size | default: 64 }}px; height:{{ block.settings.icon_size | default: 64 }}px; margin:0 auto 16px; background:{{ block.settings.icon_background | default: '#06eff' }}; border-radius:{{ block.settings.icon_radius | default: 12 }}px; display:flex; align-items:center; justify-content:center; color:{{ block.settings.icon_color | default: '#fff' }}; font-size:24px; font-weight:700;">{{ block.settings[num_key] }}</div>
+                  {%- endif -%}
+                  <h3 style="font-size:{{ block.settings.title_size | default: 18 }}px; font-weight:{{ block.settings.title_font_weight | default: 700 }}; letter-spacing:{{ block.settings.title_letter_spacing | default: 1 }}px; color:{{ block.settings.title_color | default: '#06eff' }}; margin:0 0 8px;">{{ block.settings[title_key] }}</h3>
+                  <p style="font-size:{{ block.settings.text_size | default: 14 }}px; color:{{ block.settings.text_color | default: '#000' }}; margin:0;">{{ block.settings[desc_key] }}</p>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+
+      {%- when 'ai_gen_block_7c22094' -%}
+        {# Contact / rassurance points #}
+        <div class="contact-reassurance-block" style="padding:40px 20px; background:{{ block.settings.background_color | default: '#fff' }};">
+          <div style="max-width:900px; margin:0 auto;">
+            {%- if block.settings.intro_text != '' -%}
+              <div style="padding:24px; background:{{ block.settings.intro_bg_color | default: '#f8f9fa' }}; color:{{ block.settings.intro_text_color | default: '#000' }}; border-radius:8px; margin-bottom:24px;">{{ block.settings.intro_text }}</div>
+            {%- endif -%}
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:16px;">
+              {%- for i in (1..4) -%}
+                {%- assign point_key = 'point_' | append: i | append: '_text' -%}
+                {%- if block.settings[point_key] != '' -%}
+                  <div style="padding:16px; background:{{ block.settings.item_bg_color | default: '#fff' }}; color:{{ block.settings.item_text_color | default: '#000' }}; border:1px solid #eee; border-radius:8px;">{{ block.settings[point_key] }}</div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+
+      {%- when 'ai_gen_block_8c7fb54' -%}
+        {# Testimonials / avis clients #}
+        <div class="testimonials-block" style="padding:60px 20px;">
+          <div style="max-width:1000px; margin:0 auto; text-align:center;">
+            {%- if block.settings.show_badge and block.settings.badge_text != '' -%}
+              <span style="display:inline-block; padding:6px 16px; background:#e0f0ff; color:#06f; border-radius:20px; font-size:13px; font-weight:600; margin-bottom:16px;">{{ block.settings.badge_text }}</span>
+            {%- endif -%}
+            <h2 style="font-size:32px; margin:0 0 8px;">{{ block.settings.title }}</h2>
+            {%- if block.settings.subtitle != '' -%}
+              <p style="color:#666; margin:0 0 32px;">{{ block.settings.subtitle }}</p>
+            {%- endif -%}
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+              {%- for i in (1..6) -%}
+                {%- assign enabled_key = 'testimonial_' | append: i | append: '_enabled' -%}
+                {%- assign text_key = 'testimonial_' | append: i | append: '_text' -%}
+                {%- assign name_key = 'testimonial_' | append: i | append: '_name' -%}
+                {%- if block.settings[enabled_key] -%}
+                  <div style="padding:24px; background:#f9f9f9; border-radius:12px; text-align:left;">
+                    <p style="font-size:15px; line-height:1.6; color:#333; margin:0 0 12px; font-style:italic;">"{{ block.settings[text_key] }}"</p>
+                    <strong style="font-size:14px; color:#000;">— {{ block.settings[name_key] }}</strong>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+
+      {%- when 'ai_gen_block_b6d94e0' -%}
+        {# Logo carousel / partenaires #}
+        <div class="logo-carousel-block" style="padding:{{ block.settings.section_padding | default: 60 }}px 20px; background:{{ block.settings.background_color | default: '#fff' }}; overflow:hidden;">
+          <div style="max-width:{{ block.settings.container_width | default: 1200 }}px; margin:0 auto;">
+            {%- if block.settings.heading != '' -%}
+              <h2 style="text-align:center; font-size:{{ block.settings.heading_size | default: 32 }}px; color:{{ block.settings.heading_color | default: '#000' }}; margin:0 0 {{ block.settings.heading_spacing | default: 40 }}px;">{{ block.settings.heading }}</h2>
+            {%- endif -%}
+          </div>
+          <div style="display:flex; gap:{{ block.settings.logo_spacing | default: 40 }}px; justify-content:center; flex-wrap:wrap;">
+            {%- for i in (1..4) -%}
+              {%- assign logo_key = 'logo_' | append: i -%}
+              {%- if block.settings[logo_key] != '' -%}
+                <div style="padding:{{ block.settings.logo_padding | default: 10 }}px; background:{{ block.settings.logo_background | default: '#fff' }}; border-radius:{{ block.settings.logo_border_radius | default: 8 }}px;">
+                  <img src="{{ block.settings[logo_key] | img_url: '300x' }}" alt="" style="width:{{ block.settings.logo_width | default: 150 }}px; height:{{ block.settings.logo_height | default: 80 }}px; object-fit:contain; display:block;">
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+
+      {%- when 'ai_gen_block_c8229d6' -%}
+        {# Brand cards grid #}
+        <div class="brand-cards-block" style="padding:40px 20px; background:{{ block.settings.section_background | default: '#fff' }};">
+          <div style="display:grid; grid-template-columns:repeat({{ block.settings.cards_per_row | default: 3 }}, 1fr); gap:{{ block.settings.card_gap | default: 8 }}px;">
+            {%- for i in (1..12) -%}
+              {%- assign brand_key = 'card_' | append: i | append: '_brand' -%}
+              {%- assign link_key = 'card_' | append: i | append: '_link' -%}
+              {%- assign img_key = 'card_' | append: i | append: '_image' -%}
+              {%- assign btn_key = 'card_' | append: i | append: '_button_text' -%}
+              {%- if block.settings[brand_key] != '' -%}
+                <a href="{{ block.settings[link_key] }}" class="brand-card" style="position:relative; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; min-height:280px; padding:{{ block.settings.content_padding | default: 40 }}px; text-decoration:none; overflow:hidden; border-radius:8px;">
+                  {%- if block.settings[img_key] != '' -%}
+                    <img src="{{ block.settings[img_key] | img_url: '600x' }}" alt="{{ block.settings[brand_key] }}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0;">
+                    <div style="position:absolute; inset:0; background:rgba(0,0,0,{{ block.settings.overlay_opacity | default: 0.5 }}); z-index:1;"></div>
+                  {%- endif -%}
+                  <h3 style="position:relative; z-index:2; font-size:{{ block.settings.brand_font_size | default: 36 }}px; font-weight:600; letter-spacing:{{ block.settings.brand_letter_spacing | default: 4 }}px; color:{{ block.settings.brand_color | default: '#fff' }}; margin:0 0 12px; text-transform:uppercase;">{{ block.settings[brand_key] }}</h3>
+                  <span style="position:relative; z-index:2; padding:{{ block.settings.button_padding_vertical | default: 14 }}px {{ block.settings.button_padding_horizontal | default: 24 }}px; background:{{ block.settings.button_background | default: 'rgba(255,255,255,0.9)' }}; color:{{ block.settings.button_text_color | default: '#000' }}; font-size:{{ block.settings.button_font_size | default: 13 }}px; font-weight:{{ block.settings.button_font_weight | default: 500 }}; letter-spacing:{{ block.settings.button_letter_spacing | default: 1.5 }}px; border-radius:4px; text-transform:uppercase;">{{ block.settings[btn_key] }}</span>
+                </a>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+
+      {%- when 'ai_gen_block_d305d1b' -%}
+        {# Breadcrumbs #}
+        <nav class="breadcrumbs-block" style="padding:{{ block.settings.padding_top | default: 60 }}px 20px {{ block.settings.padding_bottom | default: 0 }}px; background:{{ block.settings.background_color | default: '#fff' }};">
+          <div style="max-width:{{ block.settings.container_width | default: 1200 }}px; margin:0 auto; display:flex; align-items:center; gap:{{ block.settings.spacing | default: 8 }}px; font-size:{{ block.settings.font_size | default: 14 }}px; color:{{ block.settings.separator_color | default: '#ccc' }};">
+            {%- if block.settings.show_home_icon -%}
+              <a href="/" style="color:{{ block.settings.link_color | default: '#666' }}; text-decoration:none;">🏠</a>
+            {%- endif -%}
+            <a href="/" style="color:{{ block.settings.link_color | default: '#666' }}; text-decoration:none;">{{ block.settings.home_text | default: 'Accueil' }}</a>
+            <span style="color:{{ block.settings.separator_color | default: '#ccc' }};">{{ block.settings.separator | default: '/' }}</span>
+            <span style="color:{{ block.settings.current_color | default: '#000' }}; font-weight:500;">{{ page_title }}</span>
+          </div>
+        </nav>
+
+      {%- when 'ai_gen_block_df4f891' -%}
+        {# Product features with mode tabs #}
+        <div class="features-tabs-block" style="padding:{{ block.settings.padding_top | default: 60 }}px 20px {{ block.settings.padding_bottom | default: 60 }}px; background:{{ block.settings.background_color | default: '#fff' }};">
+          <div style="max-width:{{ block.settings.container_width | default: 1200 }}px; margin:0 auto; text-align:center;">
+            <h2 style="font-size:{{ block.settings.title_size | default: 36 }}px; margin:0 0 12px;">{{ block.settings.title }}</h2>
+            {%- if block.settings.subtitle != '' -%}
+              <div style="font-size:{{ block.settings.subtitle_size | default: 16 }}px; color:{{ block.settings.text_color | default: '#000' }}; max-width:700px; margin:0 auto 32px;">{{ block.settings.subtitle }}</div>
+            {%- endif -%}
+            <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:32px;">
+              {%- for i in (1..3) -%}
+                {%- assign label_key = 'mode_' | append: i | append: '_label' -%}
+                {%- if block.settings[label_key] != '' -%}
+                  <span style="padding:10px 24px; border:{{ block.settings.button_border_width | default: 2 }}px solid {{ block.settings.button_border_color | default: '#036' }}; color:{{ block.settings.button_text_color | default: '#036' }}; font-size:{{ block.settings.button_font_size | default: 14 }}px; border-radius:{{ block.settings.button_border_radius | default: 8 }}px; font-weight:500;">{{ block.settings[label_key] }}</span>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+            {%- for i in (1..3) -%}
+              {%- assign title_key = 'mode_' | append: i | append: '_title' -%}
+              {%- assign desc_key = 'mode_' | append: i | append: '_description' -%}
+              {%- assign video_key = 'mode_' | append: i | append: '_video_url' -%}
+              {%- assign img_key = 'mode_' | append: i | append: '_image' -%}
+              {%- if block.settings[title_key] != '' -%}
+                <div style="margin-top:{{ block.settings.padding_top | default: 60 }}px;">
+                  <h3 style="font-size:{{ block.settings.mode_title_size | default: 24 }}px; color:{{ block.settings.text_color | default: '#000' }}; margin:0 0 8px;">{{ block.settings[title_key] }}</h3>
+                  <p style="font-size:{{ block.settings.mode_text_size | default: 16 }}px; color:{{ block.settings.text_color | default: '#000' }}; max-width:800px; margin:0 auto;">{{ block.settings[desc_key] }}</p>
+                  {%- if block.settings[video_key] != '' -%}
+                    <video src="{{ block.settings[video_key] }}" controls style="width:100%; max-width:800px; margin-top:20px; border-radius:{{ block.settings.media_border_radius | default: 12 }}px;"></video>
+                  {%- elsif block.settings[img_key] != '' -%}
+                    <img src="{{ block.settings[img_key] | img_url: '800x' }}" alt="" style="width:100%; max-width:800px; margin-top:20px; border-radius:{{ block.settings.media_border_radius | default: 12 }}px;">
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+
+      {%- when 'ai_gen_block_f0ed5da' -%}
+        {# Notes olfactives (perfume) #}
+        <div class="olfactive-notes-block" style="padding:{{ block.settings.section_padding_top | default: 60 }}px 20px {{ block.settings.section_padding_bottom | default: 60 }}px; background:{{ block.settings.background_color | default: '#fff' }};">
+          <div style="max-width:{{ block.settings.max_width | default: 1150 }}px; margin:0 auto;">
+            <h2 style="text-align:center; font-size:{{ block.settings.title_size | default: 1.7 }}rem; letter-spacing:{{ block.settings.title_letter_spacing | default: 1.5 }}px; color:{{ block.settings.title_color | default: '#000' }}; margin:0 0 {{ block.settings.title_margin_bottom | default: 50 }}px;">{{ block.settings.section_title }}</h2>
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:{{ block.settings.grid_gap | default: 40 }}px;">
+              {%- assign columns = 'tete,coeur,fond' | split: ',' -%}
+              {%- for col in columns -%}
+                {%- assign title_key = col | append: '_title' -%}
+                {%- assign chips_key = col | append: '_chips' -%}
+                <div style="text-align:center;">
+                  <h3 style="font-size:{{ block.settings.column_title_size | default: 1.1 }}rem; color:{{ block.settings.column_title_color | default: '#000' }}; margin:0 0 {{ block.settings.column_title_margin | default: 20 }}px;">{{ block.settings[title_key] }}</h3>
+                  {%- assign chips = block.settings[chips_key] | split: ',' -%}
+                  <div style="display:flex; flex-wrap:wrap; gap:{{ block.settings.chips_gap | default: 8 }}px; justify-content:center;">
+                    {%- for chip in chips -%}
+                      {%- assign c = chip | strip -%}
+                      {%- if c != '' -%}
+                        <span style="padding:{{ block.settings.chip_padding_vertical | default: 0.5 }}em {{ block.settings.chip_padding_horizontal | default: 0.9 }}em; background:{{ block.settings.chip_bg_color | default: '#f8f8f8' }}; border:1px solid {{ block.settings.chip_border_color | default: '#e5e5e5' }}; color:{{ block.settings.chip_text_color | default: '#444' }}; font-size:{{ block.settings.chip_font_size | default: 0.9 }}rem; border-radius:{{ block.settings.chip_border_radius | default: 20 }}px;">{{ c }}</span>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+
+      {%- when 'ai_gen_block_7133efc' -%}
+        {# Mega menu / footer sections with collections & products #}
+        <div class="mega-menu-footer-block" style="padding:{{ block.settings.item_padding | default: 16 }}px; background:{{ block.settings.header_bg_color | default: '#fff' }};">
+          <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:{{ block.settings.item_padding | default: 16 }}px;">
+            {%- for i in (1..5) -%}
+              {%- assign enabled_key = 'section_' | append: i | append: '_enabled' -%}
+              {%- assign title_key = 'section_' | append: i | append: '_title' -%}
+              {%- assign collections_key = 'section_' | append: i | append: '_collections' -%}
+              {%- assign products_key = 'section_' | append: i | append: '_products' -%}
+              {%- if block.settings[enabled_key] -%}
+                <div>
+                  <h3 style="font-size:{{ block.settings.header_font_size | default: 16 }}px; color:{{ block.settings.header_text_color | default: '#000' }}; margin:0 0 12px; padding-bottom:8px; border-bottom:1px solid {{ block.settings.border_color | default: '#e0e0e0' }};">{{ block.settings[title_key] }}</h3>
+                  <ul style="list-style:none; margin:0; padding:0;">
+                    {%- assign collections = block.settings[collections_key] -%}
+                    {%- for handle in collections -%}
+                      <li style="margin-bottom:{{ block.settings.link_spacing | default: 8 }}px;">
+                        <a href="/collections/{{ handle }}" style="font-size:{{ block.settings.link_font_size | default: 14 }}px; color:{{ block.settings.link_color | default: '#000' }}; text-decoration:none;">{{ handle | replace: '-', ' ' | capitalize }}</a>
+                      </li>
+                    {%- endfor -%}
+                    {%- assign products = block.settings[products_key] -%}
+                    {%- for handle in products -%}
+                      <li style="margin-bottom:{{ block.settings.link_spacing | default: 8 }}px;">
+                        <a href="/products/{{ handle }}" style="font-size:{{ block.settings.link_font_size | default: 14 }}px; color:{{ block.settings.link_color | default: '#000' }}; text-decoration:none;">{{ handle | replace: '-', ' ' | capitalize }}</a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+
+      {%- else -%}
+        {# Unknown block type — fallback silencieux #}
+        {%- if block.type contains 'ai_gen_block' -%}
+          <div class="custom-block-unknown" style="display:none;"></div>
+        {%- endif -%}
+
+    {%- endcase -%}
+  {%- endfor -%}
+</div>
+
+{% schema %}
+{
+  "name": "AI Blocks",
+  "class": "section",
+  "settings": [],
+  "blocks": [
+    { "type": "ai_gen_block_3d3f0ee",  "name": "Hero Overlay CTA", "settings": [] },
+    { "type": "ai_gen_block_41aa14c",  "name": "Content + Image", "settings": [] },
+    { "type": "ai_gen_block_4cda2bf",  "name": "Video Showcase", "settings": [] },
+    { "type": "ai_gen_block_516848c",  "name": "Gradient Hero CTA", "settings": [] },
+    { "type": "ai_gen_block_5b9c4c6",  "name": "Steps / How It Works", "settings": [] },
+    { "type": "ai_gen_block_7c22094",  "name": "Contact Rassurance", "settings": [] },
+    { "type": "ai_gen_block_8c7fb54",  "name": "Testimonials", "settings": [] },
+    { "type": "ai_gen_block_b6d94e0",  "name": "Logo Carousel", "settings": [] },
+    { "type": "ai_gen_block_c8229d6",  "name": "Brand Cards Grid", "settings": [] },
+    { "type": "ai_gen_block_d305d1b",  "name": "Breadcrumbs", "settings": [] },
+    { "type": "ai_gen_block_df4f891",  "name": "Product Features Tabs", "settings": [] },
+    { "type": "ai_gen_block_f0ed5da",  "name": "Notes Olfactives", "settings": [] },
+    { "type": "ai_gen_block_7133efc",  "name": "Mega Menu Footer", "settings": [] }
+  ],
+  "presets": [
+    {
+      "name": "AI Blocks",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}
