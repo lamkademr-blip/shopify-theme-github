@@ -15,14 +15,18 @@
     {%- endunless -%}
 
     <title>
-      {{ page_title }}
-      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
-      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
-      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+      {% if template.name == 'index' %}
+        Volant Personnalisé Sur Mesure — Cuir, Alcantara, Carbone | {{ shop.name }}
+      {% else %}
+        {{ page_title }}
+        {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+        {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+        {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+      {% endif %}
     </title>
 
     {% if template.name == 'index' %}
-      <meta name="description" content="Les As du Volant : volants de voiture personnalisés haut de gamme, sur mesure et artisanaux. Volants sport, simracing, cuir et carbone. Personnalisation premium pour votre véhicule à commander en ligne.">
+      <meta name="description" content="Volant personnalisé sur mesure pour Audi, BMW, Mercedes, Porsche, Tesla et toutes les marques. Cuir, Alcantara, carbone, simracing. Fabrication artisanale premium, livré sous 5 à 7 jours. Garantie 5 ans.">
     {% elsif page_description %}
       <meta name="description" content="{{ page_description | escape }}">
     {% endif %}
@@ -30,6 +34,13 @@
     {% render 'breadcrumb-jsonld' %}
 
     {% render 'meta-tags' %}
+
+    {% if template.name == 'index' %}
+      <meta property="og:title" content="Volant Personnalisé Sur Mesure — Cuir, Alcantara, Carbone | Les As du Volant">
+      <meta property="og:description" content="Volant sur mesure premium pour toutes les marques : Audi, BMW, Mercedes, Porsche, Tesla. Personnalisation cuir, Alcantara, carbone. Fabrication artisanale, livraison rapide, garantie 5 ans.">
+      <meta name="twitter:title" content="Volant Personnalisé Sur Mesure — Cuir, Alcantara, Carbone | Les As du Volant">
+      <meta name="twitter:description" content="Volant sur mesure premium pour toutes les marques. Personnalisation cuir, Alcantara, carbone. Fabrication artisanale, garantie 5 ans.">
+    {% endif %}
 
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
