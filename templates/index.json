@@ -1,18 +1,5 @@
 {
   "sections": {
-    "slideshow_6GfCjf": {
-      "type": "slideshow",
-      "settings": {
-        "layout": "full_bleed",
-        "slide_height": "medium",
-        "slider_visual": "counter",
-        "auto_rotate": false,
-        "change_slides_speed": 5,
-        "image_behavior": "none",
-        "show_text_below": true,
-        "accessibility_info": "Diaporama sur votre marque"
-      }
-    },
     "176899746855311c7e": {
       "type": "_blocks",
       "settings": {}
@@ -38,7 +25,7 @@
             "eyebrow_spacing": 0.2,
             "eyebrow_color": "#FFFFFF",
             "eyebrow_opacity": 0.9,
-            "headline_text": "Prenez le contr\u00f4le de votre passion avec un volant personnalis\u00e9 !",
+            "headline_text": "Prenez le contrôle de votre passion avec un volant personnalisé !",
             "headline_size": 44,
             "headline_weight": "300",
             "headline_spacing": 0.1,
@@ -82,7 +69,7 @@
     },
     "blocks_fVR8CW": {
       "type": "_blocks",
-      "name": "D\u00e9couvrez notre atelier",
+      "name": "Découvrez notre atelier",
       "settings": {}
     },
     "1768995084527ed5d7": {
@@ -186,20 +173,20 @@
             "gradient_color_3": "#ffffff",
             "gradient_color_4": "#ffffff",
             "gradient_color_5": "#ffffff",
-            "headline": "Vous ne trouvez pas le volant pour votre v\u00e9hicule ?",
+            "headline": "Vous ne trouvez pas le volant pour votre véhicule ?",
             "headline_size": 40,
             "headline_weight": "400",
             "headline_letter_spacing": 1,
             "headline_color": "#000000",
             "headline_max_width": 720,
-            "subtext": "Certains projets ne rentrent pas dans un configurateur. D\u00e9crivez-nous votre volant id\u00e9al, nous le cr\u00e9ons sur mesure.",
+            "subtext": "Certains projets ne rentrent pas dans un configurateur. Décrivez-nous votre volant idéal, nous le créons sur mesure.",
             "subtext_size": 18,
             "subtext_color": "#000000",
             "subtext_max_width": 680,
-            "highlight": "Sur-mesure total \u00b7 Conseil expert \u00b7 R\u00e9ponse rapide",
+            "highlight": "Sur-mesure total · Conseil expert · Réponse rapide",
             "highlight_size": 14,
             "highlight_color": "#8e9ad6",
-            "button_text": "PARLER \u00c0 UN EXPERT SUR WHATSAPP",
+            "button_text": "PARLER À UN EXPERT SUR WHATSAPP",
             "button_link": "https://wa.me/33622510196",
             "show_whatsapp_icon": true,
             "button_background": "#25d366",
@@ -253,22 +240,22 @@
             "step_1_enabled": true,
             "step_1_number": "1.",
             "step_1_title": "PERSONNALISATION",
-            "step_1_description": "Cr\u00e9ez votre volant sur mesure, du design \u00e0 la prise en main, pour une exp\u00e9rience de conduite qui vous ressemble.",
+            "step_1_description": "Créez votre volant sur mesure, du design à la prise en main, pour une expérience de conduite qui vous ressemble.",
             "step_1_icon": "sliders",
             "step_2_enabled": true,
             "step_2_number": "2.",
             "step_2_title": "FABRICATION",
-            "step_2_description": "Nos artisans con\u00e7oivent votre volant avec des mat\u00e9riaux premium et une finition impeccable, digne des plus grands pilotes.",
+            "step_2_description": "Nos artisans conçoivent votre volant avec des matériaux premium et une finition impeccable, digne des plus grands pilotes.",
             "step_2_icon": "edit",
             "step_3_enabled": true,
             "step_3_number": "3.",
             "step_3_title": "LIVRAISON OFFERTE",
-            "step_3_description": "Votre volant personnalis\u00e9 livr\u00e9 gratuitement et soigneusement emball\u00e9 directement chez vous.",
+            "step_3_description": "Votre volant personnalisé livré gratuitement et soigneusement emballé directement chez vous.",
             "step_3_icon": "box",
             "step_4_enabled": true,
             "step_4_number": "4.",
             "step_4_title": "GARANTIE 5 ANS",
-            "step_4_description": "Prenez la route en toute confiance avec une garantie compl\u00e8te contre tout d\u00e9faut de fabrication.",
+            "step_4_description": "Prenez la route en toute confiance avec une garantie complète contre tout défaut de fabrication.",
             "step_4_icon": "shield"
           },
           "blocks": {}
@@ -277,32 +264,32 @@
           "type": "ai_gen_block_8c7fb54",
           "settings": {
             "show_badge": true,
-            "badge_text": "TOP QUALIT\u00c9",
+            "badge_text": "TOP QUALITÉ",
             "title": "Nos clients adorent",
-            "subtitle": "D\u00e9couvrez ce que nos clients disent de nos volants premium",
+            "subtitle": "Découvrez ce que nos clients disent de nos volants premium",
             "heading_font": "assistant_n4",
             "testimonial_1_enabled": true,
-            "testimonial_1_text": "Franchement rien \u00e0 voir avec le volant d'origine, celui-l\u00e0 est une pure tuerie ! Le montage est super simple, en 40 minutes c'\u00e9tait pli\u00e9. Pour le prix la qualit\u00e9 est vraiment au rendez-vous, je recommande sans h\u00e9siter.",
+            "testimonial_1_text": "Franchement rien à voir avec le volant d'origine, celui-là est une pure tuerie ! Le montage est super simple, en 40 minutes c'était plié. Pour le prix la qualité est vraiment au rendez-vous, je recommande sans hésiter.",
             "testimonial_1_name": "Louis Y.",
             "testimonial_1_email": "",
             "testimonial_2_enabled": true,
-            "testimonial_2_text": "J'ai l'impression d'avoir une nouvelle voiture, un truc de fou. Je la prends beaucoup plus souvent, et j'ai l'impression d'\u00eatre un meilleur pilote. Franchement, \u00e7a change tout, ma BM est redevenue une bombe.",
+            "testimonial_2_text": "J'ai l'impression d'avoir une nouvelle voiture, un truc de fou. Je la prends beaucoup plus souvent, et j'ai l'impression d'être un meilleur pilote. Franchement, ça change tout, ma BM est redevenue une bombe.",
             "testimonial_2_name": "Reid N.",
             "testimonial_2_email": "",
             "testimonial_3_enabled": true,
-            "testimonial_3_text": "Franchement au top. J'ai pu rajouter le r\u00e9gulateur de vitesse et les palettes, la sensation de conduite est juste g\u00e9niale maintenant.",
+            "testimonial_3_text": "Franchement au top. J'ai pu rajouter le régulateur de vitesse et les palettes, la sensation de conduite est juste géniale maintenant.",
             "testimonial_3_name": "Lina U.",
             "testimonial_3_email": "",
             "testimonial_4_enabled": true,
-            "testimonial_4_text": "Volant install\u00e9, et le rendu est juste magnifique ! La qualit\u00e9 est dingue, super prise en main. M\u00eame le mec du garage qui me l'a pos\u00e9 a dit que c'\u00e9tait du bon matos. Franchement, je suis trop content du resultat.",
+            "testimonial_4_text": "Volant installé, et le rendu est juste magnifique ! La qualité est dingue, super prise en main. Même le mec du garage qui me l'a posé a dit que c'était du bon matos. Franchement, je suis trop content du resultat.",
             "testimonial_4_name": "Emile O.",
             "testimonial_4_email": "",
             "testimonial_5_enabled": true,
-            "testimonial_5_text": "Super rendu une fois mont\u00e9, la prise en main est top ;)",
+            "testimonial_5_text": "Super rendu une fois monté, la prise en main est top ;)",
             "testimonial_5_name": "Aya V.",
             "testimonial_5_email": "",
             "testimonial_6_enabled": true,
-            "testimonial_6_text": "Qualit\u00e9 au top, montage nickel. \u00c7a donne un sacr\u00e9 coup de jeune \u00e0 ma BM, on dirait qu'elle a 10 ans de moins",
+            "testimonial_6_text": "Qualité au top, montage nickel. Ça donne un sacré coup de jeune à ma BM, on dirait qu'elle a 10 ans de moins",
             "testimonial_6_name": "Kevin L.",
             "testimonial_6_email": ""
           },
@@ -338,7 +325,7 @@
           "settings": {
             "video": "shopify://files/videos/WeChat_20250619223621.mp4",
             "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-            "title": "L\u00e9o",
+            "title": "Léo",
             "stars_count": 5
           }
         },
@@ -484,7 +471,7 @@
             "image": "shopify://shop_images/volant_audi_S5_carbone.png",
             "caption": "",
             "heading": "Personnalisation Volant : Quelles Options Existent",
-            "text": "<ul><li>Insertions carbone ou jantes en alliage design</li><li>Palettes de changement de vitesses r\u00e9tro\u00e9clair\u00e9es</li><li>Surpiq\u00fbres contrast\u00e9es personnalisables</li><li>Boutons multim\u00e9dias compatibles avec les syst\u00e8mes MMI ou Virtual Cockpit</li></ul>",
+            "text": "<ul><li>Insertions carbone ou jantes en alliage design</li><li>Palettes de changement de vitesses rétroéclairées</li><li>Surpiqûres contrastées personnalisables</li><li>Boutons multimédias compatibles avec les systèmes MMI ou Virtual Cockpit</li></ul>",
             "button_label": "",
             "button_link": ""
           }
@@ -494,8 +481,8 @@
           "settings": {
             "image": "shopify://shop_images/ertr.jpg",
             "caption": "",
-            "heading": "Quelle Diff\u00e9rence entre un volant sport et un volant voiture basique ?",
-            "text": "<p>Avec son diam\u00e8tre r\u00e9duit et ses\u00a0<strong>poign\u00e9es alv\u00e9ol\u00e9es</strong>\u00a0, le volant voiture sport optimise la r\u00e9activit\u00e9. Les mat\u00e9riaux premium (cuir Nappa, alcantara) r\u00e9sistent \u00e0 l'usure tout en gardant un grip ferme \u2013 id\u00e9al pour les acc\u00e9l\u00e9rations en sortie de virage. Compatible avec la plupart des\u00a0<strong>bo\u00eetes automatiques\u00a0</strong>et manuelles.</p>",
+            "heading": "Quelle Différence entre un volant sport et un volant voiture basique ?",
+            "text": "<p>Avec son diamètre réduit et ses <strong>poignées alvéolées</strong> , le volant voiture sport optimise la réactivité. Les matériaux premium (cuir Nappa, alcantara) résistent à l'usure tout en gardant un grip ferme – idéal pour les accélérations en sortie de virage. Compatible avec la plupart des <strong>boîtes automatiques </strong>et manuelles.</p>",
             "button_label": "",
             "button_link": ""
           }
@@ -527,14 +514,14 @@
         "heading_PbznYU": {
           "type": "heading",
           "settings": {
-            "heading": "Comment Savoir Si un Volant Convient \u00e0 Ma Voiture ?",
+            "heading": "Comment Savoir Si un Volant Convient à Ma Voiture ?",
             "heading_size": "h1"
           }
         },
         "text_jKFxzy": {
           "type": "text",
           "settings": {
-            "text": "<p>V\u00e9rifiez l'ann\u00e9e de fabrication, le type de direction assist\u00e9e et la connectique de l'airbag. Nos kits incluent un adaptateur universel pour les BMW S\u00e9rie r\u00e9centes, Mercedes Classe A (apr\u00e8s 2018) et Volkswagen Golf VII+.</p>"
+            "text": "<p>Vérifiez l'année de fabrication, le type de direction assistée et la connectique de l'airbag. Nos kits incluent un adaptateur universel pour les BMW Série récentes, Mercedes Classe A (après 2018) et Volkswagen Golf VII+.</p>"
           }
         }
       },
@@ -557,14 +544,14 @@
         "heading_N9cCHb": {
           "type": "heading",
           "settings": {
-            "heading": "Quel est le meilleur volant voiture \u00e0 choisir ?",
+            "heading": "Quel est le meilleur volant voiture à choisir ?",
             "heading_size": "h1"
           }
         },
         "text_cMCCTE": {
           "type": "text",
           "settings": {
-            "text": "<p>Choisir le <strong>meilleur volant voiture</strong> d\u00e9pend avant tout de ta marque, de ton mod\u00e8le et de ce que tu recherches : plus de sportivit\u00e9, un grip parfait avec de l'Alcantara ou du cuir perfor\u00e9, des palettes plus grandes, un m\u00e9plat racing ou encore le chauffage int\u00e9gr\u00e9 pour l'hiver. Chez Les As du Volant, on propose des volants personnalis\u00e9s haut de gamme compatibles plug & play pour les plus grandes marques allemandes.</p><h2>Le top des volants apr\u00e8smarket pour transformer ton habitacle</h2><p>Voici notre s\u00e9lection des meilleurs volants voiture du moment, test\u00e9s et approuv\u00e9s par des milliers de passionn\u00e9s :</p><ul><li><strong>Pour Audi</strong> : Le <a href=\"https://les-as-du-volant.com/products/volant-audi-a-trois\">volant Audi A3/RS3/S3</a> m\u00e9plat avec inserts carbone et surpiq\u00fbres contrast\u00e9es est un best-seller absolu. Grip incroyable et look ultra-sportif garanti ! Les propri\u00e9taires d'A1 ne sont pas en reste avec le <a href=\"https://les-as-du-volant.com/products/volant-audi-a-un\">volant Audi A1/S1</a>, plus compact mais tout aussi premium.</li><li><strong>Pour BMW</strong> : Le <a href=\"https://les-as-du-volant.com/products/volant-bmw-serie-un\">volant BMW S\u00e9rie 1</a> en Alcantara et palettes oversize transforme instantan\u00e9ment ta compacte en v\u00e9ritable M Performance.</li><li><strong>Pour Mercedes</strong> : Rien ne vaut le <a href=\"https://les-as-du-volant.com/products/volant-mercedes-classe-a\">volant Mercedes Classe A</a> avec son design AMG, ses touches haptiques et sa finition nappa irr\u00e9prochable pour un luxe sportif quotidien.</li><li><strong>Pour Volkswagen</strong> : Les fans de GTI/R swappent massivement sur le <a href=\"https://les-as-du-volant.com/products/volant-golf-sept\">volant Golf 7/7.5/8</a> m\u00e9plat R avec rep\u00e8re 12h et palettes allong\u00e9es \u2013 probablement le meilleur rapport qualit\u00e9/prix du march\u00e9.</li></ul><h2>Comment savoir quel volant est le meilleur pour TOI ?</h2><p>Le \"meilleur\" volant voiture, c'est celui qui correspond parfaitement \u00e0 ton usage :<br/>- Conduite quotidienne \u2192 privil\u00e9gie le cuir chauffant et les commandes multifonctions compl\u00e8tes.<br/>- Trackdays et routes sinueuses \u2192 opte pour l'Alcantara ou le carbone avec m\u00e9plat prononc\u00e9.<br/>- Look racing sans compromis \u2192 palettes oversize + LED shift lights si disponible.</p><p>Tous nos volants sont 100% compatibles avec les airbags d'origine, le virtual cockpit/iDrive/MBUX et se montent en 30-45 min avec nos tutos d\u00e9taill\u00e9s.</p><p>Pr\u00eat \u00e0 passer au niveau sup\u00e9rieur ? Parcourez notre s\u00e9lection et trouve le volant voiture qui va compl\u00e8tement m\u00e9tamorphoser ton int\u00e9rieur !</p>"
+            "text": "<p>Choisir le <strong>meilleur volant voiture</strong> dépend avant tout de ta marque, de ton modèle et de ce que tu recherches : plus de sportivité, un grip parfait avec de l'Alcantara ou du cuir perforé, des palettes plus grandes, un méplat racing ou encore le chauffage intégré pour l'hiver. Chez Les As du Volant, on propose des volants personnalisés haut de gamme compatibles plug & play pour les plus grandes marques allemandes.</p><h2>Le top des volants aprèsmarket pour transformer ton habitacle</h2><p>Voici notre sélection des meilleurs volants voiture du moment, testés et approuvés par des milliers de passionnés :</p><ul><li><strong>Pour Audi</strong> : Le <a href=\"https://les-as-du-volant.com/products/volant-audi-a-trois\">volant Audi A3/RS3/S3</a> méplat avec inserts carbone et surpiqûres contrastées est un best-seller absolu. Grip incroyable et look ultra-sportif garanti ! Les propriétaires d'A1 ne sont pas en reste avec le <a href=\"https://les-as-du-volant.com/products/volant-audi-a-un\">volant Audi A1/S1</a>, plus compact mais tout aussi premium.</li><li><strong>Pour BMW</strong> : Le <a href=\"https://les-as-du-volant.com/products/volant-bmw-serie-un\">volant BMW Série 1</a> en Alcantara et palettes oversize transforme instantanément ta compacte en véritable M Performance.</li><li><strong>Pour Mercedes</strong> : Rien ne vaut le <a href=\"https://les-as-du-volant.com/products/volant-mercedes-classe-a\">volant Mercedes Classe A</a> avec son design AMG, ses touches haptiques et sa finition nappa irréprochable pour un luxe sportif quotidien.</li><li><strong>Pour Volkswagen</strong> : Les fans de GTI/R swappent massivement sur le <a href=\"https://les-as-du-volant.com/products/volant-golf-sept\">volant Golf 7/7.5/8</a> méplat R avec repère 12h et palettes allongées – probablement le meilleur rapport qualité/prix du marché.</li></ul><h2>Comment savoir quel volant est le meilleur pour TOI ?</h2><p>Le \"meilleur\" volant voiture, c'est celui qui correspond parfaitement à ton usage :<br/>- Conduite quotidienne → privilégie le cuir chauffant et les commandes multifonctions complètes.<br/>- Trackdays et routes sinueuses → opte pour l'Alcantara ou le carbone avec méplat prononcé.<br/>- Look racing sans compromis → palettes oversize + LED shift lights si disponible.</p><p>Tous nos volants sont 100% compatibles avec les airbags d'origine, le virtual cockpit/iDrive/MBUX et se montent en 30-45 min avec nos tutos détaillés.</p><p>Prêt à passer au niveau supérieur ? Parcourez notre sélection et trouve le volant voiture qui va complètement métamorphoser ton intérieur !</p>"
           }
         }
       },
@@ -581,10 +568,55 @@
         "padding_top": 40,
         "padding_bottom": 52
       }
+    },
+    "hero_premium_main": {
+      "type": "hero-premium",
+      "settings": {
+        "desktop_height": 700,
+        "mobile_height": 500,
+        "image": "",
+        "eyebrow": "LES AS DU VOLANT",
+        "heading": "L'excellence du sur-mesure\npour votre volant",
+        "heading_size": "hxl",
+        "subtext": "Chaque volant est unique, façonné à la main pour épouser parfaitement votre style et votre conduite. 100% sur-mesure.",
+        "show_trust": true,
+        "trust_stars": 5,
+        "trust_text": "4.9/5 — Plus de 200 pilotes satisfaits",
+        "overlay_color": "#000000",
+        "overlay_opacity": 40,
+        "accent_color": "#C8A97E",
+        "text_color": "#FFFFFF",
+        "btn_primary_text": "Configurer mon volant",
+        "btn_primary_link": "shopify://collections/tous-les-volants",
+        "btn_secondary_text": "Voir nos marques",
+        "btn_secondary_link": "shopify://pages/nos-marques",
+        "btn_bg": "#FFFFFF",
+        "btn_text": "#0A0A0A",
+        "btn_hover_bg": "#C8A97E",
+        "btn_hover_text": "#FFFFFF",
+        "color_scheme": "scheme-4"
+      }
+    },
+    "promo_bienvenue": {
+      "type": "promo-banner",
+      "settings": {
+        "icon": "🎁",
+        "title": "Bienvenue chez Les As du Volant",
+        "subtitle": "-15% sur votre premier volant sur-mesure",
+        "code": "BIENVENUE15",
+        "button_label": "J'en profite",
+        "button_link": "shopify://collections/tous-les-volants",
+        "background_color": "#0A0A0A",
+        "text_color": "#FFFFFF",
+        "accent_color": "#C8A97E",
+        "code_bg": "rgba(255,255,255,0.1)",
+        "code_text": "#C8A97E"
+      }
     }
   },
   "order": [
-    "slideshow_6GfCjf",
+    "promo_bienvenue",
+    "hero_premium_main",
     "176899746855311c7e",
     "1769011966061244b5",
     "titre_7xhXj8",

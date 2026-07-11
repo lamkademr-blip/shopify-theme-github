@@ -1,0 +1,137 @@
+{{ 'section-promo-banner.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  #promo-banner-{{ section.id }} {
+    --promo-bg: {{ section.settings.background_color }};
+    --promo-text: {{ section.settings.text_color }};
+    --promo-accent: {{ section.settings.accent_color }};
+    --promo-code-bg: {{ section.settings.code_bg }};
+    --promo-code-text: {{ section.settings.code_text }};
+  }
+{%- endstyle -%}
+
+<div id="promo-banner-{{ section.id }}" class="promo-banner">
+  <div class="page-width promo-banner__inner">
+    <div class="promo-banner__content">
+      {%- if section.settings.icon != blank -%}
+        <span class="promo-banner__icon">{{ section.settings.icon }}</span>
+      {%- endif -%}
+      <div class="promo-banner__text">
+        <strong class="promo-banner__title">{{ section.settings.title }}</strong>
+        {%- if section.settings.subtitle != blank -%}
+          <span class="promo-banner__subtitle">{{ section.settings.subtitle }}</span>
+        {%- endif -%}
+      </div>
+      <div class="promo-banner__code">
+        <span class="promo-banner__code-label">Code&nbsp;:</span>
+        <span class="promo-banner__code-value">{{ section.settings.code }}</span>
+      </div>
+      {%- if section.settings.button_label != blank -%}
+        <a
+          {% if section.settings.button_link == blank %}
+            role="link" aria-disabled="true"
+          {% else %}
+            href="{{ section.settings.button_link }}"
+          {% endif %}
+          class="promo-banner__btn"
+        >
+          {{ section.settings.button_label | escape }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Promo Bienvenue",
+  "tag": "section",
+  "class": "section",
+  "limit": 1,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "icon",
+      "label": "Icône (emoji)",
+      "default": "🎁"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Bienvenue chez Les As du Volant"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Sous-titre",
+      "default": "-15% sur votre premier volant sur-mesure"
+    },
+    {
+      "type": "text",
+      "id": "code",
+      "label": "Code promo",
+      "default": "BIENVENUE15"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Libellé bouton",
+      "default": "J'en profite"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Lien du bouton"
+    },
+    {
+      "type": "header",
+      "content": "Couleurs"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Fond",
+      "default": "#0A0A0A"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Texte",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Couleur d'accent",
+      "default": "#C8A97E"
+    },
+    {
+      "type": "color",
+      "id": "code_bg",
+      "label": "Fond du code",
+      "default": "rgba(255,255,255,0.1)"
+    },
+    {
+      "type": "color",
+      "id": "code_text",
+      "label": "Texte du code",
+      "default": "#C8A97E"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promo Bienvenue",
+      "settings": {
+        "title": "Bienvenue chez Les As du Volant",
+        "subtitle": "-15% sur votre premier volant sur-mesure",
+        "code": "BIENVENUE15",
+        "button_label": "J'en profite"
+      }
+    }
+  ]
+}
+{% endschema %}

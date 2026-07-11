@@ -1,0 +1,293 @@
+{{ 'section-hero-premium.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  #hero-premium-{{ section.id }} {
+    --hero-min-height: {{ section.settings.desktop_height }}px;
+    --hero-min-height-mobile: {{ section.settings.mobile_height }}px;
+    --hero-overlay: {{ section.settings.overlay_color }};
+    --hero-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    --hero-text-color: {{ section.settings.text_color }};
+    --hero-btn-bg: {{ section.settings.button_bg }};
+    --hero-btn-text: {{ section.settings.button_text }};
+    --hero-btn-hover-bg: {{ section.settings.button_hover_bg }};
+    --hero-btn-hover-text: {{ section.settings.button_hover_text }};
+    --hero-accent: {{ section.settings.accent_color }};
+  }
+{%- endstyle -%}
+
+<div id="hero-premium-{{ section.id }}" class="hero-premium">
+  <div class="hero-premium__media">
+    {%- if section.settings.image != blank -%}
+      {%- assign image_height = section.settings.image.width | divided_by: section.settings.image.aspect_ratio -%}
+      {{
+        section.settings.image
+        | image_url: width: 3840
+        | image_tag:
+          width: section.settings.image.width,
+          height: image_height,
+          class: 'hero-premium__image',
+          sizes: '100vw',
+          widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840',
+          fetchpriority: 'high'
+      }}
+    {%- else -%}
+      <div class="hero-premium__placeholder">
+        {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      </div>
+    {%- endif -%}
+    <div class="hero-premium__overlay"></div>
+  </div>
+
+  <div class="hero-premium__content page-width">
+    <div class="hero-premium__inner">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="hero-premium__eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+
+      {%- if section.settings.quote_prefix != blank -%}
+        <span class="hero-premium__quote-prefix">{{ section.settings.quote_prefix }}</span>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h1 class="hero-premium__heading {{ section.settings.heading_size }}">
+          {{ section.settings.heading }}
+        </h1>
+      {%- endif -%}
+
+      {%- if section.settings.subtext != blank -%}
+        <p class="hero-premium__subtext">{{ section.settings.subtext }}</p>
+      {%- endif -%}
+
+      <div class="hero-premium__actions">
+        {%- if section.settings.button_label != blank -%}
+          <a
+            {% if section.settings.button_link == blank %}
+              role="link" aria-disabled="true"
+            {% else %}
+              href="{{ section.settings.button_link }}"
+            {% endif %}
+            class="hero-premium__btn hero-premium__btn--primary"
+          >
+            {{ section.settings.button_label | escape }}
+            {%- if section.settings.show_arrow -%}
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            {%- endif -%}
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.button_label_2 != blank -%}
+          <a
+            {% if section.settings.button_link_2 == blank %}
+              role="link" aria-disabled="true"
+            {% else %}
+              href="{{ section.settings.button_link_2 }}"
+            {% endif %}
+            class="hero-premium__btn hero-premium__btn--secondary"
+          >
+            {{ section.settings.button_label_2 | escape }}
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.trust_text != blank -%}
+        <div class="hero-premium__trust">
+          <span class="hero-premium__trust-stars">★★★★★</span>
+          <span class="hero-premium__trust-text">{{ section.settings.trust_text }}</span>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Hero Premium",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image d'arrière-plan"
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "min": 400,
+      "max": 900,
+      "step": 20,
+      "unit": "px",
+      "label": "Hauteur desktop",
+      "default": 640
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "min": 300,
+      "max": 700,
+      "step": 20,
+      "unit": "px",
+      "label": "Hauteur mobile",
+      "default": 480
+    },
+    {
+      "type": "header",
+      "content": "Contenu"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Sur-titre (eyebrow)",
+      "default": "LES AS DU VOLANT"
+    },
+    {
+      "type": "text",
+      "id": "quote_prefix",
+      "label": "Guillemet / préfixe",
+      "default": "\""
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "Le volant qui transforme votre intérieur",
+      "label": "Titre principal"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "Petit" },
+        { "value": "h1", "label": "Moyen" },
+        { "value": "h0", "label": "Grand" },
+        { "value": "hxl", "label": "Très grand" },
+        { "value": "hxxl", "label": "XXL" }
+      ],
+      "default": "h0",
+      "label": "Taille du titre"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Sous-titre",
+      "default": "Cuir Nappa · Alcantara · Carbone · Sur-mesure"
+    },
+    {
+      "type": "header",
+      "content": "Boutons"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Libellé bouton principal",
+      "default": "CONFIGURER MON VOLANT"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Lien bouton principal"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrow",
+      "label": "Afficher flèche sur le bouton",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_label_2",
+      "label": "Libellé secondaire (optionnel)",
+      "default": "VOIR LES MARQUES"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "Lien bouton secondaire"
+    },
+    {
+      "type": "header",
+      "content": "Confiance"
+    },
+    {
+      "type": "text",
+      "id": "trust_text",
+      "label": "Texte de confiance",
+      "default": "6 384 clients satisfaits — Note 4.9/5"
+    },
+    {
+      "type": "header",
+      "content": "Couleurs"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Couleur du texte",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Couleur d'accent",
+      "default": "#C8A97E"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Couleur du voile",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Opacité du voile",
+      "default": 45
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Fond bouton principal",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_text",
+      "label": "Texte bouton principal",
+      "default": "#0A0A0A"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg",
+      "label": "Fond bouton (hover)",
+      "default": "#C8A97E"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text",
+      "label": "Texte bouton (hover)",
+      "default": "#FFFFFF"
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Hero Premium",
+      "settings": {
+        "eyebrow": "LES AS DU VOLANT",
+        "heading": "Le volant qui transforme votre intérieur",
+        "subtext": "Cuir Nappa · Alcantara · Carbone · Sur-mesure",
+        "button_label": "CONFIGURER MON VOLANT",
+        "button_label_2": "VOIR LES MARQUES",
+        "trust_text": "6 384 clients satisfaits — Note 4.9/5"
+      }
+    }
+  ]
+}
+{% endschema %}
