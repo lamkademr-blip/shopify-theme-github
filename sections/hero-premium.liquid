@@ -12,6 +12,9 @@
     --hero-btn-hover-bg: {{ section.settings.button_hover_bg }};
     --hero-btn-hover-text: {{ section.settings.button_hover_text }};
     --hero-accent: {{ section.settings.accent_color }};
+    {%- if section.settings.image == blank and section.settings.bg_external_url != blank -%}
+    --hero-bg-url: url('{{ section.settings.bg_external_url }}');
+    {%- endif -%}
   }
 {%- endstyle -%}
 
@@ -30,6 +33,8 @@
           widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840',
           fetchpriority: 'high'
       }}
+    {%- elsif section.settings.bg_external_url != blank -%}
+      <div class="hero-premium__bg-external" role="img" aria-label="Volant sur-mesure premium"></div>
     {%- else -%}
       <div class="hero-premium__placeholder">
         {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
@@ -113,7 +118,14 @@
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Image d'arrière-plan"
+      "label": "Image d'arrière-plan (upload Shopify)"
+    },
+    {
+      "type": "text",
+      "id": "bg_external_url",
+      "label": "Image URL externe (fallback si pas d'image uploadée)",
+      "info": "URL directe d'une image (Unsplash, etc.). Utilisée si aucune image n'est uploadée ci-dessus.",
+      "default": "https://images.unsplash.com/photo-1611775348721-1e76c0d130f0?w=1920&q=80"
     },
     {
       "type": "range",

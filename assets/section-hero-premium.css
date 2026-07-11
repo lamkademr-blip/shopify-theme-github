@@ -21,6 +21,12 @@
   object-position: center;
 }
 
+.hero-premium__bg-external {
+  width: 100%;
+  height: 100%;
+  background: var(--hero-bg-url) center center / cover no-repeat;
+}
+
 .hero-premium__placeholder svg {
   width: 100%;
   height: 100%;
