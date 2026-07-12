@@ -1,5 +1,18 @@
 {
   "sections": {
+    "slideshow_6GfCjf": {
+      "type": "slideshow",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "medium",
+        "slider_visual": "counter",
+        "auto_rotate": false,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": true,
+        "accessibility_info": "Diaporama sur votre marque"
+      }
+    },
     "176899746855311c7e": {
       "type": "_blocks",
       "settings": {}
@@ -568,56 +581,10 @@
         "padding_top": 40,
         "padding_bottom": 52
       }
-    },
-    "hero_premium_main": {
-      "type": "hero-premium",
-      "settings": {
-        "desktop_height": 700,
-        "mobile_height": 500,
-        "image": "",
-        "eyebrow": "LES AS DU VOLANT",
-        "heading": "L'excellence du sur-mesure\npour votre volant",
-        "heading_size": "hxl",
-        "subtext": "Chaque volant est unique, fa\u00e7onn\u00e9 \u00e0 la main pour \u00e9pouser parfaitement votre style et votre conduite. 100% sur-mesure.",
-        "show_trust": true,
-        "trust_stars": 5,
-        "trust_text": "4.9/5 \u2014 Plus de 200 pilotes satisfaits",
-        "overlay_color": "#000000",
-        "overlay_opacity": 40,
-        "accent_color": "#C8A97E",
-        "text_color": "#FFFFFF",
-        "btn_primary_text": "Configurer mon volant",
-        "btn_primary_link": "shopify://collections/tous-les-volants",
-        "btn_secondary_text": "Voir nos marques",
-        "btn_secondary_link": "shopify://pages/nos-marques",
-        "btn_bg": "#FFFFFF",
-        "btn_text": "#0A0A0A",
-        "btn_hover_bg": "#C8A97E",
-        "btn_hover_text": "#FFFFFF",
-        "color_scheme": "scheme-4",
-        "bg_external_url": "https://images.unsplash.com/photo-1611775348721-1e76c0d130f0?w=1920&q=80"
-      }
-    },
-    "promo_bienvenue": {
-      "type": "promo-banner",
-      "settings": {
-        "icon": "\ud83c\udf81",
-        "title": "Bienvenue chez Les As du Volant",
-        "subtitle": "-15% sur votre premier volant sur-mesure",
-        "code": "BIENVENUE15",
-        "button_label": "J'en profite",
-        "button_link": "shopify://collections/tous-les-volants",
-        "background_color": "#0A0A0A",
-        "text_color": "#FFFFFF",
-        "accent_color": "#C8A97E",
-        "code_bg": "rgba(255,255,255,0.1)",
-        "code_text": "#C8A97E"
-      }
     }
   },
   "order": [
-    "promo_bienvenue",
-    "hero_premium_main",
+    "slideshow_6GfCjf",
     "176899746855311c7e",
     "1769011966061244b5",
     "titre_7xhXj8",
