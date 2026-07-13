@@ -372,6 +372,7 @@
   }
 </style>
     {{ 'custom-cart.css' | asset_url | stylesheet_tag }}
+    {{ 'discount-popup.css' | asset_url | stylesheet_tag }}
     {% if settings.favicon != blank %}
   <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
 {% endif %}
@@ -618,6 +619,8 @@ document.addEventListener('DOMContentLoaded', function() {
       background: #20bd5a;
     }
     </style>
+
+    {{ 'discount-popup.js' | asset_url | script_tag }}
 
     </body>
 
