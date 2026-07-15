@@ -32,6 +32,7 @@
 
   function showPopup() {
     if (hasBeenShown()) return;
+    if (document.querySelector('#cart-whatsapp-popup.cwp-visible')) return;
     markAsShown();
 
     var whatsappMessage = encodeURIComponent(

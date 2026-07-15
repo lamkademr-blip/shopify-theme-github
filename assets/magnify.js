@@ -1,4 +1,5 @@
 // create a container and set the full-size image as its background
+let overlay;
 function createOverlay(image) {
   const overlayImage = document.createElement('img');
   overlayImage.setAttribute('src', `${image.src}`);

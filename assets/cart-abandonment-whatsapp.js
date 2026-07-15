@@ -200,6 +200,7 @@
   // Créer et afficher le popup
   function showPopup(cartData) {
     if (hasBeenShown()) return;
+    if (document.querySelector('.dpop-overlay.dpop-visible')) return;
     markAsShown();
 
     // Injecter les styles CSS avant d'afficher
