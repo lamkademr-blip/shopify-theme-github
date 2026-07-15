@@ -155,9 +155,7 @@
   }
 
   .slider-video-{{ section.id }} {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: relative;
     z-index: 1;
     width: 100%;
     height: 100%;
@@ -1042,38 +1040,41 @@
           slideChange: function() {
             const slides = this.slides;
             let activeSlide = slides[this.activeIndex];
-    
+
             slides.forEach(slide => {
               let video = slide.querySelector('video');
               let frame = slide.querySelector('iframe');
               let btn = slide.querySelector('.slider-action-{{ section.id }}');
-    
+
               if (video) {
                   video.pause();
               }
-    
+
               if(frame) {
                 let src2 = frame.getAttribute('data-src2');
-                frame.src = src2;
+                if (src2) frame.src = src2;
               }
-    
+
               if (btn) {
                   btn.classList.remove('active');
               }
             });
-    
+
             if(activeSlide) {
               let video = activeSlide.querySelector('video');
               let frame = activeSlide.querySelector('iframe');
               let btn = activeSlide.querySelector('.slider-action-{{ section.id }}');
-    
+
               if (video) {
-                  video.play();
+                  if (!video.getAttribute('src') && video.dataset.src) {
+                    video.src = video.dataset.src;
+                  }
+                  video.play().catch(function(){});
               }
-    
+
               if(frame) {
                 let src1 = frame.getAttribute('data-src1');
-                frame.src = src1;
+                if (src1) frame.src = src1;
               }
     
               if (btn) {
@@ -1083,6 +1084,28 @@
           }
         }
       });
+
+      var sectionEl = document.querySelector('.slider-slider-{{ section.id }}');
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var activeSlide = sectionEl.querySelector('.swiper-slide-active');
+            if (activeSlide) {
+              var vid = activeSlide.querySelector('video');
+              if (vid && !vid.getAttribute('src') && vid.dataset.src) {
+                vid.src = vid.dataset.src;
+                vid.play().catch(function(){});
+              }
+              var ifr = activeSlide.querySelector('iframe');
+              if (ifr && !ifr.getAttribute('src') && ifr.dataset.src) {
+                ifr.src = ifr.dataset.src;
+              }
+            }
+            observer.disconnect();
+          }
+        });
+      }, { threshold: 0.1 });
+      observer.observe(sectionEl);
 
       document.querySelectorAll('.slider-slide-{{ section.id }}').forEach(el => {
         let btn = el.querySelector('.slider-action-{{ section.id }}');
@@ -1121,7 +1144,10 @@
                   frame.src = src1;
                 }
               if(video) {
-                video.play();
+                if (!video.getAttribute('src') && video.dataset.src) {
+                  video.src = video.dataset.src;
+                }
+                video.play().catch(function(){});
               }
             } else {
               if(frame) {
