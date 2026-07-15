@@ -100,6 +100,8 @@ class CartItems extends HTMLElement {
               targetElement.replaceWith(sourceElement);
             }
           }
+          document.dispatchEvent(new CustomEvent('cart-drawer:updated'));
+          document.dispatchEvent(new CustomEvent('shopify:section:load'));
         })
         .catch((e) => {
           console.error(e);
