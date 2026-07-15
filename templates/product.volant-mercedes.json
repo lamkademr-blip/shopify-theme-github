@@ -664,7 +664,6 @@
     }
   },
   "order": [
-    "blocks_MAeELX",
     "main",
     "custom_liquid_FAaKFw",
     "custom_liquid_d46ijA",
@@ -676,6 +675,7 @@
     "image_texte_J3QAVV",
     "slider_video_dD7k3k",
     "reels_insta_F6PiHF",
+    "blocks_MAeELX",
     "related-products"
   ]
 }

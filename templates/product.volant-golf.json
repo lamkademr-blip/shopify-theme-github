@@ -697,7 +697,6 @@
     }
   },
   "order": [
-    "blocks_JBDFrF",
     "main",
     "custom_liquid_xWEYpM",
     "custom_liquid_PfyjDC",
@@ -707,6 +706,7 @@
     "product_faq_KxC99k",
     "slider_video_dD7k3k",
     "reels_insta_fdg6GP",
+    "blocks_JBDFrF",
     "related-products"
   ]
 }

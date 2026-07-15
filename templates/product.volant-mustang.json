@@ -589,7 +589,6 @@
     }
   },
   "order": [
-    "blocks_wxTtGA",
     "main",
     "custom_liquid_NeC4p4",
     "testimonials_carousel_bkQKaq",
@@ -598,6 +597,7 @@
     "image_texte_J3QAVV",
     "product_faq_EYPp3w",
     "reels_insta_eQHf6F",
+    "blocks_wxTtGA",
     "related-products"
   ]
 }
