@@ -780,10 +780,18 @@
       });
     }
 
+    function startSliderReels_{{ section.id | replace: '-', '_' }}() {
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          initSliderReels_{{ section.id | replace: '-', '_' }}();
+        });
+      });
+    }
+
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initSliderReels_{{ section.id | replace: '-', '_' }});
+      document.addEventListener('DOMContentLoaded', startSliderReels_{{ section.id | replace: '-', '_' }});
     } else {
-      initSliderReels_{{ section.id | replace: '-', '_' }}();
+      startSliderReels_{{ section.id | replace: '-', '_' }}();
     }
 
     if (typeof Shopify !== 'undefined' && Shopify.designMode) {

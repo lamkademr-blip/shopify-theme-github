@@ -1192,10 +1192,18 @@
       });
     }
 
+    function startSliderVideo_{{ section.id | replace: '-', '_' }}() {
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          initSliderVideo_{{ section.id | replace: '-', '_' }}();
+        });
+      });
+    }
+
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initSliderVideo_{{ section.id | replace: '-', '_' }});
+      document.addEventListener('DOMContentLoaded', startSliderVideo_{{ section.id | replace: '-', '_' }});
     } else {
-      initSliderVideo_{{ section.id | replace: '-', '_' }}();
+      startSliderVideo_{{ section.id | replace: '-', '_' }}();
     }
 
     if (typeof Shopify !== 'undefined' && Shopify.designMode) {
