@@ -952,17 +952,41 @@
 
 <script>
     function initSliderVideo_{{ section.id | replace: '-', '_' }}() {
-      document.querySelector('.slider-slider-{{ section.id }}').classList.remove('preview');
+      var container = document.querySelector('.slider-slider-{{ section.id }}');
+      if (!container) return;
+      container.classList.remove('preview');
 
-      var lazyLoadInstance = new LazyLoad();
+      function loadVideo(el) {
+        if (!el) return;
+        if (el.tagName === 'VIDEO' && !el.getAttribute('src') && el.dataset.src) {
+          el.src = el.dataset.src;
+        }
+        if (el.tagName === 'IFRAME' && !el.getAttribute('src') && el.dataset.src) {
+          el.src = el.dataset.src;
+        }
+      }
 
-      window.addEventListener(
-        "LazyLoad::Initialized",
-        function (event) {
-          window.lazyLoadInstance = event.detail.instance;
-        },
-        false
-      );
+      function playVideo(el) {
+        if (!el) return;
+        loadVideo(el);
+        if (el.tagName === 'VIDEO' && el.getAttribute('src')) {
+          var p = el.play();
+          if (p) p.catch(function(){});
+        }
+      }
+
+      function loadVisibleSlides() {
+        container.querySelectorAll('.swiper-slide').forEach(function(slide) {
+          var v = slide.querySelector('video');
+          var f = slide.querySelector('iframe');
+          loadVideo(v);
+          loadVideo(f);
+        });
+      }
+
+      if (typeof LazyLoad === 'function') {
+        try { new LazyLoad(); } catch(e) {}
+      }
 
       const slider = new Swiper(".slider-slider-{{ section.id }}", {
         effect: "coverflow",
@@ -1038,74 +1062,49 @@
         },
         on: {
           slideChange: function() {
-            const slides = this.slides;
-            let activeSlide = slides[this.activeIndex];
-
-            slides.forEach(slide => {
-              let video = slide.querySelector('video');
-              let frame = slide.querySelector('iframe');
-              let btn = slide.querySelector('.slider-action-{{ section.id }}');
-
-              if (video) {
-                  video.pause();
-              }
-
-              if(frame) {
-                let src2 = frame.getAttribute('data-src2');
+            var sw = this;
+            sw.slides.forEach(function(slide) {
+              var video = slide.querySelector('video');
+              var frame = slide.querySelector('iframe');
+              var btn = slide.querySelector('.slider-action-{{ section.id }}');
+              if (video) video.pause();
+              if (frame) {
+                var src2 = frame.getAttribute('data-src2');
                 if (src2) frame.src = src2;
               }
-
-              if (btn) {
-                  btn.classList.remove('active');
-              }
+              if (btn) btn.classList.remove('active');
             });
 
-            if(activeSlide) {
-              let video = activeSlide.querySelector('video');
-              let frame = activeSlide.querySelector('iframe');
-              let btn = activeSlide.querySelector('.slider-action-{{ section.id }}');
-
-              if (video) {
-                  if (!video.getAttribute('src') && video.dataset.src) {
-                    video.src = video.dataset.src;
-                  }
-                  video.play().catch(function(){});
-              }
-
-              if(frame) {
-                let src1 = frame.getAttribute('data-src1');
+            var activeSlide = sw.slides[sw.activeIndex];
+            if (activeSlide) {
+              var video = activeSlide.querySelector('video');
+              var frame = activeSlide.querySelector('iframe');
+              var btn = activeSlide.querySelector('.slider-action-{{ section.id }}');
+              playVideo(video);
+              if (frame) {
+                var src1 = frame.getAttribute('data-src1');
                 if (src1) frame.src = src1;
+                else loadVideo(frame);
               }
-    
-              if (btn) {
-                  btn.classList.add('active');
-              }
-            }   
+              if (btn) btn.classList.add('active');
+            }
           }
         }
       });
 
-      var sectionEl = document.querySelector('.slider-slider-{{ section.id }}');
-      var observer = new IntersectionObserver(function(entries) {
+      var io = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           if (entry.isIntersecting) {
-            var activeSlide = sectionEl.querySelector('.swiper-slide-active');
+            loadVisibleSlides();
+            var activeSlide = container.querySelector('.swiper-slide-active');
             if (activeSlide) {
-              var vid = activeSlide.querySelector('video');
-              if (vid && !vid.getAttribute('src') && vid.dataset.src) {
-                vid.src = vid.dataset.src;
-                vid.play().catch(function(){});
-              }
-              var ifr = activeSlide.querySelector('iframe');
-              if (ifr && !ifr.getAttribute('src') && ifr.dataset.src) {
-                ifr.src = ifr.dataset.src;
-              }
+              playVideo(activeSlide.querySelector('video'));
             }
-            observer.disconnect();
+            io.disconnect();
           }
         });
-      }, { threshold: 0.1 });
-      observer.observe(sectionEl);
+      }, { threshold: 0.05 });
+      io.observe(container);
 
       document.querySelectorAll('.slider-slide-{{ section.id }}').forEach(el => {
         let btn = el.querySelector('.slider-action-{{ section.id }}');
@@ -1144,10 +1143,7 @@
                   frame.src = src1;
                 }
               if(video) {
-                if (!video.getAttribute('src') && video.dataset.src) {
-                  video.src = video.dataset.src;
-                }
-                video.play().catch(function(){});
+                playVideo(video);
               }
             } else {
               if(frame) {
@@ -1196,9 +1192,13 @@
       });
     }
 
-    document.addEventListener('DOMContentLoaded', initSliderVideo_{{ section.id | replace: '-', '_' }});
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSliderVideo_{{ section.id | replace: '-', '_' }});
+    } else {
+      initSliderVideo_{{ section.id | replace: '-', '_' }}();
+    }
 
-    if (Shopify.designMode) {
+    if (typeof Shopify !== 'undefined' && Shopify.designMode) {
        document.addEventListener('shopify:section:unload', initSliderVideo_{{ section.id | replace: '-', '_' }});
        document.addEventListener('shopify:section:load', initSliderVideo_{{ section.id | replace: '-', '_' }});
     }

@@ -662,11 +662,29 @@
 
 <script>
     function initSliderReels_{{ section.id | replace: '-', '_' }}() {
-      document.querySelector('.slider-slider-{{ section.id }}').classList.remove('preview');
-      var lazyLoadInstance = new LazyLoad();
-      window.addEventListener("LazyLoad::Initialized", function (event) {
-          window.lazyLoadInstance = event.detail.instance;
-      }, false);
+      var container = document.querySelector('.slider-slider-{{ section.id }}');
+      if (!container) return;
+      container.classList.remove('preview');
+
+      function loadMedia(el) {
+        if (!el) return;
+        if (!el.getAttribute('src') && el.dataset.src) {
+          el.src = el.dataset.src;
+        }
+      }
+
+      function playVid(el) {
+        if (!el) return;
+        loadMedia(el);
+        if (el.tagName === 'VIDEO' && el.getAttribute('src')) {
+          var p = el.play();
+          if (p) p.catch(function(){});
+        }
+      }
+
+      if (typeof LazyLoad === 'function') {
+        try { new LazyLoad(); } catch(e) {}
+      }
 
       const slider = new Swiper(".slider-slider-{{ section.id }}", {
         slideToClickedSlide: true,
@@ -677,7 +695,7 @@
         grabCursor: true,
         breakpoints: {
           320: {
-            slidesPerView: 1.4, 
+            slidesPerView: 1.4,
             centeredSlides: true,
             spaceBetween: {{ slider_gap_mobile }}
           },
@@ -687,7 +705,7 @@
             spaceBetween: {{ slider_gap }}
           },
           1024: {
-            slidesPerView: {{ slider_view }}, 
+            slidesPerView: {{ slider_view }},
             centeredSlides: false,
             spaceBetween: {{ slider_gap }},
             effect: 'slide'
@@ -695,25 +713,16 @@
         }
       });
 
-      var sectionEl = document.querySelector('.slider-slider-{{ section.id }}');
-      var observer = new IntersectionObserver(function(entries) {
+      var io = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           if (entry.isIntersecting) {
-            sectionEl.querySelectorAll('.swiper-slide video').forEach(function(vid) {
-              if (!vid.getAttribute('src') && vid.dataset.src) {
-                vid.src = vid.dataset.src;
-              }
-            });
-            sectionEl.querySelectorAll('.swiper-slide iframe').forEach(function(ifr) {
-              if (!ifr.getAttribute('src') && ifr.dataset.src) {
-                ifr.src = ifr.dataset.src;
-              }
-            });
-            observer.disconnect();
+            container.querySelectorAll('.swiper-slide video').forEach(loadMedia);
+            container.querySelectorAll('.swiper-slide iframe').forEach(loadMedia);
+            io.disconnect();
           }
         });
-      }, { threshold: 0.1 });
-      observer.observe(sectionEl);
+      }, { threshold: 0.05 });
+      io.observe(container);
 
       document.querySelectorAll('.slider-slide-{{ section.id }}').forEach(el => {
         let btn = el.querySelector('.slider-action-{{ section.id }}');
@@ -738,8 +747,7 @@
               });
               if(frame && frame.getAttribute('data-src1')) frame.src = frame.getAttribute('data-src1');
               if(video) {
-                if (!video.getAttribute('src') && video.dataset.src) video.src = video.dataset.src;
-                video.play().catch(function(){});
+                playVid(video);
               }
             } else {
               if(frame && frame.getAttribute('data-src2')) frame.src = frame.getAttribute('data-src2');
@@ -772,8 +780,13 @@
       });
     }
 
-    document.addEventListener('DOMContentLoaded', initSliderReels_{{ section.id | replace: '-', '_' }});
-    if (Shopify.designMode) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSliderReels_{{ section.id | replace: '-', '_' }});
+    } else {
+      initSliderReels_{{ section.id | replace: '-', '_' }}();
+    }
+
+    if (typeof Shopify !== 'undefined' && Shopify.designMode) {
        document.addEventListener('shopify:section:unload', initSliderReels_{{ section.id | replace: '-', '_' }});
        document.addEventListener('shopify:section:load', initSliderReels_{{ section.id | replace: '-', '_' }});
     }
