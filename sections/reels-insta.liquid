@@ -662,8 +662,10 @@
 
 <script>
     function initSliderReels_{{ section.id | replace: '-', '_' }}() {
+      if (typeof Swiper === 'undefined') return false;
+
       var container = document.querySelector('.slider-slider-{{ section.id }}');
-      if (!container) return;
+      if (!container) return false;
       container.classList.remove('preview');
 
       function loadMedia(el) {
@@ -686,7 +688,7 @@
         try { new LazyLoad(); } catch(e) {}
       }
 
-      const slider = new Swiper(".slider-slider-{{ section.id }}", {
+      var slider = new Swiper(".slider-slider-{{ section.id }}", {
         slideToClickedSlide: true,
         navigation: {nextEl: '.slider-btn-next-{{ section.id }}', prevEl: '.slider-btn-prev-{{ section.id }}'},
         loop: true,
@@ -724,52 +726,50 @@
       }, { threshold: 0.05 });
       io.observe(container);
 
-      document.querySelectorAll('.slider-slide-{{ section.id }}').forEach(el => {
-        let btn = el.querySelector('.slider-action-{{ section.id }}');
-        let soundBtn = el.querySelector('.slider-sound-{{ section.id }}');
-        let frame = el.querySelector('iframe');
-        let video = el.querySelector('video');
+      document.querySelectorAll('.slider-slide-{{ section.id }}').forEach(function(el) {
+        var btn = el.querySelector('.slider-action-{{ section.id }}');
+        var soundBtn = el.querySelector('.slider-sound-{{ section.id }}');
+        var frame = el.querySelector('iframe');
+        var video = el.querySelector('video');
 
         if(btn) {
-           btn.addEventListener('click', (e) => {
+           btn.addEventListener('click', function(e) {
             e.stopPropagation();
             btn.classList.toggle('active');
             if(btn.classList.contains('active')) {
-              document.querySelectorAll('.slider-slide-{{ section.id }}').forEach(element => {
-                if(el != element) {
-                  let btn = element.querySelector('.slider-action-{{ section.id }}');
-                  let frame = element.querySelector('iframe');
-                  let video = element.querySelector('video');
-                  if(btn) btn.classList.remove('active');
-                  if(frame && frame.getAttribute('data-src2')) frame.src = frame.getAttribute('data-src2');
-                  if(video) video.pause();
+              document.querySelectorAll('.slider-slide-{{ section.id }}').forEach(function(element) {
+                if(el !== element) {
+                  var otherBtn = element.querySelector('.slider-action-{{ section.id }}');
+                  var otherFrame = element.querySelector('iframe');
+                  var otherVideo = element.querySelector('video');
+                  if(otherBtn) otherBtn.classList.remove('active');
+                  if(otherFrame && otherFrame.getAttribute('data-src2')) otherFrame.src = otherFrame.getAttribute('data-src2');
+                  if(otherVideo) otherVideo.pause();
                 }
               });
               if(frame && frame.getAttribute('data-src1')) frame.src = frame.getAttribute('data-src1');
-              if(video) {
-                playVid(video);
-              }
+              if(video) playVid(video);
             } else {
               if(frame && frame.getAttribute('data-src2')) frame.src = frame.getAttribute('data-src2');
               if(video) video.pause();
             }
-          })
+          });
         }
 
         if(soundBtn) {
-          soundBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); 
+          soundBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
             soundBtn.classList.toggle('active');
             if(soundBtn.classList.contains('active')) {
               if(frame) {
-                let src = frame.getAttribute("src");
+                var src = frame.getAttribute("src");
                 var muteIndex = src.indexOf("mute=");
                 if (src.charAt(muteIndex + 5) === "1") frame.src = src.slice(0, muteIndex + 5) + "0" + src.slice(muteIndex + 6);
               }
               if(video) video.muted = false;
             } else {
               if(frame) {
-                let src = frame.getAttribute("src");
+                var src = frame.getAttribute("src");
                 var muteIndex = src.indexOf("mute=");
                 if (src.charAt(muteIndex + 5) === "0") frame.src = src.slice(0, muteIndex + 5) + "1" + src.slice(muteIndex + 6);
               }
@@ -778,12 +778,22 @@
           });
         }
       });
+
+      return true;
     }
 
     function startSliderReels_{{ section.id | replace: '-', '_' }}() {
       requestAnimationFrame(function() {
         requestAnimationFrame(function() {
-          initSliderReels_{{ section.id | replace: '-', '_' }}();
+          if (!initSliderReels_{{ section.id | replace: '-', '_' }}()) {
+            var attempts = 0;
+            var retry = setInterval(function() {
+              attempts++;
+              if (initSliderReels_{{ section.id | replace: '-', '_' }}() || attempts > 20) {
+                clearInterval(retry);
+              }
+            }, 200);
+          }
         });
       });
     }
@@ -802,7 +812,7 @@
 
 {% schema %}
 {
-  "name": "SS - Video Slider",
+  "name": "SS - Reels Instagram",
   "settings": [
     { "type": "header", "content": "Slider Settings" },
     { "type": "range", "id": "slider_view", "min": 2, "max": 6, "step": 1, "label": "Slides Per View", "default": 5 },
@@ -904,7 +914,7 @@
   ],
   "presets": [
     {
-      "name": "SS - Video Slider",
+      "name": "SS - Reels Instagram",
       "blocks": [ { "type": "slide" }, { "type": "slide" }, { "type": "slide" }, { "type": "slide" }, { "type": "slide" } ]
     }
   ]
