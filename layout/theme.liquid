@@ -633,6 +633,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
     {{ 'discount-popup.js' | asset_url | script_tag }}
 
+    <script>
+    document.addEventListener('click', function(e) {
+      var link = e.target.closest('a[href*="wa.me"]');
+      if (!link) return;
+      var source = 'unknown';
+      if (link.classList.contains('whatsapp-float')) {
+        source = 'bouton_flottant';
+      } else if (link.closest('#cart-whatsapp-popup') || link.closest('.cwp-card')) {
+        source = 'popup_abandon_panier';
+      } else if (link.closest('.product') || link.closest('[data-product]')) {
+        source = 'page_produit';
+      }
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'whatsapp_click',
+        whatsapp_source: source,
+        page_url: window.location.pathname,
+        page_title: document.title
+      });
+    });
+    </script>
+
     </body>
 
   <script type="text/javascript">
