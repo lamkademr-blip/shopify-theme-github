@@ -952,8 +952,10 @@
 
 <script>
     function initSliderVideo_{{ section.id | replace: '-', '_' }}() {
+      if (typeof Swiper === 'undefined') return false;
+
       var container = document.querySelector('.slider-slider-{{ section.id }}');
-      if (!container) return;
+      if (!container) return false;
       container.classList.remove('preview');
 
       function loadVideo(el) {
@@ -1106,96 +1108,91 @@
       }, { threshold: 0.05 });
       io.observe(container);
 
-      document.querySelectorAll('.slider-slide-{{ section.id }}').forEach(el => {
-        let btn = el.querySelector('.slider-action-{{ section.id }}');
-        let soundBtn = el.querySelector('.slider-sound-{{ section.id }}');
-        let frame = el.querySelector('iframe');
-        let video = el.querySelector('video');
-        
+      document.querySelectorAll('.slider-slide-{{ section.id }}').forEach(function(el) {
+        var btn = el.querySelector('.slider-action-{{ section.id }}');
+        var soundBtn = el.querySelector('.slider-sound-{{ section.id }}');
+        var frame = el.querySelector('iframe');
+        var video = el.querySelector('video');
+
         if(btn) {
-           btn.addEventListener('click', (e) => {
+           btn.addEventListener('click', function(e) {
             e.stopPropagation();
             btn.classList.toggle('active');
             if(btn.classList.contains('active')) {
-
-              document.querySelectorAll('.slider-slide-{{ section.id }}').forEach(element => {
-                if(el != element) {
-                  let btn = element.querySelector('.slider-action-{{ section.id }}');
-                  let frame = element.querySelector('iframe');
-                  let video = element.querySelector('video');
-                  if(btn) {
-                    btn.classList.remove('active');
+              document.querySelectorAll('.slider-slide-{{ section.id }}').forEach(function(element) {
+                if(el !== element) {
+                  var otherBtn = element.querySelector('.slider-action-{{ section.id }}');
+                  var otherFrame = element.querySelector('iframe');
+                  var otherVideo = element.querySelector('video');
+                  if(otherBtn) otherBtn.classList.remove('active');
+                  if(otherFrame) {
+                    var src2 = otherFrame.getAttribute('data-src2');
+                    if (src2) otherFrame.src = src2;
                   }
-
-                  if(frame) {
-                    let src2 = frame.getAttribute('data-src2');
-                    frame.src = src2;
-                  }
-                  if(video) {
-                    video.pause();
-                  }
+                  if(otherVideo) otherVideo.pause();
                 }
-
               });
-
               if(frame) {
-                  let src1 = frame.getAttribute('data-src1');
-                  frame.src = src1;
-                }
-              if(video) {
-                playVideo(video);
+                var src1 = frame.getAttribute('data-src1');
+                if (src1) frame.src = src1;
               }
+              if(video) playVideo(video);
             } else {
               if(frame) {
-                let src2 = frame.getAttribute('data-src2');
-                frame.src = src2;
+                var src2 = frame.getAttribute('data-src2');
+                if (src2) frame.src = src2;
               }
-              if(video) {
-                video.pause();
-              }
+              if(video) video.pause();
             }
-          })
+          });
         }
 
         if(soundBtn) {
-          soundBtn.addEventListener('click', (e) => {
+          soundBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             soundBtn.classList.toggle('active');
             if(soundBtn.classList.contains('active')) {
               if(frame) {
-                let src = frame.getAttribute("src");
-                var muteIndex = src.indexOf("mute=");
-                var muteValue = src.charAt(muteIndex + 5);
-                if (muteValue === "1") {
-                  frame.src = src.slice(0, muteIndex + 5) + "0" + src.slice(muteIndex + 6);
+                var src = frame.getAttribute("src");
+                if (src) {
+                  var muteIndex = src.indexOf("mute=");
+                  if (muteIndex !== -1 && src.charAt(muteIndex + 5) === "1") {
+                    frame.src = src.slice(0, muteIndex + 5) + "0" + src.slice(muteIndex + 6);
+                  }
                 }
               }
-              if(video) {
-                video.muted = false;
-              }
+              if(video) video.muted = false;
             } else {
               if(frame) {
-                let src = frame.getAttribute("src");
-                var muteIndex = src.indexOf("mute=");
-                var muteValue = src.charAt(muteIndex + 5);
-                console.log(muteValue);
-                if (muteValue === "0") {
-                  frame.src = src.slice(0, muteIndex + 5) + "1" + src.slice(muteIndex + 6);
+                var src = frame.getAttribute("src");
+                if (src) {
+                  var muteIndex = src.indexOf("mute=");
+                  if (muteIndex !== -1 && src.charAt(muteIndex + 5) === "0") {
+                    frame.src = src.slice(0, muteIndex + 5) + "1" + src.slice(muteIndex + 6);
+                  }
                 }
               }
-              if(video) {
-                video.muted = true;
-              }
+              if(video) video.muted = true;
             }
           });
         }
       });
+
+      return true;
     }
 
     function startSliderVideo_{{ section.id | replace: '-', '_' }}() {
       requestAnimationFrame(function() {
         requestAnimationFrame(function() {
-          initSliderVideo_{{ section.id | replace: '-', '_' }}();
+          if (!initSliderVideo_{{ section.id | replace: '-', '_' }}()) {
+            var attempts = 0;
+            var retry = setInterval(function() {
+              attempts++;
+              if (initSliderVideo_{{ section.id | replace: '-', '_' }}() || attempts > 20) {
+                clearInterval(retry);
+              }
+            }, 200);
+          }
         });
       });
     }
