@@ -131,13 +131,41 @@
     }
   }
 
-  // Scroll the page to the main buy button so YMQ validates properly
   btn.addEventListener('click', function(e) {
     e.preventDefault();
-    var formEl = mainBtn.closest('form');
-    // Scroll to the product form area so user sees the options + YMQ validation
-    mainBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    setTimeout(function() { mainBtn.click(); }, 400);
+
+    // Check if YMQ has unfilled required fields
+    var emptyRequired = document.querySelectorAll('input[name^="empty-properties"]');
+    var requiredLabels = document.querySelectorAll('.ymq_lable.required');
+
+    // Find the first unfilled required option section
+    var firstMissing = null;
+    requiredLabels.forEach(function(label) {
+      if (firstMissing) return;
+      var optionBox = label.closest('.ymq-options-box') || label.closest('[class*="ymq-option"]') || label.parentElement;
+      if (!optionBox) return;
+      var hasEmpty = optionBox.querySelector('input[name^="empty-properties"]');
+      if (hasEmpty) firstMissing = label;
+    });
+
+    if (firstMissing) {
+      // Scroll to first missing required field
+      firstMissing.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Flash the label to draw attention
+      firstMissing.style.transition = 'color 0.3s';
+      firstMissing.style.color = '#d03b3b';
+      setTimeout(function() { firstMissing.style.color = ''; }, 2000);
+      // Also click the main button so YMQ shows its own error messages
+      setTimeout(function() { mainBtn.click(); }, 500);
+      return;
+    }
+
+    // All required fields are filled — click the real submit button
+    mainBtn.click();
+
+    // After successful add-to-cart, refresh the sticky price
+    setTimeout(function() { if (typeof updateStickyPrice === 'function') updateStickyPrice(); }, 1000);
+    setTimeout(function() { if (typeof updateStickyPrice === 'function') updateStickyPrice(); }, 2000);
   });
 
   var ticking = false;
@@ -237,6 +265,21 @@
       setTimeout(updateStickyPrice, 400);
     }
   });
+
+  // Make updateStickyPrice accessible for the ATC callback
+  window.updateStickyPrice = updateStickyPrice;
+
+  // Watch for cart drawer opening (= successful ATC) to refresh the price
+  var cartDrawer = document.querySelector('cart-drawer, #cart-drawer, .cart-drawer');
+  if (cartDrawer) {
+    new MutationObserver(function() {
+      setTimeout(updateStickyPrice, 500);
+    }).observe(cartDrawer, { attributes: true, attributeFilter: ['class', 'style', 'open'] });
+  }
+
+  // Also listen for Shopify section rendering events (fired after ATC)
+  document.addEventListener('cart:refresh', function() { setTimeout(updateStickyPrice, 300); });
+  document.addEventListener('cart:updated', function() { setTimeout(updateStickyPrice, 300); });
 
   // Initial price set
   updateStickyPrice();
