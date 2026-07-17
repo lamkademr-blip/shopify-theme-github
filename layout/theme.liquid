@@ -598,6 +598,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     </script>
 
+    {% render 'sticky-atc' %}
+    {% render 'product-jsonld' %}
+
     <!-- WhatsApp Floating Button -->
     <a href="https://wa.me/33622510196" target="_blank" rel="noopener noreferrer"
        class="whatsapp-float"
@@ -632,6 +635,78 @@ document.addEventListener('DOMContentLoaded', function() {
     </style>
 
     {{ 'discount-popup.js' | asset_url | script_tag }}
+
+    <!-- Judge.me French translation -->
+    <script>
+    (function() {
+      var translations = {
+        'Write a review': 'Laisser un avis',
+        'Write a Review': 'Laisser un avis',
+        'Sort by': 'Trier par',
+        'Most Recent': 'Plus récents',
+        'Highest Rating': 'Meilleures notes',
+        'Lowest Rating': 'Notes les plus basses',
+        'With Photos': 'Avec photos',
+        'Most Helpful': 'Plus utiles',
+        'reviews': 'avis',
+        'review': 'avis',
+        'Reviews': 'Avis',
+        'Review': 'Avis',
+        'Verified Buyer': 'Acheteur vérifié',
+        'Helpful?': 'Utile ?',
+        'Yes': 'Oui',
+        'No': 'Non',
+        'Share': 'Partager',
+        'Cancel': 'Annuler',
+        'Submit Review': 'Envoyer',
+        'Name': 'Nom',
+        'Email': 'E-mail',
+        'Rating': 'Note',
+        'Review Title': 'Titre de l\'avis',
+        'Review Body': 'Votre avis',
+        'Thank you for submitting a review!': 'Merci pour votre avis !',
+        'Loading...': 'Chargement...',
+        'No reviews yet': 'Aucun avis pour le moment',
+        'Be the first to write a review': 'Soyez le premier à laisser un avis',
+        'out of 5': 'sur 5',
+        'Showing': 'Affichage',
+        'of': 'sur',
+        'Next': 'Suivant',
+        'Previous': 'Précédent',
+        'Based on': 'Basé sur'
+      };
+
+      function translateJudgme() {
+        var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+        while (walker.nextNode()) {
+          var node = walker.currentNode;
+          var text = node.nodeValue.trim();
+          if (translations[text]) {
+            node.nodeValue = node.nodeValue.replace(text, translations[text]);
+          }
+        }
+        document.querySelectorAll('input[type="submit"], button, [placeholder], [value], [aria-label]').forEach(function(el) {
+          ['value', 'placeholder', 'aria-label', 'title'].forEach(function(attr) {
+            var val = el.getAttribute(attr);
+            if (val && translations[val.trim()]) {
+              el.setAttribute(attr, translations[val.trim()]);
+            }
+          });
+          if (el.textContent && translations[el.textContent.trim()]) {
+            el.textContent = translations[el.textContent.trim()];
+          }
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() { setTimeout(translateJudgme, 1500); });
+      } else {
+        setTimeout(translateJudgme, 1500);
+      }
+      setTimeout(translateJudgme, 3000);
+      setTimeout(translateJudgme, 5000);
+    })();
+    </script>
 
     <script>
     document.addEventListener('click', function(e) {

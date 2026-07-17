@@ -120,6 +120,9 @@ Nous pouvons vous envoyer un visuel 3D du volant via WhatsApp à la demande, ava
     </div>
   {%- endif -%}
 
+  {% render 'trust-badges' %}
+  {% render 'cross-sell-cockpit' %}
+
   {%- if show_pickup_availability -%}
     {{ 'component-pickup-availability.css' | asset_url | stylesheet_tag }}
 
