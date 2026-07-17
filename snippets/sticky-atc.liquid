@@ -85,7 +85,8 @@
   <div class="sticky-atc__inner">
     <div class="sticky-atc__info">
       <p class="sticky-atc__title">{{ product.title | escape }}</p>
-      <p class="sticky-atc__price">
+      <p class="sticky-atc__price" id="StickyATCPrice"
+         data-base-price="{{ product.selected_or_first_available_variant.price | divided_by: 100.0 }}">
         {{ product.selected_or_first_available_variant.price | money }}
         {%- if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
           <s>{{ product.selected_or_first_available_variant.compare_at_price | money }}</s>
@@ -135,6 +136,72 @@
   }, { passive: true });
   window.addEventListener('resize', checkVisibility);
   checkVisibility();
+
+  // --- YMQ option price sync ---
+  var stickyPrice = document.getElementById('StickyATCPrice');
+  if (!stickyPrice) return;
+
+  function parsePrice(text) {
+    var cleaned = text.replace(/[^\d.,]/g, '').replace(/\s/g, '');
+    cleaned = cleaned.replace(',', '.');
+    return parseFloat(cleaned) || 0;
+  }
+
+  function formatPrice(cents) {
+    return (cents / 100).toFixed(2).replace('.', ',') + ' €';
+  }
+
+  function updateStickyPrice() {
+    var mainPriceEl = document.querySelector('.price--large .price-item--regular');
+    if (mainPriceEl) {
+      var mainText = mainPriceEl.textContent.trim();
+      if (mainText) {
+        stickyPrice.childNodes[0].textContent = mainText + ' ';
+        return;
+      }
+    }
+
+    var basePrice = parsePrice(stickyPrice.getAttribute('data-base-price') || '0') * 100;
+    var addonsEl = document.getElementById('ymq-addons-price');
+    var addonsText = addonsEl ? addonsEl.textContent.trim() : '';
+    var addonsValue = 0;
+    if (addonsText) {
+      addonsValue = parsePrice(addonsText) * 100;
+    }
+    var total = basePrice + addonsValue;
+    stickyPrice.childNodes[0].textContent = formatPrice(total) + ' ';
+  }
+
+  // Observe the main price element for changes by YMQ
+  var mainPriceEl = document.querySelector('.price--large .price-item--regular');
+  if (mainPriceEl) {
+    new MutationObserver(updateStickyPrice).observe(mainPriceEl, { childList: true, characterData: true, subtree: true });
+  }
+
+  // Observe #ymq-addons-price for changes
+  var addonsEl = document.getElementById('ymq-addons-price');
+  if (addonsEl) {
+    new MutationObserver(updateStickyPrice).observe(addonsEl, { childList: true, characterData: true, subtree: true });
+  }
+
+  // Observe #ymq-price-addons visibility changes
+  var priceAddons = document.getElementById('ymq-price-addons');
+  if (priceAddons) {
+    new MutationObserver(updateStickyPrice).observe(priceAddons, { attributes: true, attributeFilter: ['style'] });
+  }
+
+  // Listen for YMQ custom events and input changes on option elements
+  document.addEventListener('change', function(e) {
+    if (e.target.closest('[class*="ymq"]')) {
+      setTimeout(updateStickyPrice, 100);
+    }
+  });
+  document.addEventListener('click', function(e) {
+    if (e.target.closest('[class*="ymq"]')) {
+      setTimeout(updateStickyPrice, 100);
+      setTimeout(updateStickyPrice, 300);
+    }
+  });
 })();
 </script>
 {%- endif -%}
