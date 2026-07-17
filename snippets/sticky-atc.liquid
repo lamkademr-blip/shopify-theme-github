@@ -179,7 +179,7 @@
   var stickyPrice = document.getElementById('StickyATCPrice');
   if (!stickyPrice) return;
 
-  var basePrice = parseFloat(stickyPrice.getAttribute('data-base-price')) || 0;
+  var basePrice = parseFloat(stickyPrice.getAttribute('data-base-price').replace(',', '.')) || 0;
 
   function parseAddons(text) {
     if (!text) return 0;
