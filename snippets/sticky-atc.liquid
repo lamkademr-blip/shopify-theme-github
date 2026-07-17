@@ -55,6 +55,13 @@
     color: rgba(var(--color-foreground), 0.5);
     margin-left: 6px;
   }
+  .sticky-atc__addons {
+    font-size: 10px;
+    font-weight: 400;
+    color: #c9a96e;
+    line-height: 1.2;
+    display: none;
+  }
   .sticky-atc__btn {
     flex-shrink: 0;
     background: #c9a96e;
@@ -86,11 +93,9 @@
     <div class="sticky-atc__info">
       <p class="sticky-atc__title">{{ product.title | escape }}</p>
       <p class="sticky-atc__price" id="StickyATCPrice"
-         data-base-price="{{ product.selected_or_first_available_variant.price | divided_by: 100.0 }}">
-        {{ product.selected_or_first_available_variant.price | money }}
-        {%- if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
-          <s>{{ product.selected_or_first_available_variant.compare_at_price | money }}</s>
-        {%- endif -%}
+         data-base-price="{{ product.selected_or_first_available_variant.price | money_without_currency | strip }}">
+        <span class="sticky-atc__total">{{ product.selected_or_first_available_variant.price | money }}</span>
+        <span class="sticky-atc__addons" style="display:none"></span>
       </p>
     </div>
     <button class="sticky-atc__btn" id="StickyATCBtn"
@@ -126,8 +131,13 @@
     }
   }
 
-  btn.addEventListener('click', function() {
-    mainBtn.click();
+  // Scroll the page to the main buy button so YMQ validates properly
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    var formEl = mainBtn.closest('form');
+    // Scroll to the product form area so user sees the options + YMQ validation
+    mainBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(function() { mainBtn.click(); }, 400);
   });
 
   var ticking = false;
@@ -141,67 +151,95 @@
   var stickyPrice = document.getElementById('StickyATCPrice');
   if (!stickyPrice) return;
 
-  function parsePrice(text) {
+  var basePrice = parseFloat(stickyPrice.getAttribute('data-base-price')) || 0;
+
+  function parseAddons(text) {
+    if (!text) return 0;
     var cleaned = text.replace(/[^\d.,]/g, '').replace(/\s/g, '');
     cleaned = cleaned.replace(',', '.');
     return parseFloat(cleaned) || 0;
   }
 
-  function formatPrice(cents) {
-    return (cents / 100).toFixed(2).replace('.', ',') + ' €';
+  function formatEUR(value) {
+    return value.toFixed(2).replace('.', ',') + ' €';
   }
 
   function updateStickyPrice() {
-    var mainPriceEl = document.querySelector('.price--large .price-item--regular');
-    if (mainPriceEl) {
-      var mainText = mainPriceEl.textContent.trim();
-      if (mainText) {
-        stickyPrice.childNodes[0].textContent = mainText + ' ';
-        return;
-      }
-    }
-
-    var basePrice = parsePrice(stickyPrice.getAttribute('data-base-price') || '0') * 100;
     var addonsEl = document.getElementById('ymq-addons-price');
     var addonsText = addonsEl ? addonsEl.textContent.trim() : '';
-    var addonsValue = 0;
-    if (addonsText) {
-      addonsValue = parsePrice(addonsText) * 100;
-    }
+    var addonsValue = parseAddons(addonsText);
     var total = basePrice + addonsValue;
-    stickyPrice.childNodes[0].textContent = formatPrice(total) + ' ';
+
+    // Update the sticky price display
+    var priceText = formatEUR(total);
+
+    // Find or create the main price text node
+    var priceSpan = stickyPrice.querySelector('.sticky-atc__total');
+    if (!priceSpan) {
+      stickyPrice.innerHTML = '<span class="sticky-atc__total">' + priceText + '</span>';
+    } else {
+      priceSpan.textContent = priceText;
+    }
+
+    // Show the addons breakdown if any
+    var breakdownEl = stickyPrice.querySelector('.sticky-atc__addons');
+    if (addonsValue > 0) {
+      if (!breakdownEl) {
+        breakdownEl = document.createElement('span');
+        breakdownEl.className = 'sticky-atc__addons';
+        stickyPrice.appendChild(breakdownEl);
+      }
+      breakdownEl.textContent = '(dont +' + formatEUR(addonsValue) + ' options)';
+      breakdownEl.style.display = 'block';
+    } else if (breakdownEl) {
+      breakdownEl.style.display = 'none';
+    }
   }
 
-  // Observe the main price element for changes by YMQ
-  var mainPriceEl = document.querySelector('.price--large .price-item--regular');
-  if (mainPriceEl) {
-    new MutationObserver(updateStickyPrice).observe(mainPriceEl, { childList: true, characterData: true, subtree: true });
+  // 1. MutationObserver on #ymq-addons-price (YMQ writes the addon total here)
+  function waitAndObserve(id, callback) {
+    var el = document.getElementById(id);
+    if (el) {
+      new MutationObserver(callback).observe(el, { childList: true, characterData: true, subtree: true });
+      return;
+    }
+    // YMQ may inject the element after page load — retry
+    var attempts = 0;
+    var interval = setInterval(function() {
+      el = document.getElementById(id);
+      if (el) {
+        new MutationObserver(callback).observe(el, { childList: true, characterData: true, subtree: true });
+        clearInterval(interval);
+      }
+      if (++attempts > 20) clearInterval(interval);
+    }, 500);
   }
 
-  // Observe #ymq-addons-price for changes
-  var addonsEl = document.getElementById('ymq-addons-price');
-  if (addonsEl) {
-    new MutationObserver(updateStickyPrice).observe(addonsEl, { childList: true, characterData: true, subtree: true });
-  }
+  waitAndObserve('ymq-addons-price', updateStickyPrice);
 
-  // Observe #ymq-price-addons visibility changes
+  // 2. MutationObserver on #ymq-price-addons (visibility toggle)
   var priceAddons = document.getElementById('ymq-price-addons');
   if (priceAddons) {
-    new MutationObserver(updateStickyPrice).observe(priceAddons, { attributes: true, attributeFilter: ['style'] });
+    new MutationObserver(updateStickyPrice).observe(priceAddons, { attributes: true, attributeFilter: ['style', 'class'] });
   }
 
-  // Listen for YMQ custom events and input changes on option elements
-  document.addEventListener('change', function(e) {
-    if (e.target.closest('[class*="ymq"]')) {
-      setTimeout(updateStickyPrice, 100);
-    }
-  });
+  // 3. Catch all YMQ interactions (clicks on options, radio/checkbox changes)
   document.addEventListener('click', function(e) {
     if (e.target.closest('[class*="ymq"]')) {
-      setTimeout(updateStickyPrice, 100);
-      setTimeout(updateStickyPrice, 300);
+      setTimeout(updateStickyPrice, 150);
+      setTimeout(updateStickyPrice, 400);
+      setTimeout(updateStickyPrice, 800);
     }
   });
+  document.addEventListener('change', function(e) {
+    if (e.target.closest('[class*="ymq"]')) {
+      setTimeout(updateStickyPrice, 150);
+      setTimeout(updateStickyPrice, 400);
+    }
+  });
+
+  // Initial price set
+  updateStickyPrice();
 })();
 </script>
 {%- endif -%}
