@@ -632,6 +632,12 @@ document.addEventListener('DOMContentLoaded', function() {
       box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
       background: #20bd5a;
     }
+    @media screen and (max-width: 749px) {
+      .whatsapp-float {
+        bottom: 80px;
+        transition: bottom 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      }
+    }
     </style>
 
     {{ 'discount-popup.js' | asset_url | script_tag }}
