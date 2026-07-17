@@ -94,8 +94,10 @@
       tag: 'Tendance',
       desc: 'Carbone forge noir + repose-pouces en carbone.',
       selections: [
-        { group: /carbone forg[eé].*haut.*bas/i, label: /noir/i },
-        { group: /repose.?pouces?/i, label: /^oui/i }
+        { group: /mat[eé]riau du haut et bas/i, label: /^carbone$/i },
+        { group: /style de fibre de carbone/i, label: /forg/i },
+        { group: /carbone forg[eé].*haut/i, label: /noir/i },
+        { group: /reposes? pouces/i, label: /^oui/i }
       ]
     },
     {
@@ -105,8 +107,10 @@
       desc: 'ShiftLEDs + carbone forge noir + repose-pouces.',
       selections: [
         { group: /shiftled/i, label: /^oui/i },
-        { group: /carbone forg[eé].*haut.*bas/i, label: /noir/i },
-        { group: /repose.?pouces?/i, label: /^oui/i }
+        { group: /mat[eé]riau du haut et bas/i, label: /^carbone$/i },
+        { group: /style de fibre de carbone/i, label: /forg/i },
+        { group: /carbone forg[eé].*haut/i, label: /noir/i },
+        { group: /reposes? pouces/i, label: /^oui/i }
       ]
     }
   ];
@@ -120,23 +124,26 @@
   }
 
   // --- Nettoyage des libelles : retire "11.2 " etc. des titres d'options ---
+  // Le numero vit dans <span class="ymq_lable">11.2 Choix du...</span>
   function cleanLabels() {
-    document.querySelectorAll('.ymq-option-title').forEach(function(t) {
-      for (var i = 0; i < t.childNodes.length; i++) {
-        var node = t.childNodes[i];
-        if (node.nodeType === 3 && /^\s*\d+(?:\.\d+)*\.?\s+/.test(node.nodeValue)) {
-          node.nodeValue = node.nodeValue.replace(/^\s*\d+(?:\.\d+)*\.?\s+/, '');
+    document.querySelectorAll('.ymq-option-title .ymq_lable').forEach(function(span) {
+      for (var i = 0; i < span.childNodes.length; i++) {
+        var node = span.childNodes[i];
+        if (node.nodeType === 3 && /^\s*\d+(?:\.\s?\d+)*\.?\s+/.test(node.nodeValue)) {
+          node.nodeValue = node.nodeValue.replace(/^\s*\d+(?:\.\s?\d+)*\.?\s+/, '');
+          break;
         }
       }
     });
   }
 
   // --- Resolution d'un preset : trouve les inputs YMQ correspondants ---
-  function visibleBoxes() {
-    return Array.prototype.filter.call(
-      document.querySelectorAll('.ymq-options-box'),
-      function(b) { return b.offsetParent !== null; }
-    );
+  // includeHidden=true sert au calcul du prix affiche sur la carte (les
+  // sous-options conditionnelles sont masquees tant que le parent n'est pas coche).
+  function getBoxes(includeHidden) {
+    var all = document.querySelectorAll('.ymq-options-box');
+    if (includeHidden) return Array.prototype.slice.call(all);
+    return Array.prototype.filter.call(all, function(b) { return b.offsetParent !== null; });
   }
 
   function inputLabel(input) {
@@ -146,39 +153,71 @@
     return sib ? sib.textContent.trim() : '';
   }
 
-  function resolvePreset(preset) {
-    var found = [];
-    var total = 0;
-    preset.selections.forEach(function(sel) {
-      var boxes = visibleBoxes();
-      for (var i = 0; i < boxes.length; i++) {
-        var title = boxes[i].querySelector('.ymq-option-title');
-        if (!title || !sel.group.test(title.textContent)) continue;
-        var inputs = boxes[i].querySelectorAll('input[type="radio"], input[type="checkbox"]');
-        for (var j = 0; j < inputs.length; j++) {
-          if (sel.label.test(inputLabel(inputs[j]))) {
-            found.push(inputs[j]);
-            total += parseFloat(inputs[j].getAttribute('data-price')) || 0;
-            return;
-          }
-        }
+  function findSelection(sel, includeHidden) {
+    var boxes = getBoxes(includeHidden);
+    for (var i = 0; i < boxes.length; i++) {
+      var title = boxes[i].querySelector('.ymq-option-title');
+      if (!title || !sel.group.test(title.textContent)) continue;
+      var inputs = boxes[i].querySelectorAll('input[type="radio"], input[type="checkbox"]');
+      for (var j = 0; j < inputs.length; j++) {
+        if (sel.label.test(inputLabel(inputs[j]))) return inputs[j];
       }
-    });
-    return { inputs: found, total: total };
+    }
+    return null;
   }
 
-  function applyPreset(preset, card, bar) {
-    var resolved = resolvePreset(preset);
-    resolved.inputs.forEach(function(input) {
-      if (!input.checked) input.click();
+  function presetPrice(preset) {
+    var total = 0;
+    var foundAny = false;
+    preset.selections.forEach(function(sel) {
+      var input = findSelection(sel, true);
+      if (input) {
+        foundAny = true;
+        total += parseFloat(input.getAttribute('data-price')) || 0;
+      }
     });
+    return { total: total, foundAny: foundAny };
+  }
+
+  // Application multi-passes : cocher un parent revele des sous-options YMQ,
+  // donc on re-cherche les selections restantes apres chaque vague de clics.
+  function applyPreset(preset, card, bar) {
+    var remaining = preset.selections.slice();
+    var applied = 0;
+    var passes = 0;
+
+    function pass() {
+      passes++;
+      var next = [];
+      remaining.forEach(function(sel) {
+        var input = findSelection(sel, false);
+        if (input) {
+          if (!input.checked) input.click();
+          applied++;
+        } else {
+          next.push(sel);
+        }
+      });
+      remaining = next;
+      if (remaining.length > 0 && passes < 5) {
+        setTimeout(pass, 500);
+      } else {
+        track('config_preset_apply', {
+          preset: preset.key,
+          preset_options_applied: applied,
+          preset_options_missing: remaining.length
+        });
+        if (typeof window.updateStickyPrice === 'function') {
+          setTimeout(window.updateStickyPrice, 300);
+          setTimeout(window.updateStickyPrice, 800);
+        }
+        setTimeout(cleanLabels, 400);
+      }
+    }
+
     bar.querySelectorAll('.config-preset').forEach(function(c) { c.classList.remove('is-selected'); });
     card.classList.add('is-selected');
-    track('config_preset_apply', { preset: preset.key, preset_addons: resolved.total });
-    if (typeof window.updateStickyPrice === 'function') {
-      setTimeout(window.updateStickyPrice, 300);
-      setTimeout(window.updateStickyPrice, 800);
-    }
+    pass();
   }
 
   // --- Construction de la barre de presets ---
@@ -197,9 +236,9 @@
     bar.appendChild(row);
 
     PRESETS.forEach(function(preset) {
-      var resolved = resolvePreset(preset);
+      var priced = presetPrice(preset);
       // Ne pas afficher un preset dont aucune option n'existe sur ce produit
-      if (preset.selections.length > 0 && resolved.inputs.length === 0) return;
+      if (preset.selections.length > 0 && !priced.foundAny) return;
 
       var card = document.createElement('button');
       card.type = 'button';
@@ -223,7 +262,7 @@
 
       var price = document.createElement('span');
       price.className = 'config-preset__price';
-      price.textContent = resolved.total > 0 ? '+ ' + formatEUR(resolved.total) : 'Sans supplement';
+      price.textContent = priced.total > 0 ? '+ ' + formatEUR(priced.total) : 'Sans supplement';
       card.appendChild(price);
 
       card.addEventListener('click', function() { applyPreset(preset, card, bar); });
