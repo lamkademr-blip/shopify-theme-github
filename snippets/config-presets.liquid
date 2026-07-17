@@ -86,6 +86,7 @@
       name: 'Essentiel',
       tag: 'Le plus choisi',
       desc: 'La configuration classique, prete a commander telle quelle.',
+      reset: true,
       selections: []
     },
     {
@@ -164,6 +165,59 @@
     return null;
   }
 
+  // --- Snapshot de l'etat initial (pour le preset "Essentiel" = reset) ---
+  function snapshotInitial() {
+    document.querySelectorAll('.ymq-options-box input[type="radio"], .ymq-options-box input[type="checkbox"]').forEach(function(i) {
+      if (!i.hasAttribute('data-cro-init')) {
+        i.setAttribute('data-cro-init', i.checked ? '1' : '0');
+      }
+    });
+  }
+
+  function restoreSnapshot() {
+    var all = document.querySelectorAll('.ymq-options-box input[type="radio"], .ymq-options-box input[type="checkbox"]');
+    // Passe 1 : re-cocher ce qui etait coche au chargement (decoche les radios voisines)
+    all.forEach(function(i) {
+      if (i.getAttribute('data-cro-init') === '1' && !i.checked) i.click();
+    });
+    // Passe 2 : decocher ce qui ne l'etait pas et l'est reste
+    all.forEach(function(i) {
+      if (i.getAttribute('data-cro-init') === '1' || !i.checked) return;
+      if (i.type === 'checkbox') {
+        i.click();
+      } else {
+        i.checked = false;
+        i.dispatchEvent(new Event('change', { bubbles: true }));
+        i.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    });
+  }
+
+  // --- Remplissage des champs obligatoires restes sans reponse ---
+  // Apres un preset, YMQ peut avoir des groupes requis non repondus (ex : "Ajouter
+  // un couvercle d'airbag personnalise ?"). On coche l'option gratuite par defaut
+  // (preference "Non") — jamais une option payante en silence.
+  function fillRequiredDefaults() {
+    var filled = 0;
+    getBoxes(false).forEach(function(box) {
+      var inputs = box.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+      if (!inputs.length) return;
+      if (box.querySelector('input[type="radio"]:checked, input[type="checkbox"]:checked')) return;
+      var unfilled = box.querySelector('input[name^="empty-properties"]');
+      var required = box.querySelector('.ymq_lable.required');
+      if (!unfilled && !required) return;
+      var pick = null;
+      for (var i = 0; i < inputs.length; i++) {
+        var price = parseFloat(inputs[i].getAttribute('data-price')) || 0;
+        if (price !== 0) continue;
+        if (/^non\b/i.test(inputLabel(inputs[i]))) { pick = inputs[i]; break; }
+        if (!pick) pick = inputs[i];
+      }
+      if (pick) { pick.click(); filled++; }
+    });
+    return filled;
+  }
+
   function presetPrice(preset) {
     var total = 0;
     var foundAny = false;
@@ -180,8 +234,29 @@
   // Application multi-passes : cocher un parent revele des sous-options YMQ,
   // donc on re-cherche les selections restantes apres chaque vague de clics.
   function applyPreset(preset, card, bar) {
+    bar.querySelectorAll('.config-preset').forEach(function(c) { c.classList.remove('is-selected'); });
+    card.classList.add('is-selected');
+
+    function refreshPrice() {
+      if (typeof window.updateStickyPrice === 'function') {
+        setTimeout(window.updateStickyPrice, 300);
+        setTimeout(window.updateStickyPrice, 800);
+      }
+      setTimeout(cleanLabels, 400);
+    }
+
+    // Preset "Essentiel" : retour a la configuration d'origine de la page
+    if (preset.reset) {
+      restoreSnapshot();
+      setTimeout(restoreSnapshot, 500);
+      track('config_preset_apply', { preset: preset.key, preset_reset: true });
+      setTimeout(refreshPrice, 600);
+      return;
+    }
+
     var remaining = preset.selections.slice();
     var applied = 0;
+    var autofilled = 0;
     var passes = 0;
 
     function pass() {
@@ -197,24 +272,24 @@
         }
       });
       remaining = next;
+      autofilled += fillRequiredDefaults();
       if (remaining.length > 0 && passes < 5) {
         setTimeout(pass, 500);
       } else {
-        track('config_preset_apply', {
-          preset: preset.key,
-          preset_options_applied: applied,
-          preset_options_missing: remaining.length
-        });
-        if (typeof window.updateStickyPrice === 'function') {
-          setTimeout(window.updateStickyPrice, 300);
-          setTimeout(window.updateStickyPrice, 800);
-        }
-        setTimeout(cleanLabels, 400);
+        // Derniere verification des obligatoires apres stabilisation de YMQ
+        setTimeout(function() {
+          autofilled += fillRequiredDefaults();
+          track('config_preset_apply', {
+            preset: preset.key,
+            preset_options_applied: applied,
+            preset_options_missing: remaining.length,
+            preset_required_autofilled: autofilled
+          });
+          refreshPrice();
+        }, 600);
       }
     }
 
-    bar.querySelectorAll('.config-preset').forEach(function(c) { c.classList.remove('is-selected'); });
-    card.classList.add('is-selected');
     pass();
   }
 
@@ -284,6 +359,9 @@
       return;
     }
     cleanLabels();
+    snapshotInitial();
+    // YMQ peut injecter des inputs apres coup : completer le snapshot
+    setTimeout(snapshotInitial, 2000);
     // Presets uniquement sur les vrais configurateurs (volants)
     if (boxes.length >= 8 && !document.getElementById('ConfigPresets')) {
       var first = boxes[0];
