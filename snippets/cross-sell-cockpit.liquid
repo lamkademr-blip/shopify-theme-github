@@ -3,7 +3,22 @@
   Uses Shopify's product recommendations API with "related" intent.
 {% endcomment %}
 
-{%- if request.page_type == 'product' and product.type contains 'Volant' or product.collections | map: 'handle' | join: ',' | contains: 'volant' -%}
+{%- liquid
+  assign is_volant = false
+  if product.title contains 'Volant' or product.title contains 'volant'
+    assign is_volant = true
+  endif
+  if product.type contains 'Volant' or product.type contains 'volant'
+    assign is_volant = true
+  endif
+  for col in product.collections
+    if col.handle contains 'volant'
+      assign is_volant = true
+      break
+    endif
+  endfor
+-%}
+{%- if request.page_type == 'product' and is_volant -%}
 <style>
   .cross-sell-cockpit {
     margin-top: 24px;
