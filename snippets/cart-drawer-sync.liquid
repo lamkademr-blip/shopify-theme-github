@@ -1,0 +1,76 @@
+{% comment %}
+  Fix : YMQ ajoute au panier via son propre appel AJAX et court-circuite le
+  rendu du theme — le tiroir panier restait sur "0,00 €" jusqu'au rechargement.
+  On intercepte tout /cart/add reussi (fetch + XMLHttpRequest) et on re-rend
+  les sections cart-drawer et cart-icon-bubble via la Section Rendering API.
+{% endcomment %}
+<script>
+(function () {
+  'use strict';
+
+  var refreshing = false;
+
+  function refreshDrawer(openAfter) {
+    var drawer = document.querySelector('cart-drawer');
+    if (!drawer || refreshing) return;
+    refreshing = true;
+
+    var root = (window.Shopify && Shopify.routes && Shopify.routes.root) || '/';
+    fetch(root + '?sections=cart-drawer,cart-icon-bubble')
+      .then(function (r) { return r.json(); })
+      .then(function (sections) {
+        if (sections['cart-drawer']) {
+          var tmp = document.createElement('div');
+          tmp.innerHTML = sections['cart-drawer'];
+          var fresh = tmp.querySelector('cart-drawer');
+          if (fresh) {
+            drawer.innerHTML = fresh.innerHTML;
+            drawer.classList.toggle('is-empty', fresh.classList.contains('is-empty'));
+          }
+        }
+        var bubble = document.getElementById('cart-icon-bubble');
+        if (bubble && sections['cart-icon-bubble']) {
+          bubble.innerHTML = sections['cart-icon-bubble'];
+        }
+        if (openAfter && typeof drawer.open === 'function') drawer.open();
+      })
+      .catch(function () {})
+      .then(function () { refreshing = false; });
+  }
+
+  function isCartAdd(url) {
+    return typeof url === 'string' && url.indexOf('/cart/add') !== -1;
+  }
+
+  // Interception fetch
+  var origFetch = window.fetch;
+  window.fetch = function () {
+    var url = arguments[0] && (arguments[0].url || arguments[0]);
+    var p = origFetch.apply(this, arguments);
+    if (isCartAdd(url)) {
+      p.then(function (res) {
+        if (res && res.ok) setTimeout(function () { refreshDrawer(true); }, 300);
+      }).catch(function () {});
+    }
+    return p;
+  };
+
+  // Interception XMLHttpRequest (certaines apps l'utilisent)
+  var origOpen = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function (method, url) {
+    this._lavCartAdd = isCartAdd(url);
+    return origOpen.apply(this, arguments);
+  };
+  var origSend = XMLHttpRequest.prototype.send;
+  XMLHttpRequest.prototype.send = function () {
+    if (this._lavCartAdd) {
+      this.addEventListener('load', function () {
+        if (this.status >= 200 && this.status < 300) {
+          setTimeout(function () { refreshDrawer(true); }, 300);
+        }
+      });
+    }
+    return origSend.apply(this, arguments);
+  };
+})();
+</script>
