@@ -9,7 +9,9 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', '{{ shop.metafields.pagefly.measurementId }}', { groups: 'pagefly' });
+    {%- comment -%} send_page_view: false — le page_view GA4 est deja envoye par l'app
+    Google & YouTube de Shopify ; sans ce flag chaque page etait comptee en double. {%- endcomment -%}
+    gtag('config', '{{ shop.metafields.pagefly.measurementId }}', { groups: 'pagefly', send_page_view: false });
     {% endif %}
     window.pfPageInfo = Object.assign(window.pfPageInfo || {});
 
