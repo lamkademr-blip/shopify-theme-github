@@ -95,9 +95,15 @@
       tag: 'Tendance',
       desc: 'Haut et bas en carbone forge noir.',
       selections: [
-        { group: /mat[eé]riau du haut et bas/i, label: /^carbone$/i },
-        { group: /style de fibre de carbone/i, label: /forg/i },
-        { group: /carbone forg[eé].*haut/i, label: /noir/i }
+        // Selon le produit, le materiau est un choix direct (Golf : "Carbone
+        // Forge Noir" dans la liste) ou une chaine (BMW : Carbone -> fibre
+        // forgee -> couleur). Les alternatives couvrent les deux structures.
+        { alts: [
+          { group: /mat[eé]riau du haut/i, label: /carbone forg[eé].*noir/i },
+          { group: /mat[eé]riau du haut/i, label: /^carbone$/i }
+        ] },
+        { optional: true, group: /style de fibre de carbone/i, label: /forg/i },
+        { optional: true, group: /carbone forg[eé].*haut/i, label: /noir/i }
       ]
     },
     {
@@ -107,9 +113,12 @@
       desc: 'Carbone forge noir + ShiftLEDs de performance.',
       selections: [
         { group: /shiftled/i, label: /^oui/i },
-        { group: /mat[eé]riau du haut et bas/i, label: /^carbone$/i },
-        { group: /style de fibre de carbone/i, label: /forg/i },
-        { group: /carbone forg[eé].*haut/i, label: /noir/i }
+        { alts: [
+          { group: /mat[eé]riau du haut/i, label: /carbone forg[eé].*noir/i },
+          { group: /mat[eé]riau du haut/i, label: /^carbone$/i }
+        ] },
+        { optional: true, group: /style de fibre de carbone/i, label: /forg/i },
+        { optional: true, group: /carbone forg[eé].*haut/i, label: /noir/i }
       ]
     }
   ];
@@ -153,13 +162,16 @@
   }
 
   function findSelection(sel, includeHidden) {
-    var boxes = getBoxes(includeHidden);
-    for (var i = 0; i < boxes.length; i++) {
-      var title = boxes[i].querySelector('.ymq-option-title');
-      if (!title || !sel.group.test(title.textContent)) continue;
-      var inputs = boxes[i].querySelectorAll('input[type="radio"], input[type="checkbox"]');
-      for (var j = 0; j < inputs.length; j++) {
-        if (sel.label.test(inputLabel(inputs[j]))) return inputs[j];
+    var alts = sel.alts || [sel];
+    for (var a = 0; a < alts.length; a++) {
+      var boxes = getBoxes(includeHidden);
+      for (var i = 0; i < boxes.length; i++) {
+        var title = boxes[i].querySelector('.ymq-option-title');
+        if (!title || !alts[a].group.test(title.textContent)) continue;
+        var inputs = boxes[i].querySelectorAll('input[type="radio"], input[type="checkbox"]');
+        for (var j = 0; j < inputs.length; j++) {
+          if (alts[a].label.test(inputLabel(inputs[j]))) return inputs[j];
+        }
       }
     }
     return null;
@@ -279,10 +291,11 @@
         // Derniere verification des obligatoires apres stabilisation de YMQ
         setTimeout(function() {
           autofilled += fillRequiredDefaults();
+          var missing = remaining.filter(function(s) { return !s.optional; }).length;
           track('config_preset_apply', {
             preset: preset.key,
             preset_options_applied: applied,
-            preset_options_missing: remaining.length,
+            preset_options_missing: missing,
             preset_required_autofilled: autofilled
           });
           refreshPrice();
