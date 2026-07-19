@@ -1,76 +1,85 @@
 {% comment %}
-  Fix : YMQ ajoute au panier via son propre appel AJAX et court-circuite le
+  Fix : YMQ ajoute au panier via son propre AJAX (XHR) et court-circuite le
   rendu du theme — le tiroir panier restait sur "0,00 €" jusqu'au rechargement.
-  On intercepte tout /cart/add reussi (fetch + XMLHttpRequest) et on re-rend
-  les sections cart-drawer et cart-icon-bubble via la Section Rendering API.
+  Approche robuste : au clic sur un bouton d'ajout, on surveille /cart.js ;
+  des que le panier change reellement, on re-rend les sections cart-drawer et
+  cart-icon-bubble (Section Rendering API) et on ouvre le tiroir.
+  Pas de patch fetch/XHR : les scripts tiers ne peuvent pas le neutraliser.
 {% endcomment %}
 <script>
 (function () {
   'use strict';
 
-  var refreshing = false;
+  var polling = false;
+  var root = (window.Shopify && Shopify.routes && Shopify.routes.root) || '/';
 
-  function refreshDrawer(openAfter) {
-    var drawer = document.querySelector('cart-drawer');
-    if (!drawer || refreshing) return;
-    refreshing = true;
+  function cartState() {
+    return fetch(root + 'cart.js').then(function (r) { return r.json(); })
+      .then(function (c) { return c.item_count + '|' + c.total_price; });
+  }
 
-    var root = (window.Shopify && Shopify.routes && Shopify.routes.root) || '/';
+  function swapSection(wrapperId, html) {
+    var wrapper = document.getElementById(wrapperId);
+    if (!wrapper || !html) return false;
+    var tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    var fresh = tmp.firstElementChild;
+    if (!fresh) return false;
+    wrapper.innerHTML = fresh.innerHTML;
+    return true;
+  }
+
+  function refreshDrawer() {
     fetch(root + '?sections=cart-drawer,cart-icon-bubble')
       .then(function (r) { return r.json(); })
       .then(function (sections) {
-        if (sections['cart-drawer']) {
-          var tmp = document.createElement('div');
-          tmp.innerHTML = sections['cart-drawer'];
-          var fresh = tmp.querySelector('cart-drawer');
-          if (fresh) {
-            drawer.innerHTML = fresh.innerHTML;
-            drawer.classList.toggle('is-empty', fresh.classList.contains('is-empty'));
+        swapSection('shopify-section-cart-drawer', sections['cart-drawer']);
+        if (!swapSection('shopify-section-cart-icon-bubble', sections['cart-icon-bubble'])) {
+          // Dawn rend la bulle dans un element #cart-icon-bubble sans wrapper de section
+          var bubble = document.getElementById('cart-icon-bubble');
+          if (bubble && sections['cart-icon-bubble']) {
+            var t = document.createElement('div');
+            t.innerHTML = sections['cart-icon-bubble'];
+            var freshB = t.firstElementChild;
+            if (freshB) bubble.innerHTML = freshB.innerHTML;
           }
         }
-        var bubble = document.getElementById('cart-icon-bubble');
-        if (bubble && sections['cart-icon-bubble']) {
-          bubble.innerHTML = sections['cart-icon-bubble'];
+        var drawer = document.querySelector('cart-drawer');
+        if (drawer) {
+          drawer.classList.remove('is-empty');
+          if (typeof drawer.open === 'function') drawer.open();
         }
-        if (openAfter && typeof drawer.open === 'function') drawer.open();
       })
-      .catch(function () {})
-      .then(function () { refreshing = false; });
+      .catch(function () {});
   }
 
-  function isCartAdd(url) {
-    return typeof url === 'string' && url.indexOf('/cart/add') !== -1;
+  function watchForCartChange() {
+    if (polling) return;
+    polling = true;
+    cartState().then(function (base) {
+      var tries = 0;
+      var iv = setInterval(function () {
+        tries++;
+        cartState().then(function (now) {
+          if (now !== base) {
+            clearInterval(iv);
+            polling = false;
+            refreshDrawer();
+          } else if (tries >= 15) {
+            clearInterval(iv);
+            polling = false;
+          }
+        }).catch(function () {
+          if (tries >= 15) { clearInterval(iv); polling = false; }
+        });
+      }, 600);
+    }).catch(function () { polling = false; });
   }
 
-  // Interception fetch
-  var origFetch = window.fetch;
-  window.fetch = function () {
-    var url = arguments[0] && (arguments[0].url || arguments[0]);
-    var p = origFetch.apply(this, arguments);
-    if (isCartAdd(url)) {
-      p.then(function (res) {
-        if (res && res.ok) setTimeout(function () { refreshDrawer(true); }, 300);
-      }).catch(function () {});
+  document.addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('button[name="add"], #StickyATCBtn, .quick-add__submit')) {
+      watchForCartChange();
     }
-    return p;
-  };
-
-  // Interception XMLHttpRequest (certaines apps l'utilisent)
-  var origOpen = XMLHttpRequest.prototype.open;
-  XMLHttpRequest.prototype.open = function (method, url) {
-    this._lavCartAdd = isCartAdd(url);
-    return origOpen.apply(this, arguments);
-  };
-  var origSend = XMLHttpRequest.prototype.send;
-  XMLHttpRequest.prototype.send = function () {
-    if (this._lavCartAdd) {
-      this.addEventListener('load', function () {
-        if (this.status >= 200 && this.status < 300) {
-          setTimeout(function () { refreshDrawer(true); }, 300);
-        }
-      });
-    }
-    return origSend.apply(this, arguments);
-  };
+  }, true);
 })();
 </script>
