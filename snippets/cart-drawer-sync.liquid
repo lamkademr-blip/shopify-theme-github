@@ -14,7 +14,7 @@
   var root = (window.Shopify && Shopify.routes && Shopify.routes.root) || '/';
 
   function cartState() {
-    return fetch(root + 'cart.js').then(function (r) { return r.json(); })
+    return fetch(root + 'cart.js?_t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); })
       .then(function (c) { return c.item_count + '|' + c.total_price; });
   }
 
@@ -30,7 +30,7 @@
   }
 
   function refreshDrawer() {
-    fetch(root + '?sections=cart-drawer,cart-icon-bubble')
+    fetch(root + '?sections=cart-drawer,cart-icon-bubble&_t=' + Date.now(), { cache: 'no-store' })
       .then(function (r) { return r.json(); })
       .then(function (sections) {
         swapSection('shopify-section-cart-drawer', sections['cart-drawer']);
