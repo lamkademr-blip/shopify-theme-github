@@ -1,0 +1,65 @@
+/* Configurateur de volant — styles du formulaire d'options (Phase 1). */
+
+.wheel-cfg {
+  display: block;
+  margin: 1.2rem 0;
+}
+
+.wheel-cfg__group {
+  border: none;
+  padding: 0;
+  margin: 0 0 1.4rem;
+}
+
+.wheel-cfg__legend {
+  padding: 0;
+  margin-bottom: 0.6rem;
+}
+
+.wheel-cfg__values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.wheel-cfg__radio {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.wheel-cfg__value {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.1rem;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.25);
+  border-radius: 4rem;
+  cursor: pointer;
+  font-size: 1.3rem;
+  line-height: 1;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.wheel-cfg__radio:checked + .wheel-cfg__value {
+  border-color: rgb(var(--color-foreground));
+  background-color: rgba(var(--color-foreground), 0.06);
+  font-weight: 600;
+}
+
+.wheel-cfg__radio:focus-visible + .wheel-cfg__value {
+  outline: 0.2rem solid rgb(var(--color-foreground));
+  outline-offset: 0.2rem;
+}
+
+.wheel-cfg__swatch {
+  display: inline-block;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background-color: var(--swatch);
+  border: 0.1rem solid rgba(var(--color-foreground), 0.3);
+  flex-shrink: 0;
+}

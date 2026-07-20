@@ -1,0 +1,85 @@
+{% comment %}
+  Configurateur de volant — Phase 1 (formulaire d'options + propriétés panier).
+  Rendu serveur complet : fonctionne sans JavaScript (les radios soumettent
+  directement les properties[] au panier via l'attribut form).
+
+  Le catalogue vient des metaobjects :
+    product.metafields.custom.wheel_model → wheel_model → option_groups → values
+
+  Paramètres :
+  - product: le produit
+  - product_form_id: id du <form> produit (association via attribut form)
+
+  Phase 3 ajoutera le compositeur d'images par calques ; le JSON manifest
+  embarqué ci-dessous contient déjà les données de calques (slot/type/hex/image).
+{% endcomment %}
+
+{%- assign wheel_model = product.metafields.custom.wheel_model.value -%}
+{%- if wheel_model -%}
+  {{ 'wheel-configurator.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'wheel-configurator.js' | asset_url }}" defer="defer"></script>
+
+  <wheel-configurator class="wheel-cfg" data-form-id="{{ product_form_id }}">
+    {%- for group in wheel_model.option_groups.value -%}
+      {%- assign group_slot = group.slot.value -%}
+      <fieldset class="wheel-cfg__group js product-form__input product-form__input--pill">
+        <legend class="form__label wheel-cfg__legend">
+          {{ group.label.value }}{% if group.required.value %} <span aria-hidden="true">*</span>{% endif %}
+        </legend>
+        <div class="wheel-cfg__values">
+          {%- for val in group.values.value -%}
+            {%- assign input_id = 'wheel-cfg-' | append: group_slot | append: '-' | append: val.system.handle -%}
+            <input
+              type="radio"
+              id="{{ input_id }}"
+              class="wheel-cfg__radio"
+              name="properties[{{ group.property_name.value }}]"
+              value="{{ val.label.value }}"
+              form="{{ product_form_id }}"
+              data-group="{{ group_slot }}"
+              data-value-handle="{{ val.system.handle }}"
+              {% if forloop.first %}checked{% endif %}
+            >
+            <label class="wheel-cfg__value" for="{{ input_id }}">
+              {%- if val.hex.value -%}
+                <span class="wheel-cfg__swatch" style="--swatch: {{ val.hex.value }}" aria-hidden="true"></span>
+              {%- endif -%}
+              <span class="wheel-cfg__value-label">{{ val.label.value }}</span>
+            </label>
+          {%- endfor -%}
+        </div>
+      </fieldset>
+    {%- endfor -%}
+
+    {%- comment -%} Propriétés machine (masquées au client par le préfixe _) {%- endcomment -%}
+    <input type="hidden" name="properties[_config]" value="" form="{{ product_form_id }}" data-cfg-json>
+    <input type="hidden" name="properties[_hash]" value="" form="{{ product_form_id }}" data-cfg-hash>
+
+    <script type="application/json" data-cfg-manifest>
+      {
+        "v": 1,
+        "model": {{ wheel_model.system.handle | json }},
+        "groups": [
+          {%- for group in wheel_model.option_groups.value -%}
+          {
+            "slot": {{ group.slot.value | json }},
+            "property": {{ group.property_name.value | json }},
+            "values": [
+              {%- for val in group.values.value -%}
+              {
+                "handle": {{ val.system.handle | json }},
+                "label": {{ val.label.value | json }},
+                "layerType": {{ val.layer_type.value | json }},
+                "hex": {{ val.hex.value | json }},
+                "visible": {{ val.visible.value | json }},
+                "image": {% if val.image.value %}{{ val.image.value | image_url: width: 2000 | json }}{% else %}null{% endif %}
+              }{% unless forloop.last %},{% endunless %}
+              {%- endfor -%}
+            ]
+          }{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        ]
+      }
+    </script>
+  </wheel-configurator>
+{%- endif -%}

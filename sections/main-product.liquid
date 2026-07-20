@@ -467,6 +467,8 @@
 
               {%- when 'variant_picker' -%}
                 {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+              {%- when 'wheel_configurator' -%}
+                {% render 'wheel-configurator', product: product, product_form_id: product_form_id %}
               {%- when 'buy_buttons' -%}
                 {%- render 'buy-buttons',
                   block: block,
@@ -898,6 +900,11 @@
           "default": "circle"
         }
       ]
+    },
+    {
+      "type": "wheel_configurator",
+      "name": "Configurateur de volant",
+      "limit": 1
     },
     {
       "type": "buy_buttons",
