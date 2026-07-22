@@ -62,39 +62,14 @@
   }
 
   /**
-   * Supplément (en centimes) des options payantes de l'app d'options (YMQ).
-   * Chaque choix payant affiche son prix dans un .ymq-price-span à côté du
-   * bouton ; on additionne ceux des choix cochés. Deux précautions :
-   * - dédoublonnage par name (l'app rend les groupes en double desktop/mobile) ;
-   * - seuls les groupes actifs comptent, c.-à-d. ceux dont la propriété
-   *   existe dans le formulaire (les sous-options masquées gardent un input
-   *   coché mais leur propriété est retirée du formulaire par l'app).
-   */
-  function readAddonsCents(form, activeProps) {
-    var cents = 0;
-    var seen = {};
-    document.querySelectorAll('.ymq-box input:checked, .ymq-box option:checked').forEach(function (el) {
-      var input = el.tagName === 'OPTION' ? el.parentElement : el;
-      var match = input.name && input.name.match(/^ymq\[(.+)\]$/);
-      if (!match || seen[match[1]] || !activeProps[match[1]]) return;
-      seen[match[1]] = true;
-
-      // Prix : span dans le <label for=...> associé (ou parent), ou texte de l'<option>.
-      var source = el;
-      if (el.tagName !== 'OPTION') {
-        source =
-          (el.id && document.querySelector('label[for="' + CSS.escape(el.id) + '"] .ymq-price-span')) ||
-          (el.closest('label') && el.closest('label').querySelector('.ymq-price-span'));
-      }
-      if (source) cents += parsePriceCents(source.textContent);
-    });
-    return cents;
-  }
-
-  /**
-   * Propriétés visibles du formulaire (configurateur, champs personnalisés) :
-   * radios cochées, selects et champs texte nommés properties[...]. Les
-   * propriétés machine (préfixe _) et les valeurs vides sont ignorées.
+   * Propriétés visibles du formulaire (configurateur, app d'options, champs
+   * personnalisés) : radios cochées, selects et champs texte nommés
+   * properties[...]. Les propriétés machine (préfixe _) et les valeurs vides
+   * sont ignorées.
+   *
+   * L'app d'options écrit le supplément payant dans la valeur même de la
+   * propriété (« Carbone + alcantara | 149.90 € ») — c'est ce qui arrive tel
+   * quel dans le panier. On extrait ce montant dans `cents` pour le total.
    */
   function readProperties(form) {
     var options = [];
@@ -108,7 +83,12 @@
       if ((el.type === 'radio' || el.type === 'checkbox') && !el.checked) continue;
       if (!el.value || seen[label]) continue;
       seen[label] = true;
-      options.push({ label: label, value: el.value });
+      var priceSuffix = el.value.match(/\|\s*([\d\s.,]+\s*[€$£])\s*$/);
+      options.push({
+        label: label,
+        value: el.value,
+        cents: priceSuffix ? parsePriceCents(priceSuffix[1]) : 0
+      });
     }
     return options;
   }
@@ -133,14 +113,12 @@
     var qty = qtyInput && parseInt(qtyInput.value, 10) > 0 ? parseInt(qtyInput.value, 10) : 1;
     lines.push('🔢 Quantité : ' + qty);
 
-    // Prix total = (prix de la variante courante + supplément des options
+    // Prix total = (prix de la variante courante + suppléments des options
     // payantes) × quantité (repli : prix rendu côté serveur ; ligne omise
     // si aucun prix disponible)
-    var activeProps = {};
-    properties.forEach(function (opt) { activeProps[opt.label] = true; });
     var unitCents = variant ? variant.price : parseInt(cta.dataset.priceCents, 10);
     if (unitCents > 0) {
-      unitCents += readAddonsCents(form, activeProps);
+      properties.forEach(function (opt) { unitCents += opt.cents; });
       lines.push('💰 Total : ' + formatPrice(unitCents * qty, cta.dataset.currency || 'EUR'));
     }
 
