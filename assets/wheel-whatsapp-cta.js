@@ -51,6 +51,46 @@
     }
   }
 
+  /** « + 49.90 € » ou « 1 234,56 € » → centimes (0 si non analysable). */
+  function parsePriceCents(text) {
+    var raw = (text || '').replace(/[^\d.,]/g, '');
+    if (!raw) return 0;
+    if (raw.indexOf('.') > -1 && raw.indexOf(',') > -1) raw = raw.replace(/\./g, '');
+    raw = raw.replace(',', '.');
+    var value = parseFloat(raw);
+    return isNaN(value) ? 0 : Math.round(value * 100);
+  }
+
+  /**
+   * Supplément (en centimes) des options payantes de l'app d'options (YMQ).
+   * Chaque choix payant affiche son prix dans un .ymq-price-span à côté du
+   * bouton ; on additionne ceux des choix cochés. Deux précautions :
+   * - dédoublonnage par name (l'app rend les groupes en double desktop/mobile) ;
+   * - seuls les groupes actifs comptent, c.-à-d. ceux dont la propriété
+   *   existe dans le formulaire (les sous-options masquées gardent un input
+   *   coché mais leur propriété est retirée du formulaire par l'app).
+   */
+  function readAddonsCents(form, activeProps) {
+    var cents = 0;
+    var seen = {};
+    document.querySelectorAll('.ymq-box input:checked, .ymq-box option:checked').forEach(function (el) {
+      var input = el.tagName === 'OPTION' ? el.parentElement : el;
+      var match = input.name && input.name.match(/^ymq\[(.+)\]$/);
+      if (!match || seen[match[1]] || !activeProps[match[1]]) return;
+      seen[match[1]] = true;
+
+      // Prix : span dans le <label for=...> associé (ou parent), ou texte de l'<option>.
+      var source = el;
+      if (el.tagName !== 'OPTION') {
+        source =
+          (el.id && document.querySelector('label[for="' + CSS.escape(el.id) + '"] .ymq-price-span')) ||
+          (el.closest('label') && el.closest('label').querySelector('.ymq-price-span'));
+      }
+      if (source) cents += parsePriceCents(source.textContent);
+    });
+    return cents;
+  }
+
   /**
    * Propriétés visibles du formulaire (configurateur, champs personnalisés) :
    * radios cochées, selects et champs texte nommés properties[...]. Les
@@ -82,7 +122,8 @@
 
     // Options de la variante sélectionnée, puis propriétés (configurateur…)
     var variant = readVariant(cta, form);
-    var selections = (variant ? variant.options : []).concat(readProperties(form));
+    var properties = readProperties(form);
+    var selections = (variant ? variant.options : []).concat(properties);
     selections.forEach(function (opt) {
       if (opt.value) lines.push('• ' + opt.label + ' : ' + opt.value);
     });
@@ -92,10 +133,14 @@
     var qty = qtyInput && parseInt(qtyInput.value, 10) > 0 ? parseInt(qtyInput.value, 10) : 1;
     lines.push('🔢 Quantité : ' + qty);
 
-    // Prix total = prix de la variante courante × quantité (repli : prix
-    // rendu côté serveur ; ligne omise si aucun prix disponible)
+    // Prix total = (prix de la variante courante + supplément des options
+    // payantes) × quantité (repli : prix rendu côté serveur ; ligne omise
+    // si aucun prix disponible)
+    var activeProps = {};
+    properties.forEach(function (opt) { activeProps[opt.label] = true; });
     var unitCents = variant ? variant.price : parseInt(cta.dataset.priceCents, 10);
     if (unitCents > 0) {
+      unitCents += readAddonsCents(form, activeProps);
       lines.push('💰 Total : ' + formatPrice(unitCents * qty, cta.dataset.currency || 'EUR'));
     }
 
