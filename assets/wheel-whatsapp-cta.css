@@ -8,6 +8,10 @@
   --alpha-button-background: 1;
   gap: 0.8rem;
   margin-bottom: 1rem; /* espace avant « Ajouter au panier » */
+  /* Libellé long : autorise le passage sur deux lignes (mobile) */
+  padding: 0.8rem 1.5rem;
+  line-height: 1.3;
+  text-align: center;
 }
 
 .wheel-whatsapp-cta__icon {

@@ -94,11 +94,12 @@
   }
 
   function buildMessage(cta, form) {
-    var lines = ['Bonjour Les As du Volant 👋', '', 'Je souhaite vous envoyer ma configuration :', ''];
+    // Pas d'emoji ici : certains appareils les corrompent via le lien wa.me.
+    var lines = ['Bonjour Les As du Volant,', '', 'Je souhaite vous envoyer ma configuration :', ''];
 
     // Nom du produit
     var title = cta.dataset.productTitle;
-    if (title) lines.push('🏁 Produit : ' + title);
+    if (title) lines.push('Produit : ' + title);
 
     // Options de la variante sélectionnée, puis propriétés (configurateur…)
     var variant = readVariant(cta, form);
@@ -111,7 +112,7 @@
     // Quantité (défaut 1 si le champ est absent ou vide)
     var qtyInput = form.elements.namedItem('quantity');
     var qty = qtyInput && parseInt(qtyInput.value, 10) > 0 ? parseInt(qtyInput.value, 10) : 1;
-    lines.push('🔢 Quantité : ' + qty);
+    lines.push('Quantité : ' + qty);
 
     // Prix total = (prix de la variante courante + suppléments des options
     // payantes) × quantité (repli : prix rendu côté serveur ; ligne omise
@@ -119,7 +120,7 @@
     var unitCents = variant ? variant.price : parseInt(cta.dataset.priceCents, 10);
     if (unitCents > 0) {
       properties.forEach(function (opt) { unitCents += opt.cents; });
-      lines.push('💰 Total : ' + formatPrice(unitCents * qty, cta.dataset.currency || 'EUR'));
+      lines.push('Total : ' + formatPrice(unitCents * qty, cta.dataset.currency || 'EUR'));
     }
 
     // URL du produit + configuration partageable (?cfg= maintenu par le configurateur)
@@ -127,7 +128,7 @@
     if (url) {
       var cfg = new URLSearchParams(window.location.search).get('cfg');
       if (cfg) url += '?cfg=' + encodeURIComponent(cfg);
-      lines.push('', '🔗 ' + url);
+      lines.push('', 'Lien : ' + url);
     }
 
     return lines.join('\n');
