@@ -1,0 +1,17 @@
+/* Bouton WhatsApp « Envoyez votre configuration ».
+   Hérite de la géométrie .button du thème (rayon, padding, hover) ;
+   seules les couleurs passent aux conventions WhatsApp. */
+
+.wheel-whatsapp-cta {
+  --color-button: 37, 211, 102; /* vert WhatsApp #25D366 */
+  --color-button-text: 255, 255, 255;
+  --alpha-button-background: 1;
+  gap: 0.8rem;
+  margin-bottom: 1rem; /* espace avant « Ajouter au panier » */
+}
+
+.wheel-whatsapp-cta__icon {
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+}

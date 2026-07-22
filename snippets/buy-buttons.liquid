@@ -70,6 +70,11 @@
               assign quantity_rule_soldout = true
             endif
           -%}
+          {%- comment -%}
+            Bouton WhatsApp « Envoyez votre configuration » — rendu uniquement
+            sur les produits configurables (voir snippets/wheel-whatsapp-cta.liquid).
+          {%- endcomment -%}
+          {% render 'wheel-whatsapp-cta', product: product, product_form_id: product_form_id %}
           <button
             id="ProductSubmitButton-{{ section_id }}"
             type="submit"
