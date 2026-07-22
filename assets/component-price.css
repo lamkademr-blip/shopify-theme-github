@@ -14,6 +14,15 @@
   visibility: hidden;
 }
 
+/* « À partir de » devant les prix des cartes produit (collections). */
+.price__from-label {
+  font-size: 0.8em;
+  font-weight: 400;
+  opacity: 0.75;
+  letter-spacing: normal;
+  margin-right: 0.2rem;
+}
+
 .price--end {
   text-align: right;
 }
