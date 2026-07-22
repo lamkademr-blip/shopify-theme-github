@@ -1,10 +1,11 @@
 /**
- * Bouton WhatsApp « Envoyez votre configuration ».
+ * Bouton WhatsApp « Envoyez votre configuration » (toutes pages produit).
  *
  * Au clic, construit le message à partir de l'état réel du formulaire
- * produit (options du configurateur cochées, quantité, prix) puis met à
- * jour le href wa.me avant que la navigation n'ait lieu. Le lien reste
- * fonctionnel sans ce script (href de repli rendu côté serveur).
+ * produit : options de la variante sélectionnée (via la carte JSON
+ * [data-whatsapp-variants]), propriétés du configurateur si présent,
+ * quantité et prix, puis met à jour le href wa.me avant la navigation.
+ * Le lien reste fonctionnel sans ce script (href de repli côté serveur).
  *
  * Aucune dépendance : ne touche ni au configurateur ni au panier.
  */
@@ -22,11 +23,40 @@
   }
 
   /**
-   * Lit les propriétés visibles du formulaire : radios cochées, selects et
-   * champs texte nommés properties[...]. Les propriétés machine (préfixe _)
-   * et les valeurs vides sont ignorées.
+   * Variante sélectionnée : lue au clic depuis l'input caché name="id" du
+   * formulaire, cherchée dans la carte JSON rendue par le snippet.
+   * Renvoie null si la carte ou la variante est introuvable.
    */
-  function readOptions(form) {
+  function readVariant(cta, form) {
+    var mapEl = document.querySelector(
+      '[data-whatsapp-variants][data-form-id="' + cta.dataset.formId + '"]'
+    );
+    if (!mapEl) return null;
+    try {
+      var map = JSON.parse(mapEl.textContent);
+      var idInput = form.querySelector('input[name="id"]');
+      var variant = idInput && map.variants[idInput.value];
+      if (!variant) return null;
+      return {
+        price: variant.price,
+        // Paires « Nom d'option : valeur », omises pour la variante par défaut.
+        options: map.hasOnlyDefaultVariant
+          ? []
+          : map.optionNames.map(function (name, i) {
+              return { label: name, value: variant.options[i] };
+            })
+      };
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /**
+   * Propriétés visibles du formulaire (configurateur, champs personnalisés) :
+   * radios cochées, selects et champs texte nommés properties[...]. Les
+   * propriétés machine (préfixe _) et les valeurs vides sont ignorées.
+   */
+  function readProperties(form) {
     var options = [];
     var seen = {};
     for (var i = 0; i < form.elements.length; i++) {
@@ -50,9 +80,11 @@
     var title = cta.dataset.productTitle;
     if (title) lines.push('🏁 Produit : ' + title);
 
-    // Options sélectionnées dans le configurateur
-    readOptions(form).forEach(function (opt) {
-      lines.push('• ' + opt.label + ' : ' + opt.value);
+    // Options de la variante sélectionnée, puis propriétés (configurateur…)
+    var variant = readVariant(cta, form);
+    var selections = (variant ? variant.options : []).concat(readProperties(form));
+    selections.forEach(function (opt) {
+      if (opt.value) lines.push('• ' + opt.label + ' : ' + opt.value);
     });
 
     // Quantité (défaut 1 si le champ est absent ou vide)
@@ -60,8 +92,9 @@
     var qty = qtyInput && parseInt(qtyInput.value, 10) > 0 ? parseInt(qtyInput.value, 10) : 1;
     lines.push('🔢 Quantité : ' + qty);
 
-    // Prix total = prix unitaire × quantité (omis si prix indisponible)
-    var unitCents = parseInt(cta.dataset.priceCents, 10);
+    // Prix total = prix de la variante courante × quantité (repli : prix
+    // rendu côté serveur ; ligne omise si aucun prix disponible)
+    var unitCents = variant ? variant.price : parseInt(cta.dataset.priceCents, 10);
     if (unitCents > 0) {
       lines.push('💰 Total : ' + formatPrice(unitCents * qty, cta.dataset.currency || 'EUR'));
     }
