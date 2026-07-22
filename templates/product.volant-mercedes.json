@@ -230,12 +230,6 @@
           "type": "price",
           "settings": {}
         },
-        "custom_liquid_rf8TWw": {
-          "type": "custom_liquid",
-          "settings": {
-            "custom_liquid": "<modal-opener class=\"product-popup-modal__opener\" data-modal=\"#PopupModal-compatibilite\">\n  <button class=\"product-popup-modal__button link\" type=\"button\" aria-haspopup=\"dialog\">\n    Compatibilité de votre volant\n  </button>\n</modal-opener>\n\n<modal-dialog id=\"PopupModal-compatibilite\" class=\"product-popup-modal\">\n  <div class=\"product-popup-modal__content\">\n    <button class=\"product-popup-modal__close\" type=\"button\" aria-label=\"Fermer\">\n      ×\n    </button>\n    <h2>Compatibilité Volant BMW</h2>\n    <p>Le volant personnalisé pour BMW Série F (2012-2018) est compatible avec...</p>\n  </div>\n</modal-dialog>"
-          }
-        },
         "variant_picker": {
           "type": "variant_picker",
           "settings": {
@@ -266,7 +260,6 @@
         "custom_liquid_Exk8Hw",
         "custom_liquid_mnzfMC",
         "price",
-        "custom_liquid_rf8TWw",
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
