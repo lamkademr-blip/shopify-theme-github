@@ -59,6 +59,16 @@
       >
         {%- if card_product.featured_media -%}
           <div class="card__media{% if image_shape and image_shape != 'default' %} shape--{{ image_shape }} color-{{ settings.card_color_scheme }} gradient{% endif %}">
+            {%- if request.page_type == 'collection' and collection.handle == 'volant-bmw' -%}
+              <img
+                class="card-logo-overlay"
+                src="{{ 'logoo.png' | file_img_url: '600x' }}"
+                alt=""
+                loading="lazy"
+                width="600"
+                height="200"
+              >
+            {%- endif -%}
             <div class="media media--transparent media--hover-effect">
               {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
               <img
