@@ -61,9 +61,14 @@
           <div class="card__media{% if image_shape and image_shape != 'default' %} shape--{{ image_shape }} color-{{ settings.card_color_scheme }} gradient{% endif %}">
             {%- if request.page_type == 'collection' and collection.handle == 'volant-bmw' -%}
               {%- unless card_product.tags contains 'logo-photo' -%}
+                {%- if card_product.tags contains 'logo-blanc' -%}
+                  {%- assign logo_overlay_src = 'logoo-blanc.png' | asset_url -%}
+                {%- else -%}
+                  {%- assign logo_overlay_src = 'logoo.png' | file_img_url: '600x' -%}
+                {%- endif -%}
                 <img
                   class="card-logo-overlay"
-                  src="{{ 'logoo.png' | file_img_url: '600x' }}"
+                  src="{{ logo_overlay_src }}"
                   alt=""
                   loading="lazy"
                   width="600"
