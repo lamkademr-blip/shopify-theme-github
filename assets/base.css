@@ -3746,3 +3746,16 @@ button[name="add"]:hover,
   background: #0056b3 !important; /* Bleu plus foncé au hover */
   cursor: pointer !important;
 }
+
+/* Logo « Les As du Volant » en surimpression sur les cartes produit
+   (test : collection volant-bmw uniquement - voir snippets/card-product.liquid) */
+.card__media .card-logo-overlay {
+  position: absolute;
+  top: 21%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44%;
+  height: auto;
+  z-index: 2;
+  pointer-events: none;
+}
