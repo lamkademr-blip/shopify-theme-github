@@ -101,6 +101,36 @@
         "lazy": true
       }
     },
+    "breadcrumb_top": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_d305d1b_9XUi3U": {
+          "type": "ai_gen_block_d305d1b",
+          "settings": {
+            "home_text": "Les As du Volant",
+            "show_home_icon": true,
+            "separator": "/",
+            "font": "assistant_n4",
+            "font_size": 14,
+            "spacing": 8,
+            "background_color": "#ffffff",
+            "link_color": "#4c4c4c",
+            "link_hover_color": "#000000",
+            "separator_color": "#cccccc",
+            "current_color": "#000000",
+            "container_width": 1200,
+            "padding_top": 20,
+            "padding_bottom": 0
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_d305d1b_9XUi3U"
+      ],
+      "name": "Fil d'Ariane",
+      "settings": {}
+    },
     "17634983328a593803": {
       "type": "_blocks",
       "blocks": {
@@ -129,32 +159,12 @@
             "desktop_width_percent": 100
           },
           "blocks": {}
-        },
-        "ai_gen_block_d305d1b_9XUi3U": {
-          "type": "ai_gen_block_d305d1b",
-          "settings": {
-            "home_text": "Les As du Volant",
-            "show_home_icon": true,
-            "separator": "/",
-            "font": "assistant_n4",
-            "font_size": 14,
-            "spacing": 8,
-            "background_color": "#ffffff",
-            "link_color": "#4c4c4c",
-            "link_hover_color": "#000000",
-            "separator_color": "#cccccc",
-            "current_color": "#000000",
-            "container_width": 1200,
-            "padding_top": 60,
-            "padding_bottom": 0
-          },
-          "blocks": {}
         }
       },
       "block_order": [
-        "ai_gen_block_d305d1b_9XUi3U",
         "ai_gen_block_b6d94e0_gKqyWK"
       ],
+      "name": "Nos partenaires",
       "settings": {}
     },
     "main": {
@@ -699,6 +709,7 @@
     }
   },
   "order": [
+    "breadcrumb_top",
     "main",
     "custom_liquid_QKjTbh",
     "custom_liquid_RfKfBQ",
