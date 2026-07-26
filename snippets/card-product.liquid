@@ -59,7 +59,7 @@
       >
         {%- if card_product.featured_media -%}
           <div class="card__media{% if image_shape and image_shape != 'default' %} shape--{{ image_shape }} color-{{ settings.card_color_scheme }} gradient{% endif %}">
-            {%- if request.page_type == 'collection' and collection.handle == 'volant-bmw' -%}
+            {%- if request.page_type == 'collection' and collection.handle contains 'volant' -%}
               {%- unless card_product.tags contains 'logo-photo' -%}
                 {%- if card_product.tags contains 'logo-blanc' -%}
                   {%- assign logo_overlay_src = 'logoo-blanc.png' | asset_url -%}
