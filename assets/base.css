@@ -3751,10 +3751,10 @@ button[name="add"]:hover,
    (test : collection volant-bmw uniquement - voir snippets/card-product.liquid) */
 .card__media .card-logo-overlay {
   position: absolute;
-  top: 19%;
+  top: 21%;
   left: 50%;
   transform: translateX(-50%);
-  width: 60%;
+  width: 44%;
   height: auto;
   z-index: 2;
   pointer-events: none;
