@@ -69,6 +69,7 @@
                 <img
                   class="card-logo-overlay"
                   src="{{ logo_overlay_src }}"
+                  style="top: {{ card_product.metafields.custom.logo_top.value | default: 21 }}%"
                   alt=""
                   loading="lazy"
                   width="600"
