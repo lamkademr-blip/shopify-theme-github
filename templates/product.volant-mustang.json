@@ -163,7 +163,7 @@
             "separator_color": "#cccccc",
             "current_color": "#000000",
             "container_width": 1200,
-            "padding_top": 20,
+            "padding_top": 60,
             "padding_bottom": 0
           },
           "blocks": {}
