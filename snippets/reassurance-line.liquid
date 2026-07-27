@@ -1,0 +1,36 @@
+{% comment %}
+  Ligne de réassurance compacte — rendue sous le bouton de commande
+  (drawer panier + page panier). DA carbone & champagne.
+{% endcomment %}
+
+<style>
+  .reassurance-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    margin-top: 12px;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    color: rgba(var(--color-foreground), 0.65);
+  }
+  .reassurance-line__dot {
+    color: #c9a96e;
+  }
+  .reassurance-line a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .reassurance-line a:hover {
+    color: rgb(var(--color-foreground));
+  }
+</style>
+
+<div class="reassurance-line">
+  <a href="/pages/garantie-5-ans">Garantie 5 ans</a>
+  <span class="reassurance-line__dot" aria-hidden="true">·</span>
+  <span>Livraison offerte</span>
+  <span class="reassurance-line__dot" aria-hidden="true">·</span>
+  <span>Paiement sécurisé</span>
+</div>

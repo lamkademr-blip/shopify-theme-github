@@ -6,12 +6,18 @@
   .trust-badges {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-top: 16px;
-    padding: 16px;
-    background: rgba(var(--color-foreground), 0.03);
-    border: 1px solid rgba(var(--color-foreground), 0.06);
-    border-radius: 8px;
+    gap: 10px 16px;
+    margin-top: 18px;
+    padding: 14px 0;
+    border-top: 1px solid rgba(var(--color-foreground), 0.08);
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
+  }
+  a.trust-badge {
+    text-decoration: none;
+    color: inherit;
+  }
+  a.trust-badge:hover .trust-badge__text {
+    color: #c9a96e;
   }
   .trust-badge {
     display: flex;
@@ -60,15 +66,15 @@
       <span class="trust-badge__sub">2 à 5 semaines</span>
     </div>
   </div>
-  <div class="trust-badge">
+  <a class="trust-badge" href="/pages/garantie-5-ans">
     <div class="trust-badge__icon">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
     </div>
     <div class="trust-badge__text">
       Garantie 5 ans
-      <span class="trust-badge__sub">Fabrication artisanale</span>
+      <span class="trust-badge__sub">Voir les conditions</span>
     </div>
-  </div>
+  </a>
   <div class="trust-badge">
     <div class="trust-badge__icon">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
