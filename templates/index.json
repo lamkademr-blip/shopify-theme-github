@@ -64,7 +64,7 @@
     "titre_7xhXj8": {
       "type": "Titre",
       "settings": {
-        "title": "Pour Chaque Pilote, Un Volant d'Exception",
+        "title": "Pour chaque pilote, un volant d'exception",
         "title_color": "#000000",
         "title_size": 36,
         "text_align": "center",
@@ -264,7 +264,7 @@
           "type": "ai_gen_block_8c7fb54",
           "settings": {
             "show_badge": true,
-            "badge_text": "TOP QUALITÉ",
+            "badge_text": "",
             "title": "Nos clients adorent",
             "subtitle": "Découvrez ce que nos clients disent de nos volants premium",
             "heading_font": "assistant_n4",

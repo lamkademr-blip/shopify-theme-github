@@ -204,7 +204,7 @@
   padding: 6px 10px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  animation: dpop-badge-bounce 2s ease-in-out infinite;
+  
   z-index: 2;
 }
 

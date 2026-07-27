@@ -3717,3 +3717,24 @@ body.template-index .top-bar {
   [id$="__slider_video_eanfLJ"] { margin-bottom: 24px; }
   [id$="__multirow_EAck6W"] { display: block; padding-top: 32px; }
 }
+
+/* Hero : CTA secondaire WhatsApp en ghost — un seul vert par écran (la bulle) */
+[class*="ai-hero-button-secondary-"] {
+  background-color: transparent !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  transition: border-color 0.15s ease-out !important;
+}
+[class*="ai-hero-button-secondary-"]:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: #ffffff !important;
+  color: #ffffff !important;
+}
+
+/* Ancrage du prix (PDP) */
+.price-anchoring {
+  margin: 6px 0 0;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: rgba(var(--color-foreground), 0.65);
+}
