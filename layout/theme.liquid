@@ -385,82 +385,60 @@
     <link rel="icon" type="image/png" href="{{ 'dffxgchvyj.png' | asset_url }}">
     
     <style>
-      /* Style pour le message de livraison gratuite */
+      /* Messages du panier — style sobre (DA carbone & champagne) */
       .cart__note p,
       .cart-note,
       .cart__policies,
       [data-cart-note],
       .cart__footer p {
         text-align: center !important;
-        color: #e74c3c !important;
-        font-weight: bold !important;
+        color: rgba(var(--color-foreground), 0.75) !important;
+        font-weight: 500 !important;
         margin: 15px 0 !important;
-        font-size: 14px !important;
+        font-size: 13px !important;
       }
 
-      /* Message pour commande avant 16h30 */
+      /* Note visuel 3D avant réalisation */
       .cart__footer::before,
       .cart-note::before,
       form.cart::after,
       .cart__subtotal-container::before {
-        content: "Nous vous enverrons un visuel 3D du volant pour valider le design.Nous discuterons pour nous assurer que tout vous plaît avant production.";
+        content: "Vous recevrez un visuel 3D de votre volant à valider avant réalisation.";
         display: block;
         text-align: center;
-        background-color: #D4EDDA;
-        border: 1px solid #e9ecef;
-        padding: 10px;
-        margin: 15px 0;
-        border-radius: 5px;
-        font-weight: bold;
-        color: #2c3e50;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        color: rgba(var(--color-foreground), 0.75);
+        border-top: 1px solid rgba(var(--color-foreground), 0.08);
+        padding: 12px 0 0;
+        margin: 15px 0 0;
       }
 
-      /* Style du bouton Ajouter au panier */
-      .cart__checkout, 
+      /* Boutons de commande — noir mat, immobiles (DA carbone & champagne) */
+      .cart__checkout,
       button[name="checkout"],
       .add-to-cart-button,
       .product-form__cart-submit,
-      .shopify-payment-button .shopify-payment-button__button,
       .cart__submit {
-        background-color: #e74c3c !important;
+        background-color: #121212 !important;
         color: white !important;
-        font-weight: bold !important;
+        font-weight: 600 !important;
         border: none !important;
-        border-radius: 5px !important;
+        border-radius: 0 !important;
         padding: 15px 20px !important;
-        text-transform: uppercase !important;
-        letter-spacing: 1px !important;
-        transition: background-color 0.3s ease !important;
+        text-transform: none !important;
+        letter-spacing: 0.04em !important;
+        transition: background-color 0.15s ease-out !important;
       }
 
-      .cart__checkout:hover, 
+      .cart__checkout:hover,
       button[name="checkout"]:hover,
       .add-to-cart-button:hover,
       .product-form__cart-submit:hover,
-      .shopify-payment-button .shopify-payment-button__button:hover,
       .cart__submit:hover {
-        background-color: #c0392b !important;
+        background-color: #2a2b2e !important;
         cursor: pointer !important;
-      }
-
-      /* Animation pour mettre en évidence le message de livraison */
-      .cart__note p,
-      .cart-note,
-      .cart__policies,
-      [data-cart-note] {
-        animation: pulse 2s infinite;
-      }
-
-      @keyframes pulse {
-        0% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.7;
-        }
-        100% {
-          opacity: 1;
-        }
       }
     </style>
     <meta name="google-site-verification" content="Pb3k7JZau00o9nTgyGyb5eRN624xtoN67TnawB_ifZk" />
