@@ -3675,11 +3675,12 @@ body.template-index .top-bar {
   z-index: 10;
 }
 
-/* === Shopify Custom: Taille du titre produit H1 === */
+/* === Titre produit H1 — échelle premium (DA carbone & champagne) === */
 .product__title h1 {
-  font-size: 25px; /* ← adapte la valeur ici, ex: 28px, 2.5rem, etc. */
-  font-weight: bold; /* optionnel, si tu veux jouer sur le gras */
-  line-height: 1.2; /* optionnel pour l'espacement vertical */
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
 }
 
 /* Logo « Les As du Volant » en surimpression sur les cartes produit
