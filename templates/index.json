@@ -568,53 +568,12 @@
         "padding_top": 40,
         "padding_bottom": 52
       }
-    },
-    "materiaux_edito": {
-      "type": "materiaux-editorial",
-      "blocks": {
-        "mat_carbone": {
-          "type": "materiau",
-          "settings": {
-            "image": "shopify://shop_images/macro-carbone.png",
-            "title": "Carbone tressé",
-            "text": "Tissage serré sous vernis profond. Rigide, léger — et chaque reflet est unique."
-          }
-        },
-        "mat_alcantara": {
-          "type": "materiau",
-          "settings": {
-            "image": "shopify://shop_images/macro-alcantara.png",
-            "title": "Alcantara®",
-            "text": "Le grip des voitures de course. Un toucher peau de pêche qui ne glisse jamais, même en conduite engagée."
-          }
-        },
-        "mat_cuir": {
-          "type": "materiau",
-          "settings": {
-            "image": "shopify://shop_images/macro-cuir-nappa.png",
-            "title": "Cuir nappa",
-            "text": "Souple et dense, souligné de doubles surpiqûres au fil contrasté. Le choix des grands tourers."
-          }
-        }
-      },
-      "block_order": [
-        "mat_carbone",
-        "mat_alcantara",
-        "mat_cuir"
-      ],
-      "settings": {
-        "eyebrow": "Les matières",
-        "heading": "Ce que vos mains ressentiront",
-        "cta_label": "Composer le vôtre",
-        "cta_link": "shopify://collections/all"
-      }
     }
   },
   "order": [
     "1769011966061244b5",
     "titre_7xhXj8",
     "1768995084527ed5d7",
-    "materiaux_edito",
     "before_GWCn4d",
     "slider_video_eanfLJ",
     "1769002067fd8184ff",

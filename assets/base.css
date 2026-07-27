@@ -3695,3 +3695,25 @@ body.template-index .top-bar {
   z-index: 2;
   pointer-events: none;
 }
+/* === Homepage : gouttières latérales et rythme vertical (DA carbone & champagne) ===
+   Sélecteurs par suffixe d'id de section : stables entre thème preview et live. */
+@media screen and (min-width: 750px) {
+  /* Blocs à fond sombre : encadrés de blanc au lieu du bord-à-bord */
+  [id$="__slider_video_eanfLJ"],
+  [id$="__1769002067fd8184ff"],
+  [id$="__1769004103f9cfca36"] {
+    display: block;
+    max-width: 1760px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: clamp(24px, 3vw, 56px);
+    padding-right: clamp(24px, 3vw, 56px);
+  }
+
+  /* Rythme vertical homogène (~96 px entre sections) */
+  [id$="__titre_7xhXj8"] { display: block; padding-top: 56px; }
+  [id$="__1768995084527ed5d7"] { display: block; padding-bottom: 40px; }
+  [id$="__before_GWCn4d"] { display: block; padding-top: 16px; padding-bottom: 40px; }
+  [id$="__slider_video_eanfLJ"] { margin-bottom: 24px; }
+  [id$="__multirow_EAck6W"] { display: block; padding-top: 32px; }
+}
