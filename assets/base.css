@@ -2650,80 +2650,42 @@ menu-drawer + .header__search {
   }
 }
 
-/* Définition de l'animation de base pour les couleurs */
-@keyframes subtleGradientMove {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 30% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* Style du bouton */
+/* Bouton d'achat — noir mat, immobile (DA carbone & champagne) */
 .product-form__submit.button,
 .product-form__submit.button.button--full-width,
 .product-form__submit.button.button--primary,
 .product-form__submit.button.button--secondary {
-  /* Suppression des bordures */
   border: 0 !important;
-  border-width: 0 !important;
-  border-style: none !important;
-  border-color: transparent !important;
   outline: none !important;
-  
-  /* Réinitialisation du box-shadow */
   box-shadow: none !important;
-  
-  /* Style du dégradé */
-background: linear-gradient(90deg, #0055cc, #006EFF, #0088ff) !important;  /* Application de l'animation */
-  animation: subtleGradientMove 6s ease-in-out infinite !important;
-  
-  /* Autres styles */
-  border-radius: 6px !important;
-  color: white !important;
+  background: #121212 !important;
+  border-radius: 0 !important;
+  color: #ffffff !important;
   padding: 15px 25px !important;
   font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
   text-transform: none !important;
-  
-  /* Ajout de la transition pour l'effet au survol */
-  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  transition: background-color 0.15s ease-out !important;
 }
 
-/* Effet au survol */
 .product-form__submit.button:hover,
 .product-form__submit.button:focus {
-  /* Animation de couleur maintenue */
-  animation: subtleGradientMove 6s ease-in-out infinite !important;
-  
-  /* Effet de déplacement vers le haut */
-  transform: translateY(-3px) !important;
-  
-  /* Légère ombre pour renforcer l'effet de "flottement" */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15) !important;
-  
-  /* Pas de bordure */
+  background: #2a2b2e !important;
+  transform: none !important;
+  box-shadow: none !important;
   border: 0 !important;
-  border-width: 0 !important;
-  border-color: transparent !important;
   outline: 0 !important;
 }
 
-/* Effet au clic */
 .product-form__submit.button:active {
-  transform: translateY(-1px) !important;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1) !important;
+  background: #000000 !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
-/* Si nécessaire, réinitialisez aussi les après-pseudoéléments */
 .product-form__submit.button::after,
 .product-form__submit.button::before {
   display: none !important;
-  border: none !important;
-  box-shadow: none !important;
 }
 
 details[open] > .search-modal {
@@ -3718,33 +3680,6 @@ body.template-index .top-bar {
   font-size: 25px; /* ← adapte la valeur ici, ex: 28px, 2.5rem, etc. */
   font-weight: bold; /* optionnel, si tu veux jouer sur le gras */
   line-height: 1.2; /* optionnel pour l'espacement vertical */
-}
-
-/* FORCE LA COULEUR BLEUE #007BFF SUR LE BOUTON ATC */
-.product-form__cart-submit,
-button[name="add"],
-.add-to-cart-button,
-.shopify-payment-button__button,
-button[type="submit"][name="add"] {
-  background: #007BFF !important;
-  background-color: #007BFF !important;
-  background-image: none !important; /* Supprime tout dégradé existant */
-  color: #FFFFFF !important;
-  border: none !important;
-  border-radius: 8px !important;
-  padding: 15px 20px !important;
-  text-transform: none !important;
-  font-weight: bold !important;
-  letter-spacing: 1px !important;
-  transition: all 0.3s ease !important;
-}
-
-/* Effet au survol (hover) */
-.product-form__cart-submit:hover,
-button[name="add"]:hover,
-.add-to-cart-button:hover {
-  background: #0056b3 !important; /* Bleu plus foncé au hover */
-  cursor: pointer !important;
 }
 
 /* Logo « Les As du Volant » en surimpression sur les cartes produit
