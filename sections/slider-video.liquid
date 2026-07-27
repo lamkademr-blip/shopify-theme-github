@@ -122,7 +122,7 @@
 -%}
 
 {%- style -%}
-  {{  title_font | font_face: font_display: 'swap' }}
+  {% if title_custom %}{{ title_font | font_face: font_display: 'swap' }}{% endif %}
 
   .section-{{ section.id }} {
     border-top: solid {{ border_color }} {{ border_thickness }}px;

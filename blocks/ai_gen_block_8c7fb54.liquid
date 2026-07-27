@@ -52,8 +52,8 @@
   }
 
   .ai-testimonials-title-{{ ai_gen_id }} {
-    font-family: {{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }};
-    font-weight: {{ block.settings.heading_font.weight }};
+    font-family: var(--font-heading-family), sans-serif;
+    font-weight: 400;
     font-size: 36px;
     line-height: 1.2;
     color: #0f172a;
@@ -73,7 +73,7 @@
   }
 
   .ai-testimonials-subtitle-{{ ai_gen_id }} {
-    font-family: Inter, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body-family), sans-serif;
     font-size: 16px;
     line-height: 1.6;
     color: #475569;
@@ -185,7 +185,7 @@
   }
 
   .ai-testimonials-text-{{ ai_gen_id }} {
-    font-family: Inter, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body-family), sans-serif;
     font-size: 17px;
     line-height: 1.65;
     color: #0f172a;
@@ -213,7 +213,7 @@
   }
 
   .ai-testimonials-name-{{ ai_gen_id }} {
-    font-family: Inter, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body-family), sans-serif;
     font-size: 18px;
     font-weight: 700;
     color: #0066ff;
@@ -227,7 +227,7 @@
   }
 
   .ai-testimonials-email-{{ ai_gen_id }} {
-    font-family: Inter, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-body-family), sans-serif;
     font-size: 14px;
     color: #6b7280;
     margin: 0;

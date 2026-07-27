@@ -110,8 +110,8 @@
   }
 
   .ai-premium-hero-brand-{{ ai_gen_id }} {
-    font-family: {{ block.settings.brand_font.family }}, {{ block.settings.brand_font.fallback_families }};
-    font-weight: {{ block.settings.brand_font.weight }};
+    font-family: var(--font-heading-family), sans-serif;
+    font-weight: 400;
     font-size: {{ block.settings.brand_font_size }}px;
     color: {{ block.settings.brand_color }};
     margin: 0;

@@ -288,15 +288,14 @@
     {%- endif -%}
 
 
-    <!-- Charger la police Poppins depuis Google Fonts et appliquer au prix -->
+    <!-- Prix : police du thème, chiffres tabulaires -->
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
     .price-item {
-        font-family: 'Poppins', sans-serif !important;
+        font-family: var(--font-body-family), sans-serif !important;
         font-weight: 600 !important;
         font-size: 18px !important;
         line-height: 21px !important;
+        font-variant-numeric: tabular-nums;
     }
 </style>
 
