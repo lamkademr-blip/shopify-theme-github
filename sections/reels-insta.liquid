@@ -605,13 +605,19 @@
                   {% else %}
                    
                    {% comment %} --- VIDÉO SHOPIFY --- {% endcomment %}
-                   {% if forloop.first and i == 1 %}
-                      <!-- Chargement immédiat pour la première -->
-                      <video src="{{ block.settings.video.sources[1].url }}" autoplay muted playsinline loop preload="auto"></video>
-                   {% else %}
-                      <!-- Lazyload pour les autres -->
-                      <video data-src="{{ block.settings.video.sources[1].url }}" autoplay muted playsinline loop preload="none" class="lazy"></video>
-                   {% endif %}
+                   {% liquid
+                      # Plus petite rendition MP4 disponible : un reel s'affiche en ~300 px,
+                      # la 1080p (7 Mbps) est du gaspillage pur.
+                      assign reel_src = block.settings.video.sources[1].url
+                      assign reel_h = 99999
+                      for s in block.settings.video.sources
+                        if s.format == 'mp4' and s.height < reel_h
+                          assign reel_h = s.height
+                          assign reel_src = s.url
+                        endif
+                      endfor
+                   %}
+                   <video data-src="{{ reel_src }}" autoplay muted playsinline loop preload="none" class="lazy"></video>
 
                   {% endif %}
                 </div>

@@ -27,11 +27,34 @@
              style="width: 100%; height: auto; display: block;" 
              loading="lazy">
       {% elsif section.settings.media_type == 'video' and section.settings.video_url != blank %}
-        <!-- Affiche une vidéo MP4 à partir de son URL -->
-        <video autoplay loop muted playsinline preload="metadata" style="width: 100%; height: auto; display: block;">
-          <source src="{{ section.settings.video_url }}" type="video/mp4">
+        <!-- Vidéo MP4 chargée uniquement à l'approche du viewport (perf) -->
+        <video muted playsinline loop preload="none" style="width: 100%; height: auto; display: block;">
+          <source data-src="{{ section.settings.video_url }}" type="video/mp4">
           Votre navigateur ne supporte pas la balise vidéo.
         </video>
+        <script>
+          (function () {
+            var script = document.currentScript;
+            var video = script ? script.previousElementSibling : null;
+            if (!video || video.tagName !== 'VIDEO') return;
+            function loadAndPlay() {
+              var source = video.querySelector('source');
+              if (source && !source.src && source.dataset.src) {
+                source.src = source.dataset.src;
+                video.load();
+              }
+              var p = video.play();
+              if (p) p.catch(function () {});
+            }
+            if (!('IntersectionObserver' in window)) { loadAndPlay(); return; }
+            var io = new IntersectionObserver(function (entries) {
+              entries.forEach(function (entry) {
+                if (entry.isIntersecting) { loadAndPlay(); } else { video.pause(); }
+              });
+            }, { rootMargin: '200px' });
+            io.observe(video);
+          })();
+        </script>
       {% elsif section.settings.media_type == 'youtube' and section.settings.youtube_url != blank %}
         <!-- Affiche une vidéo YouTube -->
         <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
