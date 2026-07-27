@@ -3646,9 +3646,16 @@ details-disclosure > details {
   }
 }
 
-/* Changer la couleur du prix */
+/* Prix — encre du thème, chiffres tabulaires (DA carbone & champagne) */
 .price-item {
-    color: #0e0e52 !important; /* Mets la couleur que tu veux */
+    color: rgb(var(--color-foreground)) !important;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.01em;
+}
+
+/* « À partir de » : le montant reste le héros, le libellé s'efface */
+.price__container .price-item--last {
+    font-weight: 600;
 }
 
 
