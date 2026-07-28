@@ -3660,11 +3660,7 @@ details-disclosure > details {
 
 
 
-.header-wrapper  { 
 
-height: 15px !important;
-
-}
 
 .kf-branding {
   display: none !important;
@@ -3744,4 +3740,59 @@ body.template-index .top-bar {
   font-size: 12px;
   letter-spacing: 0.02em;
   color: rgba(var(--color-foreground), 0.65);
+}
+
+/* === Lot mobile (audit 27/07) ============================== */
+
+/* Prix PDP : le prix s'assume */
+.product__info-wrapper .price .price-item {
+  font-size: 22px !important;
+  font-weight: 600 !important;
+}
+
+/* Footer : zones tactiles >= 44px */
+.footer-block__details-content .list-menu__item--link {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* Bulle WhatsApp : s'efface quand la barre d'achat sticky est visible */
+.whatsapp-float {
+  transition: opacity 0.2s ease-out;
+}
+body.sticky-atc-open .whatsapp-float {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Bannière cookies Shopify : aux couleurs de la maison, cibles 44px */
+#shopify-pc__banner {
+  font-family: var(--font-body-family), sans-serif !important;
+}
+#shopify-pc__banner .shopify-pc__banner__dialog {
+  background: #121212 !important;
+  color: #f7f6f4 !important;
+  border-radius: 0 !important;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.35) !important;
+}
+#shopify-pc__banner .shopify-pc__banner__dialog p,
+#shopify-pc__banner .shopify-pc__banner__dialog a {
+  color: rgba(247, 246, 244, 0.85) !important;
+}
+#shopify-pc__banner button {
+  min-height: 44px !important;
+  border-radius: 0 !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.03em !important;
+}
+#shopify-pc__banner #shopify-pc__banner__btn-accept {
+  background: #ffffff !important;
+  color: #121212 !important;
+  border: none !important;
+}
+#shopify-pc__banner #shopify-pc__banner__btn-decline,
+#shopify-pc__banner #shopify-pc__banner__btn-manage-prefs {
+  background: transparent !important;
+  color: #f7f6f4 !important;
+  border: 1px solid rgba(247, 246, 244, 0.45) !important;
 }

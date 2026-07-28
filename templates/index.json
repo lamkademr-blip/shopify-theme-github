@@ -462,111 +462,18 @@
         "lazy": true
       }
     },
-    "multirow_EAck6W": {
-      "type": "multirow",
-      "blocks": {
-        "row_UrUFrE": {
-          "type": "row",
-          "settings": {
-            "image": "shopify://shop_images/volant_audi_S5_carbone.png",
-            "caption": "",
-            "heading": "Personnalisation Volant : Quelles Options Existent",
-            "text": "<ul><li>Insertions carbone ou jantes en alliage design</li><li>Palettes de changement de vitesses rétroéclairées</li><li>Surpiqûres contrastées personnalisables</li><li>Boutons multimédias compatibles avec les systèmes MMI ou Virtual Cockpit</li></ul>",
-            "button_label": "",
-            "button_link": ""
-          }
-        },
-        "row_WfFd7T": {
-          "type": "row",
-          "settings": {
-            "image": "shopify://shop_images/ertr.jpg",
-            "caption": "",
-            "heading": "Quelle Différence entre un volant sport et un volant voiture basique ?",
-            "text": "<p>Avec son diamètre réduit et ses <strong>poignées alvéolées</strong> , le volant voiture sport optimise la réactivité. Les matériaux premium (cuir Nappa, alcantara) résistent à l'usure tout en gardant un grip ferme – idéal pour les accélérations en sortie de virage. Compatible avec la plupart des <strong>boîtes automatiques </strong>et manuelles.</p>",
-            "button_label": "",
-            "button_link": ""
-          }
-        }
-      },
-      "block_order": [
-        "row_UrUFrE",
-        "row_WfFd7T"
-      ],
+    "guides_blog": {
+      "type": "featured-blog",
       "settings": {
-        "image_height": "medium",
-        "desktop_image_width": "medium",
-        "heading_size": "h1",
-        "text_style": "body",
-        "button_style": "secondary",
-        "desktop_content_position": "middle",
-        "desktop_content_alignment": "left",
-        "image_layout": "alternate-left",
-        "section_color_scheme": "",
-        "row_color_scheme": "",
-        "mobile_content_alignment": "left",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "rich_text_PdbVCT": {
-      "type": "rich-text",
-      "blocks": {
-        "heading_PbznYU": {
-          "type": "heading",
-          "settings": {
-            "heading": "Comment Savoir Si un Volant Convient à Ma Voiture ?",
-            "heading_size": "h1"
-          }
-        },
-        "text_jKFxzy": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Vérifiez l'année de fabrication, le type de direction assistée et la connectique de l'airbag. Nos kits incluent un adaptateur universel pour les BMW Série récentes, Mercedes Classe A (après 2018) et Volkswagen Golf VII+.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "heading_PbznYU",
-        "text_jKFxzy"
-      ],
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "",
-        "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 52
-      }
-    },
-    "rich_text_4LAEJX": {
-      "type": "rich-text",
-      "blocks": {
-        "heading_N9cCHb": {
-          "type": "heading",
-          "settings": {
-            "heading": "Quel est le meilleur volant voiture à choisir ?",
-            "heading_size": "h1"
-          }
-        },
-        "text_cMCCTE": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Choisir le <strong>meilleur volant voiture</strong> dépend avant tout de ta marque, de ton modèle et de ce que tu recherches : plus de sportivité, un grip parfait avec de l'Alcantara ou du cuir perforé, des palettes plus grandes, un méplat racing ou encore le chauffage intégré pour l'hiver. Chez Les As du Volant, on propose des volants personnalisés haut de gamme compatibles plug & play pour les plus grandes marques allemandes.</p><h2>Le top des volants aprèsmarket pour transformer ton habitacle</h2><p>Voici notre sélection des meilleurs volants voiture du moment, testés et approuvés par des milliers de passionnés :</p><ul><li><strong>Pour Audi</strong> : Le <a href=\"https://les-as-du-volant.com/products/volant-audi-a-trois\">volant Audi A3/RS3/S3</a> méplat avec inserts carbone et surpiqûres contrastées est un best-seller absolu. Grip incroyable et look ultra-sportif garanti ! Les propriétaires d'A1 ne sont pas en reste avec le <a href=\"https://les-as-du-volant.com/products/volant-audi-a-un\">volant Audi A1/S1</a>, plus compact mais tout aussi premium.</li><li><strong>Pour BMW</strong> : Le <a href=\"https://les-as-du-volant.com/products/volant-bmw-serie-un\">volant BMW Série 1</a> en Alcantara et palettes oversize transforme instantanément ta compacte en véritable M Performance.</li><li><strong>Pour Mercedes</strong> : Rien ne vaut le <a href=\"https://les-as-du-volant.com/products/volant-mercedes-classe-a\">volant Mercedes Classe A</a> avec son design AMG, ses touches haptiques et sa finition nappa irréprochable pour un luxe sportif quotidien.</li><li><strong>Pour Volkswagen</strong> : Les fans de GTI/R swappent massivement sur le <a href=\"https://les-as-du-volant.com/products/volant-golf-sept\">volant Golf 7/7.5/8</a> méplat R avec repère 12h et palettes allongées – probablement le meilleur rapport qualité/prix du marché.</li></ul><h2>Comment savoir quel volant est le meilleur pour TOI ?</h2><p>Le \"meilleur\" volant voiture, c'est celui qui correspond parfaitement à ton usage :<br/>- Conduite quotidienne → privilégie le cuir chauffant et les commandes multifonctions complètes.<br/>- Trackdays et routes sinueuses → opte pour l'Alcantara ou le carbone avec méplat prononcé.<br/>- Look racing sans compromis → palettes oversize + LED shift lights si disponible.</p><p>Tous nos volants sont 100% compatibles avec les airbags d'origine, le virtual cockpit/iDrive/MBUX et se montent en 30-45 min avec nos tutos détaillés.</p><p>Prêt à passer au niveau supérieur ? Parcourez notre sélection et trouve le volant voiture qui va complètement métamorphoser ton intérieur !</p>"
-          }
-        }
-      },
-      "block_order": [
-        "heading_N9cCHb",
-        "text_cMCCTE"
-      ],
-      "name": "t:sections.rich-text.presets.name",
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "",
-        "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 52
+        "heading": "Nos guides",
+        "blog": "infos",
+        "post_limit": 3,
+        "columns_desktop": 3,
+        "show_image": true,
+        "show_date": false,
+        "show_author": false,
+        "show_view_all": true,
+        "color_scheme": "scheme-1"
       }
     }
   },
@@ -578,8 +485,6 @@
     "slider_video_eanfLJ",
     "1769002067fd8184ff",
     "1769004103f9cfca36",
-    "multirow_EAck6W",
-    "rich_text_PdbVCT",
-    "rich_text_4LAEJX"
+    "guides_blog"
   ]
 }

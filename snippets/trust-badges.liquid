@@ -45,14 +45,14 @@
     color: rgb(var(--color-foreground));
   }
   .trust-badge__sub {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
     color: rgba(var(--color-foreground), 0.6);
     display: block;
   }
   @media screen and (max-width: 749px) {
     .trust-badges { padding: 12px; gap: 4px; }
-    .trust-badge__text { font-size: 11px; }
+    .trust-badge__text { font-size: 12px; }
   }
 </style>
 
@@ -91,6 +91,15 @@
     <div class="trust-badge__text">
       Paiement sécurisé
       <span class="trust-badge__sub">CB, PayPal, Apple Pay</span>
+    </div>
+  </div>
+  <div class="trust-badge" style="grid-column: 1 / -1;">
+    <div class="trust-badge__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    </div>
+    <div class="trust-badge__text">
+      Compatible airbag &amp; commandes d'origine
+      <span class="trust-badge__sub">Base d'origine constructeur adaptée à votre véhicule</span>
     </div>
   </div>
 </div>
