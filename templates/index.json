@@ -466,6 +466,62 @@
         "lazy": true
       }
     },
+    "faq_home": {
+      "type": "faq-home",
+      "blocks": {
+        "faq_q1": {
+          "type": "question",
+          "settings": {
+            "question": "Mon volant restera-t-il compatible avec l'airbag et les commandes ?",
+            "answer": "<p>Oui. Chaque volant part d'une <strong>pièce d'origine constructeur</strong> correspondant à votre véhicule : l'airbag, les commandes et les connectiques d'origine se remontent normalement. Indiquez simplement votre modèle et votre année lors de la commande.</p>"
+          }
+        },
+        "faq_q2": {
+          "type": "question",
+          "settings": {
+            "question": "Vais-je voir mon volant avant de le recevoir ?",
+            "answer": "<p>Oui — c'est notre garde-fou contre les mauvaises surprises : vous recevez un <strong>visuel 3D de votre configuration sur WhatsApp</strong> et vous validez chaque détail avant le lancement de votre commande.</p>"
+          }
+        },
+        "faq_q3": {
+          "type": "question",
+          "settings": {
+            "question": "Quels sont les délais ?",
+            "answer": "<p>Comptez <strong>2 à 5 semaines</strong> entre la validation de votre commande et la livraison, selon la complexité de la personnalisation. La livraison est offerte et vous recevez un numéro de suivi dès l'expédition.</p>"
+          }
+        },
+        "faq_q4": {
+          "type": "question",
+          "settings": {
+            "question": "Qui installe le volant ?",
+            "answer": "<p>Nous fournissons des instructions détaillées pour chaque modèle. En raison de la présence de l'airbag, nous recommandons la pose par un professionnel — <strong>nous pouvons vous mettre en relation avec un professionnel proche de chez vous</strong>.</p>"
+          }
+        },
+        "faq_q5": {
+          "type": "question",
+          "settings": {
+            "question": "Puis-je retourner un volant personnalisé ?",
+            "answer": "<p>Les volants sur mesure ne peuvent pas être retournés pour changement d'avis, conformément au droit de rétractation qui exclut les biens personnalisés. C'est précisément le rôle du <strong>visuel 3D validé avant lancement</strong> — et votre volant reste couvert par la <strong>garantie 5 ans</strong>.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_q1",
+        "faq_q2",
+        "faq_q3",
+        "faq_q4",
+        "faq_q5"
+      ],
+      "settings": {
+        "heading": "Questions fréquentes",
+        "subheading": "Tout ce qu'on nous demande avant de commander",
+        "open_first": false,
+        "link_label": "Toutes les questions",
+        "link_url": "/pages/foire-aux-questions",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
     "guides_blog": {
       "type": "featured-blog",
       "settings": {
@@ -488,6 +544,7 @@
     "before_GWCn4d",
     "slider_video_eanfLJ",
     "1769002067fd8184ff",
+    "faq_home",
     "1769004103f9cfca36",
     "guides_blog"
   ]
