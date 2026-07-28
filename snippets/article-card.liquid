@@ -112,10 +112,10 @@
           {%- endif -%}
         </div>
       </div>
-      <div class="card__content">
+      <div class="card__content" aria-hidden="true">
         <div class="card__information">
           <h3 class="card__heading{% if show_excerpt %} h2{% endif %}">
-            <a href="{{ article.url }}" class="full-unstyled-link">
+            <a href="{{ article.url }}" class="full-unstyled-link" tabindex="-1">
               {{ article.title | truncate: 50 | escape }}
             </a>
           </h3>

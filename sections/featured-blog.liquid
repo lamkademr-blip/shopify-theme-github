@@ -59,13 +59,18 @@
         role="list"
       >
         {%- if section.settings.blog != blank and section.settings.blog.articles_count > 0 -%}
-          {%- for article in section.settings.blog.articles limit: section.settings.post_limit -%}
+          {%- assign shown_count = 0 -%}
+          {%- for article in section.settings.blog.articles -%}
+            {%- comment -%} Les articles tagués "hors-home" restent sur le blog mais pas en homepage {%- endcomment -%}
+            {%- if article.tags contains 'hors-home' -%}{%- continue -%}{%- endif -%}
+            {%- if shown_count >= section.settings.post_limit -%}{%- break -%}{%- endif -%}
+            {%- assign shown_count = shown_count | plus: 1 -%}
             <li
-              id="Slide-{{ section.id }}-{{ forloop.index }}"
+              id="Slide-{{ section.id }}-{{ shown_count }}"
               class="blog__post grid__item article slider__slide slider__slide--full-width{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
               {% if settings.animations_reveal_on_scroll %}
                 data-cascade
-                style="--animation-order: {{ forloop.index }};"
+                style="--animation-order: {{ shown_count }};"
               {% endif %}
             >
               {% render 'article-card',

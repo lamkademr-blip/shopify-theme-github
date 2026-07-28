@@ -3,9 +3,9 @@
 <main class="ba_main {{ unique_id }}">
   {% if section.settings.show_top_title and section.settings.top_title != blank %}
     <div class="ba-top-title-container">
-      <p class="ba-top-title" style="color: {{ section.settings.top_title_color }};">
+      <h2 class="ba-top-title" style="color: {{ section.settings.top_title_color }};">
         {{ section.settings.top_title }}
-      </p>
+      </h2>
     </div>
   {% endif %}
 
@@ -15,7 +15,7 @@
         <img
           class="image-before slider-image"
           src="{{ section.settings.bf_image | image_url }}"
-          alt="color photo"
+          alt="{{ section.settings.bf_alt | default: 'Volant d’origine avant personnalisation' | escape }}"
         >
         <span
           class="before_badge ba_badge"
@@ -27,7 +27,7 @@
         <img
           class="image-after slider-image"
           src="{{ section.settings.af_image | image_url }}"
-          alt="black and white"
+          alt="{{ section.settings.af_alt | default: 'Volant personnalisé après transformation' | escape }}"
         >
         <span class="after_badge ba_badge" style="{% unless section.settings.show_badge %}display: none;{% endunless %}"
           >Après</span
@@ -104,17 +104,21 @@
       </svg>
     </div>
   </div>
-  <div
-    class="container before_after-content"
-    style="{% unless section.settings.show_content %}display: none;{% endunless %}"
-  >
-    <div class="before_after-heading">
-      <h3>{{ section.settings.ba_heading }}</h3>
+  {% if section.settings.ba_caption != blank %}
+    <p class="ba-caption">{{ section.settings.ba_caption }}</p>
+  {% endif %}
+  {% if section.settings.show_content %}
+    <div class="container before_after-content">
+      {% if section.settings.ba_heading != blank %}
+        <div class="before_after-heading">
+          <h3>{{ section.settings.ba_heading }}</h3>
+        </div>
+      {% endif %}
+      <div class="before_after-paragraph">
+        <p>{{ section.settings.ba_content }}</p>
+      </div>
     </div>
-    <div class="before_after-paragraph">
-      <p>{{ section.settings.ba_content }}</p>
-    </div>
-  </div>
+  {% endif %}
 </main>
 
 {% schema %}
@@ -152,6 +156,21 @@
       "id":"af_image",
       "type":"image_picker",
       "label":"After Image"
+    },
+    {
+      "type": "text",
+      "id": "bf_alt",
+      "label": "Texte alternatif image Avant"
+    },
+    {
+      "type": "text",
+      "id": "af_alt",
+      "label": "Texte alternatif image Après"
+    },
+    {
+      "type": "text",
+      "id": "ba_caption",
+      "label": "Légende sous le comparateur"
     },
     {
       "type": "checkbox",
@@ -201,6 +220,15 @@
     font-size: 24px;
     font-weight: bold;
     margin: 0;
+  }
+
+  .ba-caption {
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    opacity: 0.7;
+    margin: -14px 0 0;
   }
 
   {% if section.settings.show_content == true %}

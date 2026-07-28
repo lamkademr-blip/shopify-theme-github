@@ -701,8 +701,13 @@ document.addEventListener('DOMContentLoaded', function() {
         source = 'bouton_flottant';
       } else if (link.closest('#cart-whatsapp-popup') || link.closest('.cwp-card')) {
         source = 'popup_abandon_panier';
+      } else if (link.closest('.dpop-container')) {
+        source = 'popup_3d';
       } else if (link.closest('.product') || link.closest('[data-product]')) {
         source = 'page_produit';
+      } else {
+        var section = link.closest('[id^="shopify-section-"]');
+        if (section) source = section.id.replace('shopify-section-', '').slice(0, 60);
       }
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
@@ -711,6 +716,11 @@ document.addEventListener('DOMContentLoaded', function() {
         page_url: window.location.pathname,
         page_title: document.title
       });
+      if (typeof window.clarity === 'function') {
+        window.clarity('event', 'whatsapp_click');
+        window.clarity('set', 'wa_source', source);
+        window.clarity('set', 'wa_page', window.location.pathname.slice(0, 60));
+      }
     });
     </script>
 

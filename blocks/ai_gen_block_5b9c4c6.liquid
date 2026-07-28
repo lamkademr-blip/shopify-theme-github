@@ -169,7 +169,7 @@
 
             <div class="ai-process-steps__title-wrapper-{{ ai_gen_id }}">
               {% if step_number != blank %}
-                <h3 class="ai-process-steps__number-{{ ai_gen_id }}">{{ step_number }}</h3>
+                <div class="ai-process-steps__number-{{ ai_gen_id }}" aria-hidden="true">{{ step_number }}</div>
               {% endif %}
               {% if step_title != blank %}
                 <h3 class="ai-process-steps__title-{{ ai_gen_id }}">{{ step_title }}</h3>
