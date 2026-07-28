@@ -3795,9 +3795,14 @@ body.sticky-atc-open .whatsapp-float {
 }
 #shopify-pc__banner .shopify-pc__banner__btns {
   display: flex !important;
+  flex-direction: row !important;
   flex-wrap: wrap !important;
   gap: 8px !important;
   margin-top: 12px !important;
+}
+#shopify-pc__banner .shopify-pc__banner__btns button {
+  width: auto !important;
+  max-width: none !important;
 }
 #shopify-pc__banner button {
   min-height: 44px !important;
