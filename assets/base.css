@@ -3765,34 +3765,68 @@ body.sticky-atc-open .whatsapp-float {
   pointer-events: none;
 }
 
-/* Bannière cookies Shopify : aux couleurs de la maison, cibles 44px */
-#shopify-pc__banner {
+/* Bannière cookies Shopify : bandeau compact aux couleurs de la maison.
+   Le dialog EST l'élément #shopify-pc__banner (pas un enfant). */
+#shopify-pc__banner.shopify-pc__banner__dialog {
   font-family: var(--font-body-family), sans-serif !important;
-}
-#shopify-pc__banner .shopify-pc__banner__dialog {
   background: #121212 !important;
   color: #f7f6f4 !important;
   border-radius: 0 !important;
+  border: none !important;
   box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.35) !important;
+  padding: 16px 20px !important;
 }
-#shopify-pc__banner .shopify-pc__banner__dialog p,
-#shopify-pc__banner .shopify-pc__banner__dialog a {
-  color: rgba(247, 246, 244, 0.85) !important;
+#shopify-pc__banner__body-title {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+  margin: 0 0 6px !important;
+}
+#shopify-pc__banner .shopify-pc__banner__body p {
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+  color: rgba(247, 246, 244, 0.7) !important;
+  max-height: 70px !important;
+  overflow-y: auto !important;
+  margin: 0 !important;
+}
+#shopify-pc__banner .shopify-pc__banner__body a {
+  color: #c9a96e !important;
+}
+#shopify-pc__banner .shopify-pc__banner__btns {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin-top: 12px !important;
 }
 #shopify-pc__banner button {
   min-height: 44px !important;
   border-radius: 0 !important;
   font-weight: 600 !important;
   letter-spacing: 0.03em !important;
+  margin: 0 !important;
 }
 #shopify-pc__banner #shopify-pc__banner__btn-accept {
+  order: 1 !important;
+  flex: 1 1 40% !important;
   background: #ffffff !important;
   color: #121212 !important;
   border: none !important;
 }
-#shopify-pc__banner #shopify-pc__banner__btn-decline,
-#shopify-pc__banner #shopify-pc__banner__btn-manage-prefs {
+#shopify-pc__banner #shopify-pc__banner__btn-decline {
+  order: 2 !important;
+  flex: 1 1 40% !important;
   background: transparent !important;
   color: #f7f6f4 !important;
   border: 1px solid rgba(247, 246, 244, 0.45) !important;
+}
+#shopify-pc__banner #shopify-pc__banner__btn-manage-prefs {
+  order: 3 !important;
+  flex: 1 1 100% !important;
+  background: transparent !important;
+  border: none !important;
+  color: rgba(247, 246, 244, 0.6) !important;
+  text-decoration: underline !important;
+  font-weight: 400 !important;
+  min-height: 40px !important;
 }
