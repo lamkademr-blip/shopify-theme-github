@@ -6,9 +6,13 @@
   'use strict';
 
   var POPUP_DELAY_MS = 12000;
+  var EXIT_INTENT_MIN_MS = 8000;
   var COOKIE_NAME = '_lav_dpop_shown';
   var COOKIE_DAYS = 30;
   var WHATSAPP_NUMBER = '33622510196';
+
+  var pageLoadTime = Date.now();
+  var waitingForConsent = false;
 
   function getCookie(name) {
     var match = document.cookie.match('(?:^|;)\\s*' + name + '=([^;]*)');
@@ -30,9 +34,27 @@
     setCookie(COOKIE_NAME, '1', COOKIE_DAYS);
   }
 
+  function consentBannerVisible() {
+    var banner = document.getElementById('shopify-pc__banner');
+    return !!(banner && banner.offsetParent !== null);
+  }
+
   function showPopup() {
     if (hasBeenShown()) return;
     if (document.querySelector('#cart-whatsapp-popup.cwp-visible')) return;
+
+    // Un seul overlay à la fois : tant que le bandeau cookies est affiché,
+    // on attend la réponse au consentement puis on retente 2 s après.
+    if (consentBannerVisible()) {
+      if (!waitingForConsent) {
+        waitingForConsent = true;
+        document.addEventListener('visitorConsentCollected', function () {
+          setTimeout(showPopup, 2000);
+        }, { once: true });
+      }
+      return;
+    }
+
     markAsShown();
 
     var whatsappMessage = encodeURIComponent(
@@ -127,6 +149,7 @@
 
     function onMouseLeave(e) {
       if (e.clientY > 0 || exitFired) return;
+      if (Date.now() - pageLoadTime < EXIT_INTENT_MIN_MS) return;
       exitFired = true;
       showPopup();
       document.removeEventListener('mouseleave', onMouseLeave);
