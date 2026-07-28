@@ -96,8 +96,17 @@
     letter-spacing: {{ block.settings.headline_spacing }}em;
     line-height: {{ block.settings.headline_line_height }};
     color: {{ block.settings.headline_color }};
-    margin: 0 0 32px 0;
+    margin: 0 0 {% if block.settings.subheadline_text != blank %}20px{% else %}32px{% endif %} 0;
     text-transform: none;
+  }
+
+  .ai-hero-subheadline-{{ ai_gen_id }} {
+    font-size: 16px;
+    line-height: 1.6;
+    color: {{ block.settings.headline_color }};
+    opacity: 0.85;
+    margin: 0 0 32px 0;
+    max-width: 480px;
   }
 
   .ai-hero-buttons-{{ ai_gen_id }} {
@@ -188,7 +197,12 @@
 
     .ai-hero-headline-{{ ai_gen_id }} {
       font-size: {{ block.settings.headline_size | times: 0.5 }}px;
-      margin-bottom: 22px;
+      margin-bottom: {% if block.settings.subheadline_text != blank %}12px{% else %}22px{% endif %};
+    }
+
+    .ai-hero-subheadline-{{ ai_gen_id }} {
+      font-size: 15px;
+      margin-bottom: 26px;
     }
 
     .ai-hero-buttons-{{ ai_gen_id }} {
@@ -237,6 +251,12 @@
         <h1 class="ai-hero-headline-{{ ai_gen_id }}">
           {{ block.settings.headline_text }}
         </h1>
+      {% endif %}
+
+      {% if block.settings.subheadline_text != blank %}
+        <p class="ai-hero-subheadline-{{ ai_gen_id }}">
+          {{ block.settings.subheadline_text }}
+        </p>
       {% endif %}
 
       <div class="ai-hero-buttons-{{ ai_gen_id }}">
@@ -497,6 +517,15 @@
       "id": "headline_color",
       "label": "Color",
       "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Subheadline"
+    },
+    {
+      "type": "textarea",
+      "id": "subheadline_text",
+      "label": "Subheadline text"
     },
     {
       "type": "header",
