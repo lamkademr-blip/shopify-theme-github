@@ -1,0 +1,44 @@
+/* Judge.me — héritage strict du design du thème (variables Dawn).
+   Ne touche que les éléments .jdgm-* injectés par Judge.me. */
+
+.jdgm-widget,
+.jdgm-widget * {
+  font-family: var(--font-body-family) !important;
+}
+
+.jdgm-rev-widg {
+  border: none !important;
+  padding: 0 !important;
+}
+
+.jdgm-rev-widg__title {
+  font-family: var(--font-heading-family) !important;
+  font-size: calc(var(--font-heading-scale) * 2.4rem) !important;
+  color: rgb(var(--color-foreground)) !important;
+}
+
+.jdgm-rev-widg__summary-text,
+.jdgm-rev__body,
+.jdgm-rev__author {
+  color: rgba(var(--color-foreground), 0.85) !important;
+}
+
+/* Bouton "Laisser un avis" = style bouton Dawn */
+.jdgm-btn.jdgm-btn--solid,
+.jdgm-write-rev-link {
+  background: rgb(var(--color-button)) !important;
+  color: rgb(var(--color-button-text)) !important;
+  border-radius: var(--buttons-radius, 0) !important;
+  border: none !important;
+}
+
+/* Cartes d'avis : même traitement discret que les cards du thème */
+.jdgm-rev {
+  border-color: rgba(var(--color-foreground), 0.08) !important;
+}
+
+/* Miniatures photo/vidéo d'avis : coins cohérents avec les media du thème */
+.jdgm-rev__pics .jdgm-rev__pic-img,
+.jdgm-rev__pics .jdgm-rev__pic-video {
+  border-radius: var(--media-radius, 0) !important;
+}

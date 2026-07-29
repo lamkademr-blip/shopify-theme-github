@@ -474,6 +474,7 @@ src="https://www.facebook.com/tr?id=821714487268965&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
 <!-- Weglot removed — site français uniquement -->
+{{ 'judgeme-custom.css' | asset_url | stylesheet_tag: preload: false }}
   </head>
 
 <body class="gradient racing-theme{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
