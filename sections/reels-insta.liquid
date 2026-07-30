@@ -718,11 +718,13 @@
         }
       });
 
+      var ldvSeen = false;
       function loadOnScreenMedia() {
-        var vw = window.innerWidth;
+        if (!ldvSeen) return;
+        var vw = window.innerWidth, vh = window.innerHeight;
         container.querySelectorAll('.swiper-slide').forEach(function(slide) {
           var r = slide.getBoundingClientRect();
-          if (r.right > -vw * 0.5 && r.left < vw * 1.5) {
+          if (r.right > -vw * 0.5 && r.left < vw * 1.5 && r.bottom > -vh * 0.5 && r.top < vh * 1.5) {
             loadMedia(slide.querySelector('video'));
             loadMedia(slide.querySelector('iframe'));
           }
@@ -731,6 +733,7 @@
       var io = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           if (entry.isIntersecting) {
+            ldvSeen = true;
             loadOnScreenMedia();
             io.disconnect();
           }

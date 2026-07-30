@@ -967,8 +967,9 @@
       if (!container) return false;
       container.classList.remove('preview');
 
+      var ldvSeen = false;
       function loadVideo(el) {
-        if (!el) return;
+        if (!el || !ldvSeen) return;
         if (el.tagName === 'VIDEO' && !el.getAttribute('src') && el.dataset.src) {
           el.src = el.dataset.src;
         }
@@ -1104,6 +1105,7 @@
       var io = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           if (entry.isIntersecting) {
+            ldvSeen = true;
             loadVisibleSlides();
             var activeSlide = container.querySelector('.swiper-slide-active');
             if (activeSlide) {
