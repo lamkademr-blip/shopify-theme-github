@@ -260,45 +260,9 @@
             "step_4_icon": "shield"
           },
           "blocks": {}
-        },
-        "ai_gen_block_8c7fb54_kiwkJP": {
-          "type": "ai_gen_block_8c7fb54",
-          "settings": {
-            "show_badge": true,
-            "badge_text": "",
-            "title": "Nos clients adorent",
-            "subtitle": "Découvrez ce que nos clients disent de nos volants premium",
-            "heading_font": "assistant_n4",
-            "testimonial_1_enabled": true,
-            "testimonial_1_text": "Franchement rien à voir avec le volant d'origine, celui-là est une pure tuerie ! Le montage est super simple, en 40 minutes c'était plié. Pour le prix la qualité est vraiment au rendez-vous, je recommande sans hésiter.",
-            "testimonial_1_name": "Louis Y.",
-            "testimonial_1_email": "",
-            "testimonial_2_enabled": true,
-            "testimonial_2_text": "J'ai l'impression d'avoir une nouvelle voiture, un truc de fou. Je la prends beaucoup plus souvent, et j'ai l'impression d'être un meilleur pilote. Franchement, ça change tout, ma BM est redevenue une bombe.",
-            "testimonial_2_name": "Reid N.",
-            "testimonial_2_email": "",
-            "testimonial_3_enabled": true,
-            "testimonial_3_text": "Franchement au top. J'ai pu rajouter le régulateur de vitesse et les palettes, la sensation de conduite est juste géniale maintenant.",
-            "testimonial_3_name": "Lina U.",
-            "testimonial_3_email": "",
-            "testimonial_4_enabled": true,
-            "testimonial_4_text": "Volant installé, et le rendu est juste magnifique ! La qualité est dingue, super prise en main. Même le mec du garage qui me l'a posé a dit que c'était du bon matos. Franchement, je suis trop content du resultat.",
-            "testimonial_4_name": "Emile O.",
-            "testimonial_4_email": "",
-            "testimonial_5_enabled": true,
-            "testimonial_5_text": "Super rendu une fois monté, la prise en main est top ;)",
-            "testimonial_5_name": "Aya V.",
-            "testimonial_5_email": "",
-            "testimonial_6_enabled": true,
-            "testimonial_6_text": "Qualité au top, montage nickel. Ça donne un sacré coup de jeune à ma BM, on dirait qu'elle a 10 ans de moins",
-            "testimonial_6_name": "Kevin L.",
-            "testimonial_6_email": ""
-          },
-          "blocks": {}
         }
       },
       "block_order": [
-        "ai_gen_block_8c7fb54_kiwkJP",
         "ai_gen_block_5b9c4c6_WRdrYK"
       ],
       "settings": {}
