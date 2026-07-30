@@ -78,6 +78,7 @@
     </span>
     {%- render 'loading-spinner' -%}
     <div class="product__media media media--transparent">
+      {%- assign ldv_media_alt = media.alt | default: product_title -%}
       {{
         media.preview_image
         | image_url: width: 1946
@@ -85,6 +86,7 @@
           class: image_class,
           loading: lazy,
           sizes: sizes,
+          alt: ldv_media_alt,
           widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946'
       }}
     </div>
@@ -120,12 +122,14 @@
           </span>
         {%- endif -%}
       </span>
+      {%- assign ldv_media_alt = media.alt | default: product_title -%}
       {{
         media.preview_image
         | image_url: width: 1946
         | image_tag:
           loading: lazy,
           sizes: sizes,
+          alt: ldv_media_alt,
           widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946'
       }}
     </button>

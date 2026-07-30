@@ -70,6 +70,7 @@
         >
           {%- assign media_position = 1 -%}
           {% render 'product-thumbnail',
+            product_title: product.title,
             media: featured_media,
             media_count: media_count,
             position: media_position,
@@ -108,6 +109,7 @@
               endif
             -%}
             {% render 'product-thumbnail',
+            product_title: product.title,
               media: media,
               media_count: media_count,
               position: media_position,
@@ -237,6 +239,7 @@
               aria-controls="GalleryViewer-{{ section.id }}"
               aria-describedby="{{ thumbnail_id }}"
             >
+              {%- assign featured_media_alt = featured_media.alt | default: product.title -%}
               {{
                 featured_media.preview_image
                 | image_url: width: 416
@@ -245,7 +248,7 @@
                   sizes: sizes,
                   widths: '54, 74, 104, 162, 208, 324, 416',
                   id: thumbnail_id,
-                  alt: featured_media.alt
+                  alt: featured_media_alt
                 | escape
               }}
             </button>
@@ -299,6 +302,7 @@
                 aria-controls="GalleryViewer-{{ section.id }}"
                 aria-describedby="{{ thumbnail_id }}"
               >
+                {%- assign gallery_media_alt = media.alt | default: product.title -%}
                 {{
                   media.preview_image
                   | image_url: width: 416
@@ -307,7 +311,7 @@
                     sizes: sizes,
                     widths: '54, 74, 104, 162, 208, 324, 416',
                     id: thumbnail_id,
-                    alt: media.alt
+                    alt: gallery_media_alt
                   | escape
                 }}
               </button>
