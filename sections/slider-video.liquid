@@ -1113,7 +1113,9 @@
           }
         });
       }, { threshold: 0.05 });
-      io.observe(container);
+      function ldvArm_() { io.observe(container); }
+      if (document.readyState === 'complete') { setTimeout(ldvArm_, 500); }
+      else { window.addEventListener('load', function() { setTimeout(ldvArm_, 500); }); }
 
       document.querySelectorAll('.slider-slide-{{ section.id }}').forEach(function(el) {
         var btn = el.querySelector('.slider-action-{{ section.id }}');

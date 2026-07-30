@@ -52,7 +52,9 @@
                 if (entry.isIntersecting) { loadAndPlay(); } else { video.pause(); }
               });
             }, { rootMargin: '200px' });
-            io.observe(video);
+            function armVideoIO() { io.observe(video); }
+            if (document.readyState === 'complete') { setTimeout(armVideoIO, 500); }
+            else { window.addEventListener('load', function() { setTimeout(armVideoIO, 500); }); }
           })();
         </script>
       {% elsif section.settings.media_type == 'youtube' and section.settings.youtube_url != blank %}

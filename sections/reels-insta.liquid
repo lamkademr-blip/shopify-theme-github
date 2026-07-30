@@ -736,7 +736,9 @@
           }
         });
       }, { threshold: 0.05 });
-      io.observe(container);
+      function ldvArm_() { io.observe(container); }
+      if (document.readyState === 'complete') { setTimeout(ldvArm_, 500); }
+      else { window.addEventListener('load', function() { setTimeout(ldvArm_, 500); }); }
       slider.on('slideChange', loadOnScreenMedia);
       slider.on('transitionEnd', loadOnScreenMedia);
 
