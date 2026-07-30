@@ -53,7 +53,9 @@
           "blocks": {}
         }
       },
-      "block_order": ["hero_cta"],
+      "block_order": [
+        "hero_cta"
+      ],
       "settings": {}
     },
     "intro_modele": {
@@ -82,7 +84,9 @@
           "blocks": {}
         }
       },
-      "block_order": ["intro_texte"],
+      "block_order": [
+        "intro_texte"
+      ],
       "settings": {}
     },
     "options_modele": {
@@ -140,7 +144,9 @@
           "blocks": {}
         }
       },
-      "block_order": ["options_cartes"],
+      "block_order": [
+        "options_cartes"
+      ],
       "settings": {}
     },
     "cta_final": {
@@ -155,24 +161,24 @@
             "content_max_width": 900,
             "content_spacing": 24,
             "text_alignment": "center",
-            "gradient_color_1": "#ffffff",
-            "gradient_color_2": "#ffffff",
-            "gradient_color_3": "#ffffff",
-            "gradient_color_4": "#ffffff",
-            "gradient_color_5": "#ffffff",
+            "gradient_color_1": "#131316",
+            "gradient_color_2": "#131316",
+            "gradient_color_3": "#131316",
+            "gradient_color_4": "#131316",
+            "gradient_color_5": "#131316",
             "headline": "Vous voulez un volant unique pour votre Mercedes Classe C ?",
             "headline_size": 36,
             "headline_weight": "400",
             "headline_letter_spacing": 1,
-            "headline_color": "#000000",
+            "headline_color": "#f5f5f5",
             "headline_max_width": 720,
             "subtext": "Décrivez-nous le volant de vos rêves, nous le créons sur mesure. Devis gratuit, réponse sous 24h.",
             "subtext_size": 16,
-            "subtext_color": "#333333",
+            "subtext_color": "#d6d6d6",
             "subtext_max_width": 680,
             "highlight": "Sur-mesure · Conseil expert · Livraison offerte",
             "highlight_size": 13,
-            "highlight_color": "#8e9ad6",
+            "highlight_color": "#a8b4e8",
             "button_text": "PARLER À UN EXPERT SUR WHATSAPP",
             "button_link": "https://wa.me/33622510196",
             "show_whatsapp_icon": true,
@@ -188,7 +194,9 @@
           "blocks": {}
         }
       },
-      "block_order": ["cta_bottom"],
+      "block_order": [
+        "cta_bottom"
+      ],
       "settings": {}
     }
   },
