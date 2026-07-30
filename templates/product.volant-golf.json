@@ -290,13 +290,15 @@
             "show_gift_card_recipient": true
           }
         },
-        "description": {
-          "type": "description",
-          "settings": {}
-        },
         "judge_me_reviews_preview_badge": {
           "type": "shopify://apps/judge-me-reviews/blocks/preview_badge/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {}
+        },
+        "custom_liquid_config_cta": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<div class=\"config-cta-heading\">\n  <h3>Composez votre volant sur-mesure</h3>\n  <p>Sélectionnez vos options étape par étape 👇 Chaque volant est unique : le vôtre commence ici.</p>\n</div>\n<style>\n.config-cta-heading {\n  margin: 1.2rem 0 0.4rem;\n  padding: 0.9rem 1.1rem;\n  background: linear-gradient(135deg, #eff6ff, #dbeafe);\n  border-left: 4px solid #2563eb;\n  border-radius: 10px;\n}\n.config-cta-heading h3 {\n  margin: 0 0 0.3rem;\n  font-size: 1.15rem;\n  font-weight: 700;\n  color: #1e3a8a;\n  font-family: var(--font-heading-family), sans-serif;\n}\n.config-cta-heading p {\n  margin: 0;\n  font-size: 0.9rem;\n  color: #334155;\n  line-height: 1.45;\n}\n</style>\n<script>\n(function() {\n  function place() {\n    var cta = document.querySelector('.config-cta-heading');\n    var box = document.getElementById('ymq-box');\n    if (cta && box && box.parentElement && cta.nextElementSibling !== box) {\n      box.parentElement.insertBefore(cta, box);\n    }\n    return !!(cta && box);\n  }\n  if (!place()) {\n    var obs = new MutationObserver(function() { if (place()) obs.disconnect(); });\n    obs.observe(document.body, { childList: true, subtree: true });\n    setTimeout(function() { obs.disconnect(); }, 10000);\n  }\n})();\n</script>"
+          }
         }
       },
       "block_order": [
@@ -306,10 +308,10 @@
         "custom_liquid_Rai8LA",
         "custom_liquid_TkVgWU",
         "price",
+        "custom_liquid_config_cta",
         "variant_picker",
         "quantity_selector",
-        "buy_buttons",
-        "description"
+        "buy_buttons"
       ],
       "settings": {
         "enable_sticky_info": true,
@@ -737,11 +739,22 @@
       "settings": {
         "include_margins": true
       }
+    },
+    "description_detaillee_ldv": {
+      "type": "custom-liquid",
+      "name": "Description détaillée",
+      "settings": {
+        "custom_liquid": "{% if product.description != blank %}\n<div class=\"pdp-description-full\">\n  {{ product.description }}\n</div>\n<style>\n.pdp-description-full {\n  max-width: 900px;\n  margin: 0 auto;\n  padding: 0 1.5rem;\n  font-family: var(--font-body-family), sans-serif;\n  line-height: 1.6;\n}\n.pdp-description-full h2 {\n  font-size: 1.6rem;\n  margin: 0 0 1rem;\n}\n.pdp-description-full h3 {\n  font-size: 1.15rem;\n  margin: 1.5rem 0 0.5rem;\n}\n.pdp-description-full ul {\n  margin: 0.5rem 0 1rem;\n  padding-left: 1.4rem;\n}\n.pdp-description-full li {\n  margin-bottom: 0.4rem;\n}\n@media (max-width: 749px) {\n  .pdp-description-full h2 { font-size: 1.35rem; }\n  .pdp-description-full h3 { font-size: 1.05rem; }\n}\n</style>\n{% endif %}",
+        "color_scheme": "",
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
     }
   },
   "order": [
     "breadcrumb_top",
     "main",
+    "description_detaillee_ldv",
     "custom_liquid_xWEYpM",
     "custom_liquid_PfyjDC",
     "image_texte_Q73pcQ",
