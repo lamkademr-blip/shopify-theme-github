@@ -66,7 +66,7 @@
       "type": "Titre",
       "settings": {
         "title": "Pour chaque pilote, un volant d'exception",
-        "title_color": "#000000",
+        "title_color": "#f5f5f5",
         "title_size": 36,
         "text_align": "center",
         "padding_top": 30,
@@ -308,7 +308,7 @@
       "settings": {
         "show_top_title": true,
         "top_title": "Vivez un changement radical",
-        "top_title_color": "#000000",
+        "top_title_color": "#f5f5f5",
         "bf_image": "shopify://shop_images/Capture_d_ecran_2025-03-06_181933.png",
         "af_image": "shopify://shop_images/O1CN01vMxi3A24ubvEHDeER__2210127451_jpg.webp",
         "show_badge": true,
