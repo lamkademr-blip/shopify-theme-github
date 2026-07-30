@@ -382,8 +382,8 @@
       ],
       "settings": {
         "heading": "Questions fréquentes",
-        "background": "#ffffff",
-        "text_color": "#333333",
+        "background": "#0e0e10",
+        "text_color": "#f5f5f5",
         "accent_color": "#2c5364"
       }
     },

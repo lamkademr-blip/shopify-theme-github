@@ -84,3 +84,19 @@ header.header,
 .media-text-card-section .bullet-text {
   color: #1f1f1f !important;
 }
+
+/* FAQ produit : cartes en carbone (blanc code en dur dans la section) */
+.faq-item-modern {
+  background: #17171a !important;
+  border-color: #2a2a2e !important;
+  box-shadow: 0 6px 32px -10px rgba(0, 0, 0, 0.6) !important;
+}
+.faq-answer-modern {
+  background: #131316 !important;
+  color: #c9c9d1 !important;
+  border-top-color: #2a2a2e !important;
+}
+.faq-item-modern:hover .faq-question-modern,
+.faq-question-modern:focus {
+  background: rgba(255, 255, 255, 0.04) !important;
+}
