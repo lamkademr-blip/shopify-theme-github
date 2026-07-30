@@ -1,8 +1,8 @@
-header.header, 
+header.header,
 #shopify-section-header .header-wrapper,
 .shopify-section-header {
-  background-color: #ffffff !important;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05) !important;
+  background-color: #17171a !important;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.45) !important;
   position: relative !important;
   padding: 10px 0 !important;
   margin-top: 15px !important;     /* Espace en haut */
@@ -49,13 +49,13 @@ button.header__icon--menu {
 /* Modifier la couleur de fond de la page */
 body,
 html {
-  background-color: #f5f5f5 !important; /* Gris très clair */
+  background-color: #0e0e10 !important; /* Noir carbone */
 }
 
 /* Si vous voulez aussi modifier la couleur de fond du header */
-header.header, 
+header.header,
 #shopify-section-header .header-wrapper,
 .shopify-section-header {
-  background-color: #ffffff !important; /* Blanc */
+  background-color: #17171a !important; /* Carbone */
   /* Autres propriétés existantes */
 }
