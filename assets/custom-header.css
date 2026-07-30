@@ -61,7 +61,8 @@ header.header,
 }
 /* ---- Ajustements fond carbone (dark mode) ---- */
 /* Labels du configurateur YMQ */
-#ymq-box .ymq_lable {
+#ymq-box .ymq_lable,
+#ymq-box .ymq_option_text_span {
   color: #f5f5f5 !important;
 }
 /* Sections custom : textes fonces illisibles sur fond sombre */
