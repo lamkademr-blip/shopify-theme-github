@@ -30,7 +30,18 @@
     return m ? { sid: m[1], sct: m[2] } : null;
   }
 
+  function consentOk() {
+    try {
+      var cp = window.Shopify && window.Shopify.customerPrivacy;
+      if (cp && typeof cp.analyticsProcessingAllowed === 'function') {
+        return cp.analyticsProcessingAllowed() !== false;
+      }
+    } catch (e) {}
+    return true; // pas d'API de consentement configuree -> comportement identique au reste du site
+  }
+
   function sendGA4(href) {
+    if (!consentOk()) return;
     try {
       var p = new URLSearchParams({
         v: '2', tid: MEASUREMENT_ID, cid: clientId(),
