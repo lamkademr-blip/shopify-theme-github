@@ -78,3 +78,8 @@ header.header,
 .pdp-description-full a:not(.whatsapp-cta-button) {
   color: #8ab8ff;
 }
+
+/* Cartes blanches image-texte : puces lisibles (le texte heritait du blanc du scheme sombre) */
+.media-text-card-section .bullet-text {
+  color: #1f1f1f !important;
+}
