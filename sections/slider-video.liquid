@@ -796,8 +796,18 @@
                     {% endif %}
 
                   {% else %}
+                    {%- liquid
+                      assign ldv_video_src = block.settings.video.sources[1].url
+                      assign ldv_best_h = 100000
+                      for ldv_s in block.settings.video.sources
+                        if ldv_s.format == 'mp4' and ldv_s.height >= 480 and ldv_s.height < ldv_best_h
+                          assign ldv_best_h = ldv_s.height
+                          assign ldv_video_src = ldv_s.url
+                        endif
+                      endfor
+                    -%}
                     <video
-                      data-src="{{ block.settings.video.sources[1].url }}"
+                      data-src="{{ ldv_video_src }}"
                       {% if forloop.first %}
                         autoplay
                       {% endif %}

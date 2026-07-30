@@ -221,9 +221,12 @@
   <div class="ai-hero-background-{{ ai_gen_id }}">
     {% if block.settings.background_image %}
       <img
-        src="{{ block.settings.background_image | image_url: width: 2400 }}"
+        src="{{ block.settings.background_image | image_url: width: 1200 }}"
+        srcset="{{ block.settings.background_image | image_url: width: 600 }} 600w, {{ block.settings.background_image | image_url: width: 900 }} 900w, {{ block.settings.background_image | image_url: width: 1200 }} 1200w, {{ block.settings.background_image | image_url: width: 1600 }} 1600w, {{ block.settings.background_image | image_url: width: 2048 }} 2048w"
+        sizes="100vw"
         alt="{{ block.settings.background_image.alt | escape }}"
         loading="eager"
+        fetchpriority="high"
         width="{{ block.settings.background_image.width }}"
         height="{{ block.settings.background_image.height }}"
       >
