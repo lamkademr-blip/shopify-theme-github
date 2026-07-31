@@ -282,6 +282,12 @@
       On duplique donc ici, dans le head, sa règle d'état fermé (hors flux dès le 1er layout). {% endcomment %}
     <style>
       .menu-drawer{position:absolute;transform:translateX(-100%);visibility:hidden;z-index:3;left:0;top:100%;width:100%;padding:0;overflow-x:hidden}
+      /* Hauteur du header réservée en mobile : pendant le streaming HTML avec des CSS
+         bloquants en attente dans le body, Chrome fige la géométrie du 1er layout ;
+         si le header y est gonflé, tout le contenu saute de ~400px à la résolution
+         (CLS 0,40). Hauteur fixe = géométrie correcte dès le 1er layout.
+         93px = sticky-header 78px + padding ; à ajuster si le logo change de taille. */
+      @media screen and (max-width: 749px){ .section-header{ height: 93px; } }
     </style>
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
