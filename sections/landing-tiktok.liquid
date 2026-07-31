@@ -255,8 +255,10 @@
   .ltk-topbar__logo img { height: 34px; width: auto; }
   .ltk-topbar__name { font-family: var(--font-heading-family), serif; font-size: 18px; letter-spacing: 0.08em; }
 
-  /* Hero — 1er écran complet, CTA visible sans scroll */
-  .ltk-hero { position: relative; min-height: 78vh; min-height: 78svh; display: flex; align-items: flex-end; padding: 0; max-width: none; }
+  /* Hero — 1er écran complet, CTA visible sans scroll.
+     NB spécificité : « .ltk section » (0-1-1) et « .ltk a » (0-1-1) battent une
+     classe seule (0-1-0) — les exceptions sont donc préfixées « .ltk » (0-2-0). */
+  .ltk section.ltk-hero { position: relative; min-height: 78vh; min-height: 78svh; display: flex; align-items: flex-end; padding: 0; max-width: none; }
   .ltk-hero__media { position: absolute; inset: 0; overflow: hidden; }
   .ltk-hero__img, .ltk-hero__video { width: 100%; height: 100%; object-fit: cover; }
   .ltk-hero__overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,14,16,0.15) 30%, rgba(14,14,16,0.92) 85%); }
@@ -269,10 +271,10 @@
 
   /* Boutons — DA carbone : radius 0, pas d'animation gadget */
   .ltk-btn { display: inline-block; text-align: center; padding: 16px 28px; min-height: 48px; font-size: 15px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; border-radius: 0; transition: background 0.2s, color 0.2s; }
-  .ltk-btn--primary { background: #ffffff; color: #121212; width: 100%; max-width: 420px; }
-  .ltk-btn--primary:hover { background: #121212; color: #ffffff; box-shadow: inset 0 0 0 1px #ffffff; }
-  .ltk-btn--wa { display: block; margin: 14px auto 0; max-width: 420px; background: transparent; color: var(--ltk-wa); border: 1px solid var(--ltk-wa); text-transform: none; letter-spacing: 0.02em; font-weight: 500; }
-  .ltk-btn--wa:hover { background: var(--ltk-wa); color: #0e0e10; }
+  .ltk .ltk-btn--primary { background: #ffffff; color: #121212; width: 100%; max-width: 420px; }
+  .ltk .ltk-btn--primary:hover { background: #121212; color: #ffffff; box-shadow: inset 0 0 0 1px #ffffff; }
+  .ltk .ltk-btn--wa { display: block; margin: 14px auto 0; max-width: 420px; background: transparent; color: var(--ltk-wa); border: 1px solid var(--ltk-wa); text-transform: none; letter-spacing: 0.02em; font-weight: 500; }
+  .ltk .ltk-btn--wa:hover { background: var(--ltk-wa); color: #0e0e10; }
 
   .ltk-h2 { font-size: clamp(22px, 5vw, 32px); text-align: center; margin-bottom: 8px; }
   .ltk-sub { text-align: center; color: var(--ltk-muted); font-size: 14px; margin-bottom: 8px; }
@@ -314,7 +316,7 @@
   .ltk-proof__sub { color: var(--ltk-muted); font-size: 14px; margin-top: 6px; }
 
   /* FAQ */
-  .ltk-faq { max-width: 760px; }
+  .ltk section.ltk-faq { max-width: 760px; }
   .ltk-faq__item { border-bottom: 1px solid var(--ltk-line); }
   .ltk-faq__q { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 18px 4px; font-weight: 600; font-size: 15px; min-height: 48px; }
   .ltk-faq__q::-webkit-details-marker { display: none; }
@@ -324,7 +326,7 @@
   .ltk-faq__a p { margin: 0 0 8px; }
 
   /* CTA final */
-  .ltk-final { text-align: center; background: var(--ltk-surface); max-width: none; }
+  .ltk section.ltk-final { text-align: center; background: var(--ltk-surface); max-width: none; }
   .ltk-final__title { font-size: clamp(24px, 5.5vw, 34px); }
   .ltk-final__text { color: var(--ltk-muted); margin: 10px auto 24px; max-width: 480px; }
 
@@ -338,12 +340,12 @@
   .ltk-btn--sticky { width: 100%; max-width: none; padding: 14px 20px; }
 
   @media (min-width: 750px) {
-    .ltk-hero { min-height: 70vh; }
+    .ltk section.ltk-hero { min-height: 70vh; }
     .ltk-picker__grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
     .ltk-steps__list { grid-template-columns: repeat(3, 1fr); }
     .ltk-benefits__grid { grid-template-columns: repeat(4, 1fr); }
     .ltk-videos__item { flex-basis: 220px; }
-    .ltk-btn--primary { width: auto; min-width: 320px; }
+    .ltk .ltk-btn--primary { width: auto; min-width: 320px; }
     .ltk-stickybar { display: none; }
   }
 {% endstyle %}
