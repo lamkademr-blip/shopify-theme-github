@@ -276,6 +276,14 @@
       }
     {% endstyle %}
 
+    {% comment %} Anti-CLS : component-menu-drawer.css est chargé en plein body, or un <link>
+      en body ne bloque que le paint, pas le layout — le drawer non stylé (~650px) réserve
+      de l'espace dans le header au 1er layout puis le rend (saut de ~400px du contenu).
+      On duplique donc ici, dans le head, sa règle d'état fermé (hors flux dès le 1er layout). {% endcomment %}
+    <style>
+      .menu-drawer{position:absolute;transform:translateX(-100%);visibility:hidden;z-index:3;left:0;top:100%;width:100%;padding:0;overflow-x:hidden}
+    </style>
+
     {{ 'base.css' | asset_url | stylesheet_tag }}
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
