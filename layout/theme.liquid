@@ -298,6 +298,19 @@
     {{ 'component-search.css' | asset_url | stylesheet_tag }}
     {{ 'component-menu-drawer.css' | asset_url | stylesheet_tag }}
     {{ 'component-mega-menu.css' | asset_url | stylesheet_tag }}
+    {% comment %} Anti-CLS (validé empiriquement) : les <link> CSS bloquants rendus en plein body
+      par les sections (annonce, bannière, grille) gèlent la mise en page pendant le streaming
+      HTML — le contenu reste figé ~450px trop bas puis saute (CLS 0,40 mobile). Préchargés ici,
+      ils sont en cache quand le parseur les atteint : fenêtre de gel ≈ 0. Servis instantanément
+      en test : CLS 0/5 runs ; réseau normal : CLS 0,4. {% endcomment %}
+    <link rel="preload" as="style" href="{{ 'component-slideshow.css' | asset_url }}">
+    <link rel="preload" as="style" href="{{ 'component-slider.css' | asset_url }}">
+    <link rel="preload" as="style" href="{{ 'component-list-social.css' | asset_url }}">
+    <link rel="preload" as="style" href="{{ 'component-collection-hero.css' | asset_url }}">
+    <link rel="preload" as="style" href="{{ 'template-collection.css' | asset_url }}">
+    <link rel="preload" as="style" href="{{ 'component-card.css' | asset_url }}">
+    <link rel="preload" as="style" href="{{ 'component-price.css' | asset_url }}">
+    <link rel="preload" as="style" href="{{ 'component-facets.css' | asset_url }}">
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
     {%- if settings.cart_type == 'drawer' -%}
