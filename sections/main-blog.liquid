@@ -248,6 +248,10 @@
   assign all_tags = ''
   for article in blog.articles
     for tag in article.tags
+      assign tag_l = tag | downcase
+      if tag_l == 'hors-home' or tag_l == 'ecomops' or tag_l == 'maillage'
+        continue
+      endif
       unless all_tags contains tag
         assign all_tags = all_tags | append: tag | append: ','
       endunless
