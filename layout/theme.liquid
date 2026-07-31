@@ -610,8 +610,8 @@ src="https://www.facebook.com/tr?id=821714487268965&ev=PageView&noscript=1"
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
     {{ 'custom-shipping.js' | asset_url | script_tag }}
-    {{ 'custom-cart.css' | asset_url | stylesheet_tag }}
-    {{ 'custom-header.css' | asset_url | stylesheet_tag }}
+    {% comment %} custom-cart.css / custom-header.css : déjà chargés dans le head —
+      un doublon bloquant en body peut geler la mise en page (anti-CLS) {% endcomment %}
     {{ 'cart-abandonment-whatsapp.js' | asset_url | script_tag }}
     <script>
 document.addEventListener('DOMContentLoaded', function() {
