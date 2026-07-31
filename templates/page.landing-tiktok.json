@@ -1,0 +1,149 @@
+{
+  "layout": "landing",
+  "sections": {
+    "landing": {
+      "type": "landing-tiktok",
+      "blocks": {
+        "prod_serief": {
+          "type": "produit",
+          "settings": { "product": "volant-personnalise-bmw-serie-f", "label": "BMW Série F" }
+        },
+        "prod_m3": {
+          "type": "produit",
+          "settings": { "product": "volant-personnalise-bmw-m-trois", "label": "BMW M3" }
+        },
+        "prod_golf7": {
+          "type": "produit",
+          "settings": { "product": "volant-golf-sept", "label": "Golf 7 GTI / R" }
+        },
+        "prod_a3": {
+          "type": "produit",
+          "settings": { "product": "volant-audi-a-trois", "label": "Audi A3 / RS3" }
+        },
+        "prod_amg": {
+          "type": "produit",
+          "settings": { "product": "volant-personnalise-mercedes-benz-amg-2015-2021", "label": "Mercedes AMG" }
+        },
+        "prod_tesla": {
+          "type": "produit",
+          "settings": { "product": "volant-personnalise-tesla-model-trois", "label": "Tesla Model 3" }
+        },
+        "video_1": {
+          "type": "video",
+          "settings": { "video": "shopify://files/videos/IMG_9905.MOV" }
+        },
+        "video_2": {
+          "type": "video",
+          "settings": { "video": "shopify://files/videos/IMG_9985.MOV" }
+        },
+        "video_3": {
+          "type": "video",
+          "settings": { "video": "shopify://files/videos/WeChat_20250622052628.mp4" }
+        },
+        "benef_airbag": {
+          "type": "benefice",
+          "settings": {
+            "title": "Airbag et commandes conservés",
+            "text": "Votre airbag et vos commandes d'origine se remontent à l'identique sur votre nouveau volant."
+          }
+        },
+        "benef_matieres": {
+          "type": "benefice",
+          "settings": {
+            "title": "Matériaux premium",
+            "text": "Carbone véritable, cuir perforé, Alcantara, surpiqûres au choix, écran LED en option."
+          }
+        },
+        "benef_3d": {
+          "type": "benefice",
+          "settings": {
+            "title": "Visuel 3D avant réalisation",
+            "text": "Vous validez un visuel 3D de votre configuration avant que votre volant soit réalisé."
+          }
+        },
+        "benef_garantie": {
+          "type": "benefice",
+          "settings": {
+            "title": "Garantie 5 ans",
+            "text": "Chaque volant est couvert par notre garantie de 5 ans."
+          }
+        },
+        "faq_airbag": {
+          "type": "question",
+          "settings": {
+            "question": "Est-ce que je perds mon airbag ?",
+            "answer": "<p>Non. Votre airbag et vos commandes d'origine sont conservés et se remontent à l'identique sur le nouveau volant.</p>"
+          }
+        },
+        "faq_3d": {
+          "type": "question",
+          "settings": {
+            "question": "Comment être sûr du résultat ?",
+            "answer": "<p>Avant toute réalisation, nous vous envoyons un visuel 3D de votre configuration sur WhatsApp. Vous validez, ou vous demandez des ajustements.</p>"
+          }
+        },
+        "faq_delais": {
+          "type": "question",
+          "settings": {
+            "question": "Quels sont les délais ?",
+            "answer": "<p>Chaque volant est réalisé sur-mesure : comptez 2 à 5 semaines selon les options choisies.</p>"
+          }
+        },
+        "faq_compat": {
+          "type": "question",
+          "settings": {
+            "question": "Ma voiture est-elle compatible ?",
+            "answer": "<p>Plus de 80 modèles sont couverts : BMW, Audi, Mercedes, Volkswagen, Tesla, Porsche et bien d'autres. Un doute ? Envoyez une photo de votre volant sur WhatsApp, nous confirmons en quelques minutes.</p>"
+          }
+        },
+        "faq_installation": {
+          "type": "question",
+          "settings": {
+            "question": "Qui installe le volant ?",
+            "answer": "<p>Tout professionnel de l'automobile peut l'installer comme un volant d'origine. Nous vous guidons si besoin.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "prod_serief",
+        "prod_m3",
+        "prod_golf7",
+        "prod_a3",
+        "prod_amg",
+        "prod_tesla",
+        "video_1",
+        "video_2",
+        "video_3",
+        "benef_airbag",
+        "benef_matieres",
+        "benef_3d",
+        "benef_garantie",
+        "faq_airbag",
+        "faq_3d",
+        "faq_delais",
+        "faq_compat",
+        "faq_installation"
+      ],
+      "settings": {
+        "hero_image": "shopify://shop_images/hero-cockpit-volant-carbone.png",
+        "hero_eyebrow": "CUIR · ALCANTARA · CARBONE",
+        "hero_title": "Composez votre volant sur-mesure",
+        "hero_subtitle": "Matières, coutures, écran LED : chaque volant est unique. Airbag et commandes d'origine conservés.",
+        "hero_cta_label": "Je personnalise mon volant",
+        "rating_text": "4,5/5 — avis clients vérifiés Judge.me",
+        "picker_title": "Choisissez votre voiture",
+        "picker_subtitle": "Le configurateur s'ouvre directement sur la page de votre modèle.",
+        "steps_title": "Comment ça marche",
+        "videos_title": "Nos dernières réalisations",
+        "benefits_title": "Pourquoi Les As du Volant",
+        "proof_big": "Nos clients notent leurs volants 4,5/5",
+        "proof_sub": "Avis vérifiés collectés par Judge.me sur nos pages produit",
+        "faq_title": "Questions fréquentes",
+        "final_title": "Votre volant n'attend que vous",
+        "final_text": "Configuration en ligne en 2 minutes. Visuel 3D offert avant réalisation.",
+        "whatsapp_number": "33622510196"
+      }
+    }
+  },
+  "order": ["landing"]
+}

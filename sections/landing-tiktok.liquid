@@ -1,0 +1,500 @@
+{%- comment -%}
+  Landing page trafic TikTok / Instagram — objectif unique : amener vers le
+  configurateur YMQ (PDP + ?start=config, géré par snippets/ymq-autostart.liquid).
+  Autonome : ne dépend pas de base.css (layout/landing.liquid). Préfixe .ltk-.
+{%- endcomment -%}
+
+{%- liquid
+  assign wa_number = section.settings.whatsapp_number | default: '33622510196'
+  assign wa_msg = 'Bonjour, je viens de TikTok/Instagram et je souhaite personnaliser mon volant. Ma voiture : '
+-%}
+{%- capture wa_link -%}https://wa.me/{{ wa_number }}?text={{ wa_msg | url_encode | replace: '+', '%20' }}{%- endcapture -%}
+
+{%- comment -%} Préchargement LCP : image hero {%- endcomment -%}
+{%- if section.settings.hero_image != blank -%}
+  <link rel="preload" as="image"
+    href="{{ section.settings.hero_image | image_url: width: 828 }}"
+    imagesrcset="{{ section.settings.hero_image | image_url: width: 640 }} 640w, {{ section.settings.hero_image | image_url: width: 828 }} 828w, {{ section.settings.hero_image | image_url: width: 1200 }} 1200w, {{ section.settings.hero_image | image_url: width: 1600 }} 1600w"
+    imagesizes="100vw"
+    fetchpriority="high">
+{%- endif -%}
+
+<div class="ltk">
+  {%- comment -%} ===== Bandeau logo minimal (pas de navigation) ===== {%- endcomment -%}
+  <header class="ltk-topbar">
+    <a href="{{ routes.root_url }}" class="ltk-topbar__logo" aria-label="{{ shop.name }}">
+      {%- if settings.logo != blank -%}
+        {{ settings.logo | image_url: width: 260 | image_tag: widths: '130,260', height: nil, alt: shop.name, loading: 'eager' }}
+      {%- else -%}
+        <span class="ltk-topbar__name">{{ shop.name }}</span>
+      {%- endif -%}
+    </a>
+  </header>
+
+  {%- comment -%} ===== HERO ===== {%- endcomment -%}
+  <section class="ltk-hero" id="ltk-hero">
+    <div class="ltk-hero__media" aria-hidden="true">
+      {%- if section.settings.hero_video != blank -%}
+        {%- assign v = section.settings.hero_video -%}
+        {%- assign src = v.sources | sort: 'height' | first -%}
+        <video class="ltk-hero__video" autoplay muted loop playsinline preload="metadata"
+          {% if v.preview_image %}poster="{{ v.preview_image | image_url: width: 828 }}"{% endif %}>
+          <source src="{{ src.url }}" type="{{ src.mime_type }}">
+        </video>
+      {%- elsif section.settings.hero_image != blank -%}
+        {{ section.settings.hero_image
+          | image_url: width: 1600
+          | image_tag:
+            widths: '640,828,1200,1600',
+            sizes: '100vw',
+            class: 'ltk-hero__img',
+            fetchpriority: 'high',
+            loading: 'eager',
+            alt: section.settings.hero_title | escape }}
+      {%- endif -%}
+      <div class="ltk-hero__overlay"></div>
+    </div>
+
+    <div class="ltk-hero__content">
+      {%- if section.settings.hero_eyebrow != blank -%}
+        <p class="ltk-eyebrow">{{ section.settings.hero_eyebrow }}</p>
+      {%- endif -%}
+      <h1 class="ltk-hero__title">{{ section.settings.hero_title }}</h1>
+      {%- if section.settings.hero_subtitle != blank -%}
+        <p class="ltk-hero__subtitle">{{ section.settings.hero_subtitle }}</p>
+      {%- endif -%}
+
+      <a href="#choisir-modele" class="ltk-btn ltk-btn--primary ltk-js-start" data-cta="hero">
+        {{ section.settings.hero_cta_label }}
+      </a>
+
+      <p class="ltk-hero__trust">
+        <span class="ltk-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        {{ section.settings.rating_text }}
+      </p>
+    </div>
+  </section>
+
+  {%- comment -%} ===== CHOIX DU MODÈLE (cible de tous les CTA) ===== {%- endcomment -%}
+  {%- assign product_blocks = section.blocks | where: 'type', 'produit' -%}
+  <section class="ltk-picker" id="choisir-modele">
+    <h2 class="ltk-h2">{{ section.settings.picker_title }}</h2>
+    {%- if section.settings.picker_subtitle != blank -%}
+      <p class="ltk-sub">{{ section.settings.picker_subtitle }}</p>
+    {%- endif -%}
+
+    <div class="ltk-picker__grid">
+      {%- for block in product_blocks -%}
+        {%- assign p = block.settings.product -%}
+        {%- if p != blank -%}
+          <a href="{{ p.url }}?start=config" class="ltk-card" data-cta="modele" data-handle="{{ p.handle }}" {{ block.shopify_attributes }}>
+            {%- if p.featured_image -%}
+              {{ p.featured_image
+                | image_url: width: 600
+                | image_tag: widths: '300,450,600', sizes: '(min-width: 750px) 300px, 45vw', class: 'ltk-card__img', loading: 'lazy', alt: p.title | escape }}
+            {%- endif -%}
+            <span class="ltk-card__title">
+              {{- block.settings.label | default: p.title | replace: 'Volant Personnalisé ', '' | replace: 'Volant ', '' -}}
+            </span>
+            <span class="ltk-card__go">Personnaliser &rarr;</span>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- comment -%} Carte « autre modèle » → WhatsApp (90 % des commandes passent par la conversation) {%- endcomment -%}
+      <a href="{{ wa_link }}" class="ltk-card ltk-card--other" data-cta="autre-modele" data-wa-source="picker" target="_blank" rel="noopener">
+        <span class="ltk-card__other-icon" aria-hidden="true">+ de 80 modèles</span>
+        <span class="ltk-card__title">Une autre voiture&nbsp;?</span>
+        <span class="ltk-card__go ltk-card__go--wa">Vérifier sur WhatsApp &rarr;</span>
+      </a>
+    </div>
+  </section>
+
+  {%- comment -%} ===== PROCESSUS EN 3 ÉTAPES ===== {%- endcomment -%}
+  <section class="ltk-steps">
+    <h2 class="ltk-h2">{{ section.settings.steps_title }}</h2>
+    <ol class="ltk-steps__list">
+      <li class="ltk-step">
+        <span class="ltk-step__num" aria-hidden="true">1</span>
+        <h3 class="ltk-step__title">{{ section.settings.step1_title }}</h3>
+        <p class="ltk-step__text">{{ section.settings.step1_text }}</p>
+      </li>
+      <li class="ltk-step">
+        <span class="ltk-step__num" aria-hidden="true">2</span>
+        <h3 class="ltk-step__title">{{ section.settings.step2_title }}</h3>
+        <p class="ltk-step__text">{{ section.settings.step2_text }}</p>
+      </li>
+      <li class="ltk-step">
+        <span class="ltk-step__num" aria-hidden="true">3</span>
+        <h3 class="ltk-step__title">{{ section.settings.step3_title }}</h3>
+        <p class="ltk-step__text">{{ section.settings.step3_text }}</p>
+      </li>
+    </ol>
+    <div class="ltk-center">
+      <a href="#choisir-modele" class="ltk-btn ltk-btn--primary ltk-js-start" data-cta="steps">{{ section.settings.hero_cta_label }}</a>
+    </div>
+  </section>
+
+  {%- comment -%} ===== VIDÉOS (réalisations existantes, lazy) ===== {%- endcomment -%}
+  {%- assign video_blocks = section.blocks | where: 'type', 'video' -%}
+  {%- if video_blocks.size > 0 -%}
+    <section class="ltk-videos">
+      <h2 class="ltk-h2">{{ section.settings.videos_title }}</h2>
+      <div class="ltk-videos__strip">
+        {%- for block in video_blocks -%}
+          {%- assign v = block.settings.video -%}
+          {%- if v != blank -%}
+            {%- assign src = v.sources | sort: 'height' | first -%}
+            <div class="ltk-videos__item" {{ block.shopify_attributes }}>
+              <video class="ltk-videos__video" muted loop playsinline preload="none"
+                data-ltk-src="{{ src.url }}" data-ltk-type="{{ src.mime_type }}"
+                {% if v.preview_image %}poster="{{ v.preview_image | image_url: width: 480 }}"{% endif %}>
+              </video>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ===== BÉNÉFICES ===== {%- endcomment -%}
+  {%- assign benefit_blocks = section.blocks | where: 'type', 'benefice' -%}
+  {%- if benefit_blocks.size > 0 -%}
+    <section class="ltk-benefits">
+      <h2 class="ltk-h2">{{ section.settings.benefits_title }}</h2>
+      <ul class="ltk-benefits__grid">
+        {%- for block in benefit_blocks -%}
+          <li class="ltk-benefit" {{ block.shopify_attributes }}>
+            <h3 class="ltk-benefit__title">{{ block.settings.title }}</h3>
+            <p class="ltk-benefit__text">{{ block.settings.text }}</p>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ===== PREUVE SOCIALE ===== {%- endcomment -%}
+  <section class="ltk-proof">
+    <p class="ltk-proof__stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
+    <p class="ltk-proof__big">{{ section.settings.proof_big }}</p>
+    <p class="ltk-proof__sub">{{ section.settings.proof_sub }}</p>
+  </section>
+
+  {%- comment -%} ===== FAQ ===== {%- endcomment -%}
+  {%- assign faq_blocks = section.blocks | where: 'type', 'question' -%}
+  {%- if faq_blocks.size > 0 -%}
+    <section class="ltk-faq">
+      <h2 class="ltk-h2">{{ section.settings.faq_title }}</h2>
+      {%- for block in faq_blocks -%}
+        <details class="ltk-faq__item" {{ block.shopify_attributes }}>
+          <summary class="ltk-faq__q">
+            {{ block.settings.question }}
+            <span class="ltk-faq__chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="ltk-faq__a">{{ block.settings.answer }}</div>
+        </details>
+      {%- endfor -%}
+    </section>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {%- for block in faq_blocks -%}
+            {
+              "@type": "Question",
+              "name": {{ block.settings.question | json }},
+              "acceptedAnswer": { "@type": "Answer", "text": {{ block.settings.answer | strip_html | json }} }
+            }{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        ]
+      }
+    </script>
+  {%- endif -%}
+
+  {%- comment -%} ===== CTA FINAL ===== {%- endcomment -%}
+  <section class="ltk-final">
+    <h2 class="ltk-final__title">{{ section.settings.final_title }}</h2>
+    {%- if section.settings.final_text != blank -%}
+      <p class="ltk-final__text">{{ section.settings.final_text }}</p>
+    {%- endif -%}
+    <a href="#choisir-modele" class="ltk-btn ltk-btn--primary ltk-js-start" data-cta="final">{{ section.settings.hero_cta_label }}</a>
+    <a href="{{ wa_link }}" class="ltk-btn ltk-btn--wa" data-cta="final-wa" data-wa-source="final" target="_blank" rel="noopener">
+      Une question&nbsp;? Réponse en quelques minutes sur WhatsApp
+    </a>
+  </section>
+
+  {%- comment -%} ===== Footer minimal ===== {%- endcomment -%}
+  <footer class="ltk-footer">
+    <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}</p>
+    <p>
+      <a href="/policies/legal-notice">Mentions légales</a> ·
+      <a href="/policies/privacy-policy">Confidentialité</a> ·
+      <a href="/policies/terms-of-service">CGV</a>
+    </p>
+  </footer>
+
+  {%- comment -%} ===== Barre CTA sticky mobile ===== {%- endcomment -%}
+  <div class="ltk-stickybar" id="ltk-stickybar" aria-hidden="true">
+    <a href="#choisir-modele" class="ltk-btn ltk-btn--primary ltk-btn--sticky ltk-js-start" data-cta="sticky">
+      {{ section.settings.hero_cta_label }}
+    </a>
+  </div>
+</div>
+
+{% style %}
+  .ltk { --ltk-bg: #0e0e10; --ltk-surface: #17171a; --ltk-line: #2a2b2e; --ltk-text: #f5f5f5; --ltk-muted: #b9b9b9; --ltk-gold: #C9A96E; --ltk-wa: #25D366; }
+  .ltk { background: var(--ltk-bg); color: var(--ltk-text); overflow-x: hidden; }
+  .ltk a { color: inherit; text-decoration: none; }
+  .ltk h1, .ltk h2, .ltk h3 { font-family: var(--font-heading-family), serif; font-weight: 400; margin: 0; }
+  .ltk p { margin: 0; }
+  .ltk section { padding: 56px 20px; max-width: 1100px; margin: 0 auto; }
+
+  .ltk-topbar { display: flex; justify-content: center; padding: 14px 20px; background: #17171a; border-bottom: 1px solid var(--ltk-line); }
+  .ltk-topbar__logo img { height: 34px; width: auto; }
+  .ltk-topbar__name { font-family: var(--font-heading-family), serif; font-size: 18px; letter-spacing: 0.08em; }
+
+  /* Hero — 1er écran complet, CTA visible sans scroll */
+  .ltk-hero { position: relative; min-height: 78vh; min-height: 78svh; display: flex; align-items: flex-end; padding: 0; max-width: none; }
+  .ltk-hero__media { position: absolute; inset: 0; overflow: hidden; }
+  .ltk-hero__img, .ltk-hero__video { width: 100%; height: 100%; object-fit: cover; }
+  .ltk-hero__overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,14,16,0.15) 30%, rgba(14,14,16,0.92) 85%); }
+  .ltk-hero__content { position: relative; width: 100%; max-width: 700px; margin: 0 auto; padding: 32px 20px 40px; text-align: center; }
+  .ltk-eyebrow { font-size: 12px; letter-spacing: 0.22em; color: var(--ltk-gold); text-transform: uppercase; margin-bottom: 10px; }
+  .ltk-hero__title { font-size: clamp(28px, 6.5vw, 44px); line-height: 1.12; }
+  .ltk-hero__subtitle { color: var(--ltk-muted); font-size: 15px; margin: 12px auto 22px; max-width: 520px; }
+  .ltk-hero__trust { margin-top: 14px; font-size: 13px; color: var(--ltk-muted); }
+  .ltk-stars { color: var(--ltk-gold); letter-spacing: 2px; margin-right: 6px; }
+
+  /* Boutons — DA carbone : radius 0, pas d'animation gadget */
+  .ltk-btn { display: inline-block; text-align: center; padding: 16px 28px; min-height: 48px; font-size: 15px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; border-radius: 0; transition: background 0.2s, color 0.2s; }
+  .ltk-btn--primary { background: #ffffff; color: #121212; width: 100%; max-width: 420px; }
+  .ltk-btn--primary:hover { background: #121212; color: #ffffff; box-shadow: inset 0 0 0 1px #ffffff; }
+  .ltk-btn--wa { display: block; margin: 14px auto 0; max-width: 420px; background: transparent; color: var(--ltk-wa); border: 1px solid var(--ltk-wa); text-transform: none; letter-spacing: 0.02em; font-weight: 500; }
+  .ltk-btn--wa:hover { background: var(--ltk-wa); color: #0e0e10; }
+
+  .ltk-h2 { font-size: clamp(22px, 5vw, 32px); text-align: center; margin-bottom: 8px; }
+  .ltk-sub { text-align: center; color: var(--ltk-muted); font-size: 14px; margin-bottom: 8px; }
+  .ltk-center { text-align: center; margin-top: 28px; }
+
+  /* Grille modèles */
+  .ltk-picker__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 24px; }
+  .ltk-card { background: var(--ltk-surface); border: 1px solid var(--ltk-line); padding: 12px 12px 14px; display: flex; flex-direction: column; gap: 8px; transition: border-color 0.2s; }
+  .ltk-card:hover { border-color: var(--ltk-gold); }
+  .ltk-card__img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #0e0e10; }
+  .ltk-card__title { font-size: 14px; font-weight: 600; line-height: 1.3; }
+  .ltk-card__go { font-size: 13px; color: var(--ltk-gold); margin-top: auto; }
+  .ltk-card__go--wa { color: var(--ltk-wa); }
+  .ltk-card--other { justify-content: center; text-align: center; border-style: dashed; }
+  .ltk-card__other-icon { font-family: var(--font-heading-family), serif; font-size: 20px; color: var(--ltk-gold); }
+
+  /* Étapes */
+  .ltk-steps__list { list-style: none; margin: 28px 0 0; padding: 0; display: grid; gap: 20px; }
+  .ltk-step { background: var(--ltk-surface); border: 1px solid var(--ltk-line); padding: 22px 20px; position: relative; }
+  .ltk-step__num { font-family: var(--font-heading-family), serif; font-size: 34px; color: var(--ltk-gold); line-height: 1; display: block; margin-bottom: 8px; }
+  .ltk-step__title { font-size: 17px; margin-bottom: 6px; }
+  .ltk-step__text { color: var(--ltk-muted); font-size: 14px; }
+
+  /* Vidéos verticales */
+  .ltk-videos__strip { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; margin-top: 24px; padding-bottom: 8px; }
+  .ltk-videos__item { flex: 0 0 62%; max-width: 280px; scroll-snap-align: center; }
+  .ltk-videos__video { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; background: var(--ltk-surface); border: 1px solid var(--ltk-line); }
+
+  /* Bénéfices */
+  .ltk-benefits__grid { list-style: none; margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .ltk-benefit { border: 1px solid var(--ltk-line); padding: 18px 16px; }
+  .ltk-benefit__title { font-size: 15px; color: var(--ltk-gold); margin-bottom: 6px; }
+  .ltk-benefit__text { font-size: 13px; color: var(--ltk-muted); }
+
+  /* Preuve sociale */
+  .ltk-proof { text-align: center; }
+  .ltk-proof__stars { color: var(--ltk-gold); font-size: 26px; letter-spacing: 4px; }
+  .ltk-proof__big { font-family: var(--font-heading-family), serif; font-size: clamp(22px, 5vw, 30px); margin-top: 8px; }
+  .ltk-proof__sub { color: var(--ltk-muted); font-size: 14px; margin-top: 6px; }
+
+  /* FAQ */
+  .ltk-faq { max-width: 760px; }
+  .ltk-faq__item { border-bottom: 1px solid var(--ltk-line); }
+  .ltk-faq__q { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 18px 4px; font-weight: 600; font-size: 15px; min-height: 48px; }
+  .ltk-faq__q::-webkit-details-marker { display: none; }
+  .ltk-faq__chevron { flex: 0 0 auto; width: 9px; height: 9px; border-right: 1.5px solid var(--ltk-gold); border-bottom: 1.5px solid var(--ltk-gold); transform: rotate(45deg); transition: transform 0.2s; }
+  details[open] .ltk-faq__chevron { transform: rotate(225deg); }
+  .ltk-faq__a { padding: 0 4px 18px; color: var(--ltk-muted); font-size: 14px; }
+  .ltk-faq__a p { margin: 0 0 8px; }
+
+  /* CTA final */
+  .ltk-final { text-align: center; background: var(--ltk-surface); max-width: none; }
+  .ltk-final__title { font-size: clamp(24px, 5.5vw, 34px); }
+  .ltk-final__text { color: var(--ltk-muted); margin: 10px auto 24px; max-width: 480px; }
+
+  .ltk-footer { text-align: center; padding: 28px 20px calc(28px + 74px); font-size: 12px; color: #7a7a7a; border-top: 1px solid var(--ltk-line); }
+  .ltk-footer a { color: #9a9a9a; text-decoration: underline; }
+  .ltk-footer p + p { margin-top: 6px; }
+
+  /* Barre sticky mobile */
+  .ltk-stickybar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); background: rgba(14, 14, 16, 0.94); backdrop-filter: blur(6px); border-top: 1px solid var(--ltk-line); transform: translateY(110%); transition: transform 0.25s; }
+  .ltk-stickybar.is-visible { transform: translateY(0); }
+  .ltk-btn--sticky { width: 100%; max-width: none; padding: 14px 20px; }
+
+  @media (min-width: 750px) {
+    .ltk-hero { min-height: 70vh; }
+    .ltk-picker__grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .ltk-steps__list { grid-template-columns: repeat(3, 1fr); }
+    .ltk-benefits__grid { grid-template-columns: repeat(4, 1fr); }
+    .ltk-videos__item { flex-basis: 220px; }
+    .ltk-btn--primary { width: auto; min-width: 320px; }
+    .ltk-stickybar { display: none; }
+  }
+{% endstyle %}
+
+<script>
+  (function () {
+    'use strict';
+
+    /* Tracking : clic sur un CTA configurateur */
+    document.querySelectorAll('[data-cta]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: 'config_start_click',
+          cta_position: el.getAttribute('data-cta'),
+          product_handle: el.getAttribute('data-handle') || null
+        });
+        if (typeof window.clarity === 'function') {
+          window.clarity('event', 'config_start_click');
+          window.clarity('set', 'ltk_cta', el.getAttribute('data-cta'));
+        }
+      });
+    });
+
+    /* Barre sticky : visible après le hero, masquée quand la grille modèles est à l'écran */
+    var bar = document.getElementById('ltk-stickybar');
+    var hero = document.getElementById('ltk-hero');
+    var picker = document.getElementById('choisir-modele');
+    if (bar && hero && picker && 'IntersectionObserver' in window) {
+      var heroGone = false;
+      var pickerSeen = false;
+      var update = function () {
+        var visible = heroGone && !pickerSeen;
+        bar.classList.toggle('is-visible', visible);
+        bar.setAttribute('aria-hidden', visible ? 'false' : 'true');
+      };
+      new IntersectionObserver(function (entries) {
+        heroGone = !entries[0].isIntersecting;
+        update();
+      }, { threshold: 0.1 }).observe(hero);
+      new IntersectionObserver(function (entries) {
+        pickerSeen = entries[0].isIntersecting;
+        update();
+      }, { threshold: 0.15 }).observe(picker);
+    }
+
+    /* Vidéos : chargement + lecture uniquement quand visibles (verrou perf) */
+    var vids = document.querySelectorAll('.ltk-videos__video[data-ltk-src]');
+    if (vids.length && 'IntersectionObserver' in window) {
+      var vio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          var v = entry.target;
+          if (entry.isIntersecting) {
+            if (!v.dataset.ltkLoaded) {
+              var s = document.createElement('source');
+              s.src = v.dataset.ltkSrc;
+              s.type = v.dataset.ltkType;
+              v.appendChild(s);
+              v.load();
+              v.dataset.ltkLoaded = '1';
+            }
+            v.play().catch(function () {});
+          } else if (v.dataset.ltkLoaded) {
+            v.pause();
+          }
+        });
+      }, { threshold: 0.35 });
+      vids.forEach(function (v) { vio.observe(v); });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Landing TikTok/Instagram",
+  "tag": "div",
+  "settings": [
+    { "type": "header", "content": "Hero" },
+    { "type": "image_picker", "id": "hero_image", "label": "Image de fond" },
+    { "type": "video", "id": "hero_video", "label": "Vidéo de fond (prioritaire sur l'image)" },
+    { "type": "text", "id": "hero_eyebrow", "label": "Sur-titre", "default": "CUIR · ALCANTARA · CARBONE" },
+    { "type": "text", "id": "hero_title", "label": "Titre", "default": "Composez votre volant sur-mesure" },
+    { "type": "textarea", "id": "hero_subtitle", "label": "Sous-titre", "default": "Matières, coutures, écran LED : chaque volant est unique. Airbag et commandes d'origine conservés." },
+    { "type": "text", "id": "hero_cta_label", "label": "Libellé des CTA", "default": "Je personnalise mon volant" },
+    { "type": "text", "id": "rating_text", "label": "Ligne de confiance sous le CTA", "default": "4,5/5 — avis clients vérifiés Judge.me" },
+
+    { "type": "header", "content": "Choix du modèle" },
+    { "type": "text", "id": "picker_title", "label": "Titre", "default": "Choisissez votre voiture" },
+    { "type": "text", "id": "picker_subtitle", "label": "Sous-titre", "default": "Le configurateur s'ouvre directement sur la page de votre modèle." },
+
+    { "type": "header", "content": "Étapes" },
+    { "type": "text", "id": "steps_title", "label": "Titre", "default": "Comment ça marche" },
+    { "type": "text", "id": "step1_title", "label": "Étape 1 — titre", "default": "Configurez en ligne" },
+    { "type": "textarea", "id": "step1_text", "label": "Étape 1 — texte", "default": "Choisissez matières, coutures et options directement sur la page de votre modèle." },
+    { "type": "text", "id": "step2_title", "label": "Étape 2 — titre", "default": "Recevez votre visuel 3D offert" },
+    { "type": "textarea", "id": "step2_text", "label": "Étape 2 — texte", "default": "Avant toute réalisation, nous vous envoyons un visuel 3D de votre volant sur WhatsApp. Vous validez, ou vous ajustez." },
+    { "type": "text", "id": "step3_title", "label": "Étape 3 — titre", "default": "Recevez votre volant" },
+    { "type": "textarea", "id": "step3_text", "label": "Étape 3 — texte", "default": "Livraison sous 2 à 5 semaines. Installation possible par tout professionnel — l'airbag d'origine est conservé." },
+
+    { "type": "header", "content": "Vidéos" },
+    { "type": "text", "id": "videos_title", "label": "Titre", "default": "Nos dernières réalisations" },
+
+    { "type": "header", "content": "Bénéfices" },
+    { "type": "text", "id": "benefits_title", "label": "Titre", "default": "Pourquoi Les As du Volant" },
+
+    { "type": "header", "content": "Preuve sociale" },
+    { "type": "text", "id": "proof_big", "label": "Message principal", "default": "Nos clients notent leurs volants 4,5/5" },
+    { "type": "text", "id": "proof_sub", "label": "Précision", "default": "Avis vérifiés collectés par Judge.me sur nos pages produit" },
+
+    { "type": "header", "content": "FAQ" },
+    { "type": "text", "id": "faq_title", "label": "Titre", "default": "Questions fréquentes" },
+
+    { "type": "header", "content": "CTA final" },
+    { "type": "text", "id": "final_title", "label": "Titre", "default": "Votre volant n'attend que vous" },
+    { "type": "textarea", "id": "final_text", "label": "Texte", "default": "Configuration en ligne en 2 minutes. Visuel 3D offert avant réalisation." },
+    { "type": "text", "id": "whatsapp_number", "label": "Numéro WhatsApp (sans +)", "default": "33622510196" }
+  ],
+  "blocks": [
+    {
+      "type": "produit",
+      "name": "Modèle de volant",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Produit" },
+        { "type": "text", "id": "label", "label": "Nom court (facultatif)" }
+      ]
+    },
+    {
+      "type": "video",
+      "name": "Vidéo réalisation",
+      "settings": [
+        { "type": "video", "id": "video", "label": "Vidéo (format vertical)" }
+      ]
+    },
+    {
+      "type": "benefice",
+      "name": "Bénéfice",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Titre" },
+        { "type": "textarea", "id": "text", "label": "Texte" }
+      ]
+    },
+    {
+      "type": "question",
+      "name": "Question FAQ",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "richtext", "id": "answer", "label": "Réponse" }
+      ]
+    }
+  ],
+  "templates": ["page"],
+  "presets": [{ "name": "Landing TikTok/Instagram" }]
+}
+{% endschema %}

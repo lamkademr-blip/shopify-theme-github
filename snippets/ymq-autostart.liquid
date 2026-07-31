@@ -1,0 +1,54 @@
+{%- comment -%}
+  Auto-scroll vers le configurateur YMQ (#ymq-box) quand la PDP est ouverte
+  avec ?start=config (liens de la landing TikTok/Instagram) ou l'ancre #config.
+  YMQ s'injecte après le chargement : on attend l'élément via MutationObserver.
+  Rendu uniquement sur les pages produit (gate ci-dessous) — aucun effet ailleurs.
+{%- endcomment -%}
+{%- if request.page_type == 'product' -%}
+<script>
+  (function () {
+    'use strict';
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('start') !== 'config' && window.location.hash !== '#config') return;
+
+    var done = false;
+    function goTo(el) {
+      if (done || !el) return;
+      done = true;
+      /* Offset pour le header sticky + respiration */
+      var y = el.getBoundingClientRect().top + window.pageYOffset - 90;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+      el.style.transition = 'box-shadow 0.4s';
+      el.style.boxShadow = '0 0 0 2px #C9A96E';
+      setTimeout(function () { el.style.boxShadow = 'none'; }, 2200);
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'config_autostart', page_url: window.location.pathname });
+    }
+
+    function tryNow() {
+      var box = document.getElementById('ymq-box');
+      if (box) { goTo(box); return true; }
+      return false;
+    }
+
+    function start() {
+      if (tryNow()) return;
+      var obs = new MutationObserver(function () {
+        if (tryNow()) obs.disconnect();
+      });
+      obs.observe(document.body, { childList: true, subtree: true });
+      /* Repli : si YMQ n'apparaît pas en 8 s, on scrolle vers le formulaire produit */
+      setTimeout(function () {
+        obs.disconnect();
+        if (!done) goTo(document.querySelector('.product__info-wrapper') || document.querySelector('product-form'));
+      }, 8000);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', start);
+    } else {
+      start();
+    }
+  })();
+</script>
+{%- endif -%}
