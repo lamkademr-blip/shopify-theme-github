@@ -25,8 +25,8 @@
     {{ 'component-volume-pricing.css' | asset_url | stylesheet_tag }}
   {%- endif -%}
 
-{{ 'custom-product-layout.css' | asset_url | stylesheet_tag }}
-  
+{% comment %} custom-product-layout.css supprimé : le fichier n'existe plus (404),
+  et un <link> bloquant en body vers un 404 gèle la mise en page à chaque visite {% endcomment %}
   {%- style -%}
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
