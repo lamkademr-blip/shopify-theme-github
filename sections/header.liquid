@@ -1,17 +1,12 @@
-{% comment %} CSS du menu en bloquant : chargés en media="print", le drawer mobile se rend
-  non stylé (~650px) puis se replie quand le CSS arrive = CLS 0,4 sur mobile {% endcomment %}
-{{ 'component-list-menu.css' | asset_url | stylesheet_tag }}
-{{ 'component-search.css' | asset_url | stylesheet_tag }}
-{{ 'component-menu-drawer.css' | asset_url | stylesheet_tag }}
+{% comment %} Anti-CLS : list-menu/search/menu-drawer/mega-menu sont chargés depuis le head
+  (theme.liquid). Un <link> bloquant ici, en plein body, fige la mise en page de tout ce qui
+  suit tant qu'il n'est pas chargé — ne PAS remettre de stylesheet_tag bloquant ici. {% endcomment %}
 <link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
 
 {%- if settings.predictive_search_enabled -%}
   <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- endif -%}
 
-{%- if section.settings.menu_type_desktop == 'mega' -%}
-  {{ 'component-mega-menu.css' | asset_url | stylesheet_tag }}
-{%- endif -%}
 
 
 

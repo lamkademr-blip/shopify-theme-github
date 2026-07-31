@@ -285,6 +285,13 @@
     </style>
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
+    {% comment %} Anti-CLS : CSS du header chargés depuis le head (en parallèle de base.css, ~10 Ko).
+      Chargés depuis le body (section header), leurs <link> en attente figeaient la mise en page
+      de tout ce qui suit avec le header non stylé (~500px) → saut de ~400px à la résolution. {% endcomment %}
+    {{ 'component-list-menu.css' | asset_url | stylesheet_tag }}
+    {{ 'component-search.css' | asset_url | stylesheet_tag }}
+    {{ 'component-menu-drawer.css' | asset_url | stylesheet_tag }}
+    {{ 'component-mega-menu.css' | asset_url | stylesheet_tag }}
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
     {%- if settings.cart_type == 'drawer' -%}
