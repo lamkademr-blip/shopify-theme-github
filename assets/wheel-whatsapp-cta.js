@@ -100,19 +100,35 @@
       var el = form.elements[i];
       var match = el.name && el.name.match(/^properties\[(.+)\]$/);
       if (!match) continue;
-      var label = match[1];
-      if (label.charAt(0) === '_') continue; // propriété machine (_config, _hash)
+      var rawLabel = match[1];
+      if (rawLabel.charAt(0) === '_') continue; // propriété machine (_config, _hash)
       if ((el.type === 'radio' || el.type === 'checkbox') && !el.checked) continue;
-      if (!el.value || seen[label]) continue;
-      seen[label] = true;
+      // La deduplication porte sur le nom brut : deux champs distincts le
+      // restent meme si leur libelle nettoye devient identique.
+      if (!el.value || seen[rawLabel]) continue;
+      seen[rawLabel] = true;
       var priceSuffix = el.value.match(/\|\s*([\d\s.,]+\s*[€$£])\s*$/);
       options.push({
-        label: label,
+        label: cleanLabel(rawLabel),
         value: el.value,
         cents: priceSuffix ? parsePriceCents(priceSuffix[1]) : 0
       });
     }
     return options;
+  }
+
+  /**
+   * Retire l'identifiant interne que l'app d'options YMQ accole au nom de
+   * certaines proprietes : « 10. Ajouter un couvercle d'airbag personnalise-28-6 ».
+   *
+   * Le motif est toujours deux groupes de chiffres separes par des tirets, en
+   * fin de nom (-1-17, -28-6, -29-20, -28-107...). Verifie sur 30 commandes
+   * reelles : la numerotation metier des etapes est en points (4.1.1, 11.5,
+   * « 13. 1 ») et aucun libelle legitime ne se termine par -chiffres-chiffres.
+   * Le nettoyage est donc sans risque pour les intitules vus par le client.
+   */
+  function cleanLabel(label) {
+    return label.replace(/-\d+-\d+$/, '').trim();
   }
 
   function buildMessage(cta, form) {
