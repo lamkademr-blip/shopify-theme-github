@@ -1,0 +1,45 @@
+{% comment %}
+  Encart promo réutilisable — campagne « L'Été Grand Tourisme »
+  Les As du Volant
+
+  Usage :
+    {% render 'promo-badge' %}
+    {% render 'promo-badge', compact: true %}
+    {% render 'promo-badge', title: '…', text: '…', show_deadline: false %}
+
+  Paramètres (tous optionnels) :
+  - compact        : version condensée (tiroir panier, footer)
+  - title / text   : surcharge des libellés par défaut
+  - show_deadline  : affiche le compte à rebours en jours (défaut : true)
+{% endcomment %}
+
+{{ 'promo-ete150.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign badge_title = title | default: '150 € offerts dès 1 000 € d’achat'
+  assign badge_text = text | default: 'Sur votre configuration complète — remise déduite au paiement avec le code ETE150.'
+  assign with_deadline = true
+  if show_deadline == false
+    assign with_deadline = false
+  endif
+-%}
+
+<div class="promo-badge{% if compact %} promo-badge--compact{% endif %}">
+  {%- comment -%} Icône « cadeau » : lecture immédiate, cohérente avec le champagne. {%- endcomment -%}
+  <svg class="promo-badge__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+    <polyline points="20 12 20 22 4 22 4 12"></polyline>
+    <rect x="2" y="7" width="20" height="5"></rect>
+    <line x1="12" y1="22" x2="12" y2="7"></line>
+    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+  </svg>
+
+  <div class="promo-badge__body">
+    <p class="promo-badge__title">{{ badge_title }}</p>
+    <p class="promo-badge__text">{{ badge_text }}</p>
+    {%- if with_deadline -%}
+      <span class="promo-badge__deadline" data-promo-deadline hidden></span>
+    {%- endif -%}
+  </div>
+</div>

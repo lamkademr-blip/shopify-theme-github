@@ -1,0 +1,145 @@
+{% comment %}
+  Bandeau promotionnel défilant — campagne « L'Été Grand Tourisme »
+  Les As du Volant
+
+  À placer dans le groupe « header », en remplacement du bandeau d'annonce.
+
+  Principe :
+  - chaque bloc « message » est une accroche différente ; elles s'enchaînent
+    dans le ruban, ce qui évite l'effet de répétition d'un message unique ;
+  - le ruban est dupliqué à l'identique et animé de 0 à -50 % : la boucle est
+    donc parfaitement continue, sans JavaScript ;
+  - le ruban visuel est aria-hidden, une copie unique lisible est fournie aux
+    lecteurs d'écran (sinon le message est répété N fois à la synthèse vocale).
+
+  Lien : par défaut on pointe vers /discount/<CODE>?redirect=<cible>, l'URL
+  Shopify qui pré-applique le code dans la session. Le client n'a donc jamais
+  à saisir le code à la main — c'est le principal point de friction supprimé.
+{% endcomment %}
+
+{{ 'promo-ete150.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign messages = section.blocks | where: 'type', 'message'
+  assign has_messages = false
+  if messages.size > 0
+    assign has_messages = true
+  endif
+
+  if section.settings.discount_code != blank
+    assign target = section.settings.link | default: '/collections/all'
+    assign promo_href = '/discount/' | append: section.settings.discount_code | append: '?redirect=' | append: target
+  else
+    assign promo_href = section.settings.link
+  endif
+-%}
+
+{%- if has_messages -%}
+  <div
+    class="promo-marquee"
+    style="--promo-marquee-duration: {{ section.settings.scroll_speed }}s;"
+    role="region"
+    aria-label="Offre en cours"
+  >
+    {%- if promo_href != blank -%}<a class="promo-marquee__link" href="{{ promo_href }}">{%- endif -%}
+
+    <div class="promo-marquee__track" aria-hidden="true">
+      {%- comment -%} Deux groupes identiques = boucle sans raccord. {%- endcomment -%}
+      {%- for pass in (1..2) -%}
+        <div class="promo-marquee__group">
+          {%- for block in messages -%}
+            <span
+              class="promo-marquee__item{% if block.settings.highlight %} promo-marquee__item--highlight{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              {{ block.settings.text }}
+            </span>
+            <span class="promo-marquee__separator"></span>
+          {%- endfor -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- comment -%} Copie unique et lisible pour les technologies d'assistance. {%- endcomment -%}
+    <span class="visually-hidden">
+      {%- for block in messages -%}{{ block.settings.text | strip_html }}. {% endfor -%}
+    </span>
+
+    {%- if promo_href != blank -%}</a>{%- endif -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Bandeau promo défilant",
+  "class": "promo-marquee-section",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Offre"
+    },
+    {
+      "type": "text",
+      "id": "discount_code",
+      "label": "Code de réduction à pré-appliquer",
+      "info": "Le clic sur le bandeau active le code automatiquement (le client n'a rien à saisir). Laisser vide pour un lien simple.",
+      "default": "ETE150"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Page de destination",
+      "info": "Par défaut : /collections/all"
+    },
+    {
+      "type": "header",
+      "content": "Apparence"
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "min": 20,
+      "max": 90,
+      "step": 5,
+      "unit": "s",
+      "label": "Durée d'un cycle",
+      "info": "Plus la valeur est élevée, plus le défilement est lent et lisible.",
+      "default": 45
+    }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte",
+          "default": "150 € offerts dès 1 000 € d'achat"
+        },
+        {
+          "type": "checkbox",
+          "id": "highlight",
+          "label": "Mettre en champagne",
+          "info": "À réserver au message porteur de l'offre.",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bandeau promo défilant",
+      "blocks": [
+        { "type": "message", "settings": { "text": "150 € offerts dès 1 000 € d'achat", "highlight": true } },
+        { "type": "message", "settings": { "text": "L'Été Grand Tourisme — jusqu'au 30 août" } },
+        { "type": "message", "settings": { "text": "Livraison offerte · Garantie 5 ans" } },
+        { "type": "message", "settings": { "text": "Votre volant d'origine reste le vôtre" } },
+        { "type": "message", "settings": { "text": "Visuel de votre configuration avant commande" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

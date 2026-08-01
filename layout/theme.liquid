@@ -674,6 +674,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     {{ 'discount-popup.js' | asset_url | script_tag }}
 
+    {%- comment -%}
+      Campagne « L'Été Grand Tourisme » — 150 € offerts dès 1 000 €.
+      Le seuil et l'échéance sont centralisés ici : une seule ligne à changer
+      pour prolonger, arrêter ou modifier l'offre.
+    {%- endcomment -%}
+    <script>
+      window.PROMO_ETE150 = {
+        threshold: 100000,
+        deadline: '2026-08-30T23:59:59Z',
+        currency: '{{ cart.currency.iso_code }}'
+      };
+    </script>
+    {{ 'promo-ete150.js' | asset_url | script_tag }}
+
     <!-- Judge.me French translation -->
     <script>
     (function() {

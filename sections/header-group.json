@@ -11,30 +11,6 @@
   "name": "t:sections.header.name",
   "type": "header",
   "sections": {
-    "announcement_bar_JLRHta": {
-      "type": "announcement-bar",
-      "blocks": {
-        "announcement_g9pGkz": {
-          "type": "announcement",
-          "settings": {
-            "text": "Livraison offerte · Garantie 5 ans",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "announcement_g9pGkz"
-      ],
-      "settings": {
-        "color_scheme": "scheme-5",
-        "show_line_separator": true,
-        "show_social": false,
-        "auto_rotate": false,
-        "change_slides_speed": 4,
-        "enable_country_selector": false,
-        "enable_language_selector": false
-      }
-    },
     "header": {
       "type": "header",
       "settings": {
@@ -162,10 +138,62 @@
       "settings": {
         "color_scheme": "scheme-1"
       }
+    },
+    "promo_marquee": {
+      "type": "promo-marquee",
+      "blocks": {
+        "m1": {
+          "type": "message",
+          "settings": {
+            "text": "150 € offerts dès 1 000 € d'achat",
+            "highlight": true
+          }
+        },
+        "m2": {
+          "type": "message",
+          "settings": {
+            "text": "L'Été Grand Tourisme — jusqu'au 30 août",
+            "highlight": false
+          }
+        },
+        "m3": {
+          "type": "message",
+          "settings": {
+            "text": "Livraison offerte · Garantie 5 ans",
+            "highlight": false
+          }
+        },
+        "m4": {
+          "type": "message",
+          "settings": {
+            "text": "Votre volant d'origine reste le vôtre",
+            "highlight": false
+          }
+        },
+        "m5": {
+          "type": "message",
+          "settings": {
+            "text": "Visuel de votre configuration avant commande",
+            "highlight": false
+          }
+        }
+      },
+      "block_order": [
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "m5"
+      ],
+      "settings": {
+        "discount_code": "ETE150",
+        "link": "/collections/all",
+        "scroll_speed": 45
+      }
     }
   },
   "order": [
-    "announcement_bar_JLRHta",
+    "promo_marquee",
     "brand_bar",
     "header"
   ]

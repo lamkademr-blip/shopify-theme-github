@@ -1,0 +1,282 @@
+/**
+ * Campagne « L'Été Grand Tourisme » — 150 € offerts dès 1 000 € d'achat
+ * Les As du Volant
+ *
+ * Trois composants, une seule feuille :
+ *   1. .promo-marquee   — bandeau défilant (header)
+ *   2. .promo-badge     — encart compact (PDP, panier, footer…)
+ *   3. .promo-progress  — barre de progression vers le seuil
+ *
+ * Palette alignée sur la DA carbone/champagne du thème
+ * (fond #0e0e10, accent #c9a96e, texte #f5f5f5).
+ */
+
+:root {
+  --promo-bg: #08080a;
+  --promo-gold: #c9a96e;
+  --promo-gold-light: #e8d5a8;
+  --promo-gold-dark: #8a6f3f;
+  --promo-text: #f5f5f5;
+  --promo-text-dim: #b3ada2;
+  --promo-hairline: rgba(201, 169, 110, 0.28);
+}
+
+/* ==========================================================================
+   1. BANDEAU DÉFILANT
+   Animation CSS pure sur `transform` (composité GPU, aucun reflow, 0 JS).
+   ========================================================================== */
+
+.promo-marquee {
+  position: relative;
+  overflow: hidden;
+  background: var(--promo-bg);
+  border-top: 1px solid var(--promo-hairline);
+  border-bottom: 1px solid var(--promo-hairline);
+  /* Empêche le décalage de mise en page pendant le chargement des polices. */
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+}
+
+.promo-marquee__link,
+.promo-marquee__link:hover,
+.promo-marquee__link:visited {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Dégradés latéraux : le texte apparaît/disparaît en fondu plutôt que
+   d'être coupé net sur le bord — détail qui fait « premium ». */
+.promo-marquee::before,
+.promo-marquee::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 64px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.promo-marquee::before {
+  left: 0;
+  background: linear-gradient(to right, var(--promo-bg), transparent);
+}
+
+.promo-marquee::after {
+  right: 0;
+  background: linear-gradient(to left, var(--promo-bg), transparent);
+}
+
+.promo-marquee__track {
+  display: flex;
+  width: max-content;
+  animation: promo-marquee-scroll var(--promo-marquee-duration, 40s) linear infinite;
+  /* `will-change` uniquement ici : un seul élément promu en couche. */
+  will-change: transform;
+}
+
+/* Pause au survol et au focus clavier : l'utilisateur peut lire le message. */
+.promo-marquee:hover .promo-marquee__track,
+.promo-marquee:focus-within .promo-marquee__track {
+  animation-play-state: paused;
+}
+
+.promo-marquee__group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.promo-marquee__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  white-space: nowrap;
+  padding: 0.75rem 1.5rem;
+  line-height: 1;
+  font-family: var(--font-body-family), sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--promo-text);
+}
+
+/* Message porteur de l'offre : traité en champagne pour hiérarchiser. */
+.promo-marquee__item--highlight {
+  color: var(--promo-gold-light);
+}
+
+.promo-marquee__item--highlight strong {
+  font-weight: 700;
+  color: var(--promo-gold-light);
+}
+
+/* Séparateur losange, plus discret qu'une puce ronde. */
+.promo-marquee__separator {
+  flex-shrink: 0;
+  width: 4px;
+  height: 4px;
+  transform: rotate(45deg);
+  background: var(--promo-gold);
+  opacity: 0.55;
+}
+
+@keyframes promo-marquee-scroll {
+  from { transform: translateX(0); }
+  /* -50% : le second groupe est le clone exact du premier → boucle invisible. */
+  to   { transform: translateX(-50%); }
+}
+
+@media screen and (max-width: 749px) {
+  .promo-marquee { min-height: 34px; }
+  .promo-marquee__item {
+    font-size: 11px;
+    padding: 0.65rem 1.1rem;
+    letter-spacing: 0.06em;
+  }
+  .promo-marquee::before,
+  .promo-marquee::after { width: 32px; }
+}
+
+/* Accessibilité : sans animation, on affiche un seul message centré. */
+@media (prefers-reduced-motion: reduce) {
+  .promo-marquee__track {
+    animation: none;
+    width: 100%;
+    justify-content: center;
+  }
+  .promo-marquee__group:nth-child(2) { display: none; }
+  .promo-marquee__group .promo-marquee__item:nth-child(n + 2),
+  .promo-marquee__group .promo-marquee__separator { display: none; }
+}
+
+/* ==========================================================================
+   2. ENCART / BADGE
+   Réutilisé sous le prix, près du CTA, dans le panier et le footer.
+   ========================================================================== */
+
+.promo-badge {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin: 1rem 0;
+  padding: 0.85rem 1rem;
+  background: rgba(201, 169, 110, 0.08);
+  border-left: 3px solid var(--promo-gold);
+  border-radius: 10px;
+  font-family: var(--font-body-family), sans-serif;
+}
+
+.promo-badge__icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  color: var(--promo-gold);
+}
+
+.promo-badge__body { min-width: 0; }
+
+.promo-badge__title {
+  margin: 0 0 0.2rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--promo-gold-light);
+}
+
+.promo-badge__text {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--promo-text-dim);
+}
+
+/* Compte à rebours : discret, jamais criard. */
+.promo-badge__deadline {
+  display: inline-block;
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--promo-gold);
+}
+
+/* Variante condensée pour les zones denses (tiroir panier, footer). */
+.promo-badge--compact {
+  margin: 0.75rem 0;
+  padding: 0.6rem 0.8rem;
+  gap: 0.6rem;
+}
+
+.promo-badge--compact .promo-badge__title { font-size: 0.85rem; }
+.promo-badge--compact .promo-badge__text { font-size: 0.78rem; }
+
+/* ==========================================================================
+   3. BARRE DE PROGRESSION
+   ========================================================================== */
+
+.promo-progress {
+  margin: 1rem 0;
+  padding: 0.9rem 1rem;
+  background: rgba(201, 169, 110, 0.06);
+  border: 1px solid var(--promo-hairline);
+  border-radius: 12px;
+  font-family: var(--font-body-family), sans-serif;
+}
+
+.promo-progress__label {
+  margin: 0 0 0.6rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--promo-text);
+}
+
+.promo-progress__label strong {
+  color: var(--promo-gold-light);
+  font-weight: 700;
+}
+
+.promo-progress__track {
+  position: relative;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.promo-progress__fill {
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--promo-gold-dark), var(--promo-gold), var(--promo-gold-light));
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* État « seuil atteint » : on bascule sur un vert sobre, pas criard. */
+.promo-progress.is-unlocked .promo-progress__fill {
+  background: linear-gradient(90deg, #1e7a4a, #25d366);
+}
+
+.promo-progress.is-unlocked .promo-progress__label strong { color: #4ade80; }
+
+.promo-progress__unlocked-icon {
+  display: none;
+  width: 14px;
+  height: 14px;
+  vertical-align: -2px;
+  margin-right: 0.3rem;
+  color: #4ade80;
+}
+
+.promo-progress.is-unlocked .promo-progress__unlocked-icon {
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .promo-progress__fill { transition: none; }
+}

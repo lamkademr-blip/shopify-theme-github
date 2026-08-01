@@ -1,0 +1,60 @@
+{% comment %}
+  Barre de progression vers le seuil de 1 000 € — « L'Été Grand Tourisme »
+  Les As du Volant
+
+  Usage : {% render 'promo-progress' %}
+  À placer juste au-dessus du sous-total, dans le tiroir panier et la page panier.
+
+  Le premier rendu est calculé côté serveur à partir de `cart.total_price` :
+  la barre est donc déjà juste au chargement (pas de saut visuel), puis
+  assets/promo-ete150.js la resynchronise après chaque mutation du panier.
+{% endcomment %}
+
+{{ 'promo-ete150.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign threshold = 100000
+  assign total = cart.total_price
+  assign remaining = threshold | minus: total
+  assign unlocked = false
+  if remaining <= 0
+    assign unlocked = true
+    assign remaining = 0
+  endif
+
+  assign ratio = 0
+  if total > 0
+    assign ratio = total | times: 100.0 | divided_by: threshold
+    if ratio > 100
+      assign ratio = 100
+    endif
+  endif
+-%}
+
+<div
+  class="promo-progress{% if unlocked %} is-unlocked{% endif %}"
+  data-promo-progress
+  {% if cart.item_count == 0 %}hidden{% endif %}
+>
+  <p class="promo-progress__label" data-promo-progress-label>
+    {%- if unlocked -%}
+      <svg class="promo-progress__unlocked-icon" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+      Félicitations, vos <strong>150 € offerts</strong> sont débloqués.
+    {%- else -%}
+      Plus que <strong>{{ remaining | money_without_trailing_zeros }}</strong>
+      pour débloquer vos <strong>150 € offerts</strong>.
+    {%- endif -%}
+  </p>
+
+  <div
+    class="promo-progress__track"
+    role="progressbar"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-valuenow="{{ ratio | round }}"
+    aria-label="Progression vers le seuil de 1 000 €"
+  >
+    <div class="promo-progress__fill" data-promo-progress-fill style="width: {{ ratio }}%;"></div>
+  </div>
+</div>

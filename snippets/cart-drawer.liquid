@@ -492,6 +492,9 @@
               </ul>
             {%- endif -%}
           </div>
+          {%- comment -%} Progression vers le seuil, juste avant le total. {%- endcomment -%}
+          {%- render 'promo-progress' -%}
+
           <div class="totals" role="status">
             <div class="totals__total">{{ 'sections.cart.estimated_total' | t }}</div>
             <p class="totals__total-value">{{ cart.total_price | money_with_currency }}</p>
