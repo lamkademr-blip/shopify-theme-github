@@ -17,10 +17,8 @@
 
 {%- liquid
   assign badge_title = title | default: '150 € offerts dès 1 000 € d’achat'
-  {%- comment -%}
-    Libellé volontairement neutre quant au canal : la majorité des commandes
-    se concluent sur WhatsApp, où il n'y a ni panier ni code à saisir.
-  {%- endcomment -%}
+  # Libellé volontairement neutre quant au canal : la majorité des commandes
+  # se concluent sur WhatsApp, où il n'y a ni panier ni code à saisir.
   assign badge_text = text | default: 'Sur votre configuration complète — remise appliquée sur votre devis WhatsApp comme au paiement en ligne.'
   assign with_deadline = true
   if show_deadline == false
