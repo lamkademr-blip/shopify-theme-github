@@ -2908,6 +2908,26 @@ details[open] > .header__menu-item .icon-caret {
   margin: 1rem 0;
 }
 
+/* Titres de groupe dans un menu deroulant (ex. Volants > Par matiere / Par marque) */
+.header__submenu-heading {
+  display: block;
+  padding: 1.2rem 2rem 0.4rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.header__submenu-group {
+  padding: 0;
+  margin: 0 0 0.6rem;
+}
+
+li + li > .header__submenu-heading {
+  border-top: 0.1rem solid rgba(var(--color-foreground), 0.08);
+  margin-top: 0.6rem;
+}
+
 .header__submenu .header__menu-item:after {
   right: 2rem;
 }

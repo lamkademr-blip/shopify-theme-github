@@ -44,6 +44,30 @@
                       >
                         {{ childlink.title | escape }}
                       </a>
+                    {%- elsif childlink.url == '#' -%}
+                      {%- comment -%}
+                        Entree sans lien propre = titre de section (ex. Volants > Par matiere / Par marque).
+                        On l'affiche deplie pour garder les collections a un seul clic.
+                      {%- endcomment -%}
+                      <span class="header__submenu-heading caption-large">
+                        {{- childlink.title | escape -}}
+                      </span>
+                      <ul class="list-menu header__submenu-group" role="list">
+                        {%- for grandchildlink in childlink.links -%}
+                          <li>
+                            <a
+                              id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
+                              href="{{ grandchildlink.url }}"
+                              class="header__menu-item list-menu__item link link--text focus-inset caption-large{% if grandchildlink.current %} list-menu__item--active{% endif %}"
+                              {% if grandchildlink.current %}
+                                aria-current="page"
+                              {% endif %}
+                            >
+                              {{ grandchildlink.title | escape }}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
                     {%- else -%}
                       <details id="Details-HeaderSubMenu-{{ link.handle }}-{{ childlink.handle }}">
                         <summary
