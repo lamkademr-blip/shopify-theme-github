@@ -1,0 +1,11 @@
+{% comment %}
+  SEO international : cluster hreflang entre la boutique FR
+  (les-as-du-volant.com) et la boutique UK (drivecustom.co.uk).
+  Émis uniquement sur la homepage : les handles produits/collections
+  diffèrent entre les deux boutiques, un mapping page à page serait
+  faux. Le thème UK porte les balises miroirs.
+{% endcomment %}
+{%- if request.page_type == 'index' -%}
+  <link rel="alternate" hreflang="fr-FR" href="https://les-as-du-volant.com/">
+  <link rel="alternate" hreflang="en-GB" href="https://drivecustom.co.uk/">
+{%- endif -%}
