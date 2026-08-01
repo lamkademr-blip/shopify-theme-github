@@ -26,12 +26,11 @@
     assign has_messages = true
   endif
 
-  # Un groupe doit toujours être plus large que l'écran, sinon la boucle
-  # (translation de -50 %) laisse apparaître un vide. On répète donc la
-  # séquence d'autant plus qu'il y a peu de messages : ~24 items donnent un
-  # groupe de l'ordre de 4 000 px, ce qui couvre jusqu'aux écrans 4K.
-  # Coût négligeable : ce ne sont que des spans de texte court.
-  assign repeat = 24 | divided_by: messages.size
+  # Un groupe doit rester plus large que l'écran, sinon la boucle
+  # (translation de -50 %) laisse apparaître un vide. Les items étant
+  # largement espacés, ~10 suffisent à couvrir un très grand écran : c'est
+  # le minimum de répétitions compatible avec une boucle continue.
+  assign repeat = 10 | divided_by: messages.size
   if repeat < 2
     assign repeat = 2
   endif
@@ -115,13 +114,13 @@
     {
       "type": "range",
       "id": "scroll_speed",
-      "min": 20,
-      "max": 90,
-      "step": 5,
+      "min": 30,
+      "max": 180,
+      "step": 10,
       "unit": "s",
       "label": "Durée d'un cycle",
       "info": "Plus la valeur est élevée, plus le défilement est lent et lisible.",
-      "default": 45
+      "default": 110
     }
   ],
   "blocks": [
