@@ -26,6 +26,14 @@
     assign has_messages = true
   endif
 
+  # Un groupe doit toujours être plus large que l'écran, sinon la boucle
+  # (translation de -50 %) laisse apparaître un vide. On répète donc la
+  # séquence d'autant plus qu'il y a peu de messages, pour viser ~12 items.
+  assign repeat = 12 | divided_by: messages.size
+  if repeat < 2
+    assign repeat = 2
+  endif
+
   if section.settings.discount_code != blank
     assign target = section.settings.link | default: '/collections/all'
     assign promo_href = '/discount/' | append: section.settings.discount_code | append: '?redirect=' | append: target
@@ -47,14 +55,20 @@
       {%- comment -%} Deux groupes identiques = boucle sans raccord. {%- endcomment -%}
       {%- for pass in (1..2) -%}
         <div class="promo-marquee__group">
-          {%- for block in messages -%}
-            <span
-              class="promo-marquee__item{% if block.settings.highlight %} promo-marquee__item--highlight{% endif %}"
-              {{ block.shopify_attributes }}
-            >
-              {{ block.settings.text }}
-            </span>
-            <span class="promo-marquee__separator"></span>
+          {%- for r in (1..repeat) -%}
+            {%- for block in messages -%}
+              <span
+                class="promo-marquee__item{% if block.settings.highlight %} promo-marquee__item--highlight{% endif %}"
+                {%- comment -%}
+                  shopify_attributes sur la première occurrence seulement :
+                  l'éditeur de thème doit cibler un élément unique par bloc.
+                {%- endcomment -%}
+                {% if pass == 1 and r == 1 %}{{ block.shopify_attributes }}{% endif %}
+              >
+                {{ block.settings.text }}
+              </span>
+              <span class="promo-marquee__separator"></span>
+            {%- endfor -%}
           {%- endfor -%}
         </div>
       {%- endfor -%}
@@ -134,10 +148,7 @@
       "name": "Bandeau promo défilant",
       "blocks": [
         { "type": "message", "settings": { "text": "150 € offerts dès 1 000 € d'achat", "highlight": true } },
-        { "type": "message", "settings": { "text": "L'Été Grand Tourisme — jusqu'au 31 août" } },
-        { "type": "message", "settings": { "text": "Livraison offerte · Garantie 5 ans" } },
-        { "type": "message", "settings": { "text": "Votre volant d'origine reste le vôtre" } },
-        { "type": "message", "settings": { "text": "Visuel de votre configuration avant commande" } }
+        { "type": "message", "settings": { "text": "Jusqu'au 31 août" } }
       ]
     }
   ]

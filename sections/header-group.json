@@ -152,38 +152,14 @@
         "m2": {
           "type": "message",
           "settings": {
-            "text": "L'Été Grand Tourisme — jusqu'au 31 août",
-            "highlight": false
-          }
-        },
-        "m3": {
-          "type": "message",
-          "settings": {
-            "text": "Livraison offerte · Garantie 5 ans",
-            "highlight": false
-          }
-        },
-        "m4": {
-          "type": "message",
-          "settings": {
-            "text": "Votre volant d'origine reste le vôtre",
-            "highlight": false
-          }
-        },
-        "m5": {
-          "type": "message",
-          "settings": {
-            "text": "Visuel de votre configuration avant commande",
+            "text": "Jusqu'au 31 août",
             "highlight": false
           }
         }
       },
       "block_order": [
         "m1",
-        "m2",
-        "m3",
-        "m4",
-        "m5"
+        "m2"
       ],
       "settings": {
         "discount_code": "ETE150",
