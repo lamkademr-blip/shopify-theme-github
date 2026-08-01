@@ -27,10 +27,11 @@
   endif
 
   # Un groupe doit rester plus large que l'écran, sinon la boucle
-  # (translation de -50 %) laisse apparaître un vide. Les items étant
-  # largement espacés, ~10 suffisent à couvrir un très grand écran : c'est
-  # le minimum de répétitions compatible avec une boucle continue.
-  assign repeat = 10 | divided_by: messages.size
+  # (translation de -50 %) laisse apparaître un vide. Les items étant très
+  # espacés, ~6 suffisent à couvrir un grand écran. On garde ce nombre au
+  # minimum : la distance d'un cycle grandit avec lui, et il faudrait sinon
+  # une durée d'animation démesurée pour conserver un défilement lent.
+  assign repeat = 6 | divided_by: messages.size
   if repeat < 2
     assign repeat = 2
   endif
@@ -115,12 +116,12 @@
       "type": "range",
       "id": "scroll_speed",
       "min": 30,
-      "max": 180,
+      "max": 240,
       "step": 10,
       "unit": "s",
       "label": "Durée d'un cycle",
       "info": "Plus la valeur est élevée, plus le défilement est lent et lisible.",
-      "default": 110
+      "default": 140
     }
   ],
   "blocks": [
