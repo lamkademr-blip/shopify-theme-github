@@ -152,6 +152,13 @@
         "m2": {
           "type": "message",
           "settings": {
+            "text": "Code ETE150",
+            "highlight": false
+          }
+        },
+        "m3": {
+          "type": "message",
+          "settings": {
             "text": "Jusqu'au 31 août",
             "highlight": false
           }
@@ -159,12 +166,13 @@
       },
       "block_order": [
         "m1",
-        "m2"
+        "m2",
+        "m3"
       ],
       "settings": {
         "discount_code": "ETE150",
         "link": "/collections/all",
-        "scroll_speed": 180
+        "scroll_speed": 220
       }
     }
   },

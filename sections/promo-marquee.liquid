@@ -28,12 +28,13 @@
 
   # Un groupe doit rester plus large que l'écran, sinon la boucle
   # (translation de -50 %) laisse apparaître un vide. Les items étant très
-  # espacés, ~8 suffisent à couvrir un écran 2560 px (~2 960 px de groupe). On garde ce nombre au
-  # minimum : la distance d'un cycle grandit avec lui, et il faudrait sinon
-  # une durée d'animation démesurée pour conserver un défilement lent.
+  # espacés, ~8 suffisent avec peu de messages ; le plancher de 3 garantit
+  # un groupe assez large même quand la liste s'allonge. On ne monte pas
+  # plus haut : la distance d'un cycle grandit avec ce nombre, et il
+  # faudrait sinon une durée démesurée pour garder un défilement lent.
   assign repeat = 8 | divided_by: messages.size
-  if repeat < 2
-    assign repeat = 2
+  if repeat < 3
+    assign repeat = 3
   endif
 
   if section.settings.discount_code != blank
@@ -121,7 +122,7 @@
       "unit": "s",
       "label": "Durée d'un cycle",
       "info": "Plus la valeur est élevée, plus le défilement est lent et lisible.",
-      "default": 180
+      "default": 220
     }
   ],
   "blocks": [
@@ -150,6 +151,7 @@
       "name": "Bandeau promo défilant",
       "blocks": [
         { "type": "message", "settings": { "text": "150 € offerts dès 1 000 € d'achat", "highlight": true } },
+        { "type": "message", "settings": { "text": "Code ETE150" } },
         { "type": "message", "settings": { "text": "Jusqu'au 31 août" } }
       ]
     }
