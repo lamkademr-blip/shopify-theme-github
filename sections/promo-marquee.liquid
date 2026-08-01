@@ -28,10 +28,10 @@
 
   # Un groupe doit rester plus large que l'écran, sinon la boucle
   # (translation de -50 %) laisse apparaître un vide. Les items étant très
-  # espacés, ~6 suffisent à couvrir un grand écran. On garde ce nombre au
+  # espacés, ~8 suffisent à couvrir un écran 2560 px (~2 960 px de groupe). On garde ce nombre au
   # minimum : la distance d'un cycle grandit avec lui, et il faudrait sinon
   # une durée d'animation démesurée pour conserver un défilement lent.
-  assign repeat = 6 | divided_by: messages.size
+  assign repeat = 8 | divided_by: messages.size
   if repeat < 2
     assign repeat = 2
   endif
@@ -121,7 +121,7 @@
       "unit": "s",
       "label": "Durée d'un cycle",
       "info": "Plus la valeur est élevée, plus le défilement est lent et lisible.",
-      "default": 140
+      "default": 180
     }
   ],
   "blocks": [
