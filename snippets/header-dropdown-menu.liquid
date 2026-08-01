@@ -44,10 +44,11 @@
                       >
                         {{ childlink.title | escape }}
                       </a>
-                    {%- elsif childlink.url == '#' -%}
+                    {%- else -%}
                       {%- comment -%}
-                        Entree sans lien propre = titre de section (ex. Volants > Par matiere / Par marque).
-                        On l'affiche deplie pour garder les collections a un seul clic.
+                        Entree de niveau 2 qui porte des enfants = titre de section
+                        (ex. Volants > Par matiere / Par marque). Affichee depliee pour
+                        garder les collections a un seul clic, au lieu d'un accordeon.
                       {%- endcomment -%}
                       <span class="header__submenu-heading caption-large">
                         {{- childlink.title | escape -}}
@@ -68,35 +69,6 @@
                           </li>
                         {%- endfor -%}
                       </ul>
-                    {%- else -%}
-                      <details id="Details-HeaderSubMenu-{{ link.handle }}-{{ childlink.handle }}">
-                        <summary
-                          id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
-                          class="header__menu-item link link--text list-menu__item focus-inset caption-large"
-                        >
-                          <span>{{ childlink.title | escape }}</span>
-                          {{- 'icon-caret.svg' | inline_asset_content -}}
-                        </summary>
-                        <ul
-                          id="HeaderMenu-SubMenuList-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
-                          class="header__submenu list-menu motion-reduce"
-                        >
-                          {%- for grandchildlink in childlink.links -%}
-                            <li>
-                              <a
-                                id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
-                                href="{{ grandchildlink.url }}"
-                                class="header__menu-item list-menu__item link link--text focus-inset caption-large{% if grandchildlink.current %} list-menu__item--active{% endif %}"
-                                {% if grandchildlink.current %}
-                                  aria-current="page"
-                                {% endif %}
-                              >
-                                {{ grandchildlink.title | escape }}
-                              </a>
-                            </li>
-                          {%- endfor -%}
-                        </ul>
-                      </details>
                     {%- endif -%}
                   </li>
                 {%- endfor -%}
