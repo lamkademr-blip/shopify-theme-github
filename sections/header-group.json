@@ -171,8 +171,7 @@
       ],
       "settings": {
         "discount_code": "ETE150",
-        "link": "/collections/all",
-        "scroll_speed": 45
+        "link": "/collections/all"
       }
     }
   },
