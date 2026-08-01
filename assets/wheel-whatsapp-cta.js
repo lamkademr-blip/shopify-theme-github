@@ -46,9 +46,13 @@
    * Renvoie null si la carte ou la variante est introuvable.
    */
   function readVariant(cta, form) {
-    var mapEl = document.querySelector(
-      '[data-whatsapp-variants][data-form-id="' + cta.dataset.formId + '"]'
-    );
+    // Même repli que findForm : les CTA persistants n'ont pas d'id de formulaire.
+    var mapEl =
+      (cta.dataset.formId &&
+        document.querySelector(
+          '[data-whatsapp-variants][data-form-id="' + cta.dataset.formId + '"]'
+        )) ||
+      document.querySelector('[data-whatsapp-variants]');
     if (!mapEl) return null;
     try {
       var map = JSON.parse(mapEl.textContent);
@@ -175,11 +179,25 @@
     return lines.join('\n');
   }
 
+  /**
+   * Formulaire produit associé au CTA.
+   *
+   * Le CTA rendu dans buy-buttons connaît l'id du <form> ; les CTA persistants
+   * (barre collante, bouton flottant) sont rendus hors de la section produit et
+   * ne l'ont pas. On retombe alors sur le premier formulaire d'ajout au panier
+   * de la page, qui est celui du produit affiché.
+   */
+  function findForm(cta) {
+    var byId = cta.dataset.formId && document.getElementById(cta.dataset.formId);
+    if (byId) return byId;
+    return document.querySelector('form[action*="/cart/add"]');
+  }
+
   document.addEventListener('click', function (evt) {
     var cta = evt.target.closest('[data-whatsapp-cta]');
     if (!cta) return;
 
-    var form = document.getElementById(cta.dataset.formId);
+    var form = findForm(cta);
     // Sans formulaire, le href de repli (produit + URL) est conservé.
     if (!form) return;
 
