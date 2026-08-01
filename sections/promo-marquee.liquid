@@ -28,8 +28,10 @@
 
   # Un groupe doit toujours être plus large que l'écran, sinon la boucle
   # (translation de -50 %) laisse apparaître un vide. On répète donc la
-  # séquence d'autant plus qu'il y a peu de messages, pour viser ~12 items.
-  assign repeat = 12 | divided_by: messages.size
+  # séquence d'autant plus qu'il y a peu de messages : ~24 items donnent un
+  # groupe de l'ordre de 4 000 px, ce qui couvre jusqu'aux écrans 4K.
+  # Coût négligeable : ce ne sont que des spans de texte court.
+  assign repeat = 24 | divided_by: messages.size
   if repeat < 2
     assign repeat = 2
   endif
