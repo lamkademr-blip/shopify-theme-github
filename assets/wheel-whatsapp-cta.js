@@ -23,6 +23,24 @@
   }
 
   /**
+   * Idem, arrondi à l'euro supérieur et sans décimales : sur un montant
+   * restant à atteindre, « 311 € » se lit mieux que « 311,00 € ».
+   */
+  function formatPriceRounded(cents, currency) {
+    var euros = Math.ceil(cents / 100);
+    try {
+      return new Intl.NumberFormat('fr-FR', {
+        style: 'currency',
+        currency: currency,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(euros);
+    } catch (e) {
+      return euros + ' ' + currency;
+    }
+  }
+
+  /**
    * Variante sélectionnée : lue au clic depuis l'input caché name="id" du
    * formulaire, cherchée dans la carte JSON rendue par le snippet.
    * Renvoie null si la carte ou la variante est introuvable.
@@ -140,7 +158,7 @@
           missing <= 0
             ? 'Offre : ma configuration atteint le seuil des 150 € offerts.'
             : 'Offre : il me manque ' +
-              formatPrice(Math.ceil(missing / 100) * 100, cta.dataset.currency || 'EUR') +
+              formatPriceRounded(missing, cta.dataset.currency || 'EUR') +
               ' pour les 150 € offerts.'
         );
       }
