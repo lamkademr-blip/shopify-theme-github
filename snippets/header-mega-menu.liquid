@@ -278,27 +278,10 @@
   margin-top: 0.7rem;
   padding-left: 1rem;
   border-left: 2px solid #eee;
-  /* Les groupes longs (ex. Volants > Par marque) se repartissent en colonnes */
-  columns: 150px auto;
-  column-gap: 1.5rem;
 }
 
 .custom-auto-menu .custom-submenu-item {
   margin-bottom: 0.5rem;
-  break-inside: avoid;
-}
-
-/* Un item de niveau 2 qui porte un sous-menu devient un titre de groupe */
-.custom-auto-menu .custom-mega-item:has(.custom-submenu) .custom-mega-link {
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  padding-bottom: 0.4rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.racing-theme .custom-auto-menu .custom-mega-item:has(.custom-submenu) .custom-mega-link {
-  border-bottom-color: rgba(255, 255, 255, 0.15);
 }
 
 .custom-auto-menu .custom-submenu-link {
