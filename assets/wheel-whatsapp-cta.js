@@ -190,7 +190,37 @@
   function findForm(cta) {
     var byId = cta.dataset.formId && document.getElementById(cta.dataset.formId);
     if (byId) return byId;
-    return document.querySelector('form[action*="/cart/add"]');
+
+    // Dawn rend deux formulaires /cart/add sur une fiche produit : le
+    // formulaire de paiement échelonné (caché, id product-form-installment-…,
+    // sans propriétés) arrive EN PREMIER dans le DOM. Prendre le premier venu
+    // produirait un message sans aucune option choisie — exactement ce que ce
+    // bouton doit transmettre. On écarte donc l'échelonné et on privilégie un
+    // formulaire visible, puis celui qui porte le plus de properties[].
+    var forms = [].slice
+      .call(document.querySelectorAll('form[action*="/cart/add"]'))
+      .filter(function (f) {
+        return (f.getAttribute('id') || '').indexOf('installment') === -1;
+      });
+    if (!forms.length) return null;
+
+    var visible = forms.filter(function (f) {
+      return f.offsetParent !== null;
+    });
+    var candidates = visible.length ? visible : forms;
+
+    return candidates.reduce(function (best, f) {
+      return countProperties(f) > countProperties(best) ? f : best;
+    }, candidates[0]);
+  }
+
+  /** Nombre de champs properties[...] d'un formulaire. */
+  function countProperties(form) {
+    var n = 0;
+    for (var i = 0; i < form.elements.length; i++) {
+      if (/^properties\[/.test(form.elements[i].name || '')) n++;
+    }
+    return n;
   }
 
   document.addEventListener('click', function (evt) {
