@@ -17,7 +17,7 @@
 
   var config = window.PROMO_ETE150 || {};
   var THRESHOLD_CENTS = parseInt(config.threshold, 10) || 100000; // 1 000 €
-  var DEADLINE_ISO = config.deadline || '2026-08-30T23:59:59Z';
+  var DEADLINE_ISO = config.deadline || '2026-08-31T21:59:59Z';
   var CURRENCY = config.currency || 'EUR';
 
   /* ----------------------------------------------------------------------

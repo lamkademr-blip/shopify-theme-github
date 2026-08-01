@@ -118,9 +118,32 @@
     // payantes) × quantité (repli : prix rendu côté serveur ; ligne omise
     // si aucun prix disponible)
     var unitCents = variant ? variant.price : parseInt(cta.dataset.priceCents, 10);
+    var totalCents = 0;
     if (unitCents > 0) {
       properties.forEach(function (opt) { unitCents += opt.cents; });
-      lines.push('Total : ' + formatPrice(unitCents * qty, cta.dataset.currency || 'EUR'));
+      totalCents = unitCents * qty;
+      lines.push('Total : ' + formatPrice(totalCents, cta.dataset.currency || 'EUR'));
+    }
+
+    // Offre en cours : 90 % des commandes passent par WhatsApp et ne voient
+    // donc jamais la barre de progression du panier. On porte l'information
+    // dans le message lui-même, en la personnalisant selon le total réel :
+    // le client ouvre la conversation en sachant s'il est éligible ou ce qui
+    // lui manque — ce qui ouvre naturellement la discussion sur les options.
+    var promo = window.PROMO_ETE150;
+    if (promo && totalCents > 0 && promo.threshold) {
+      var deadlineOk = !promo.deadline || new Date(promo.deadline).getTime() > Date.now();
+      if (deadlineOk) {
+        var missing = promo.threshold - totalCents;
+        lines.push(
+          '',
+          missing <= 0
+            ? 'Offre : ma configuration atteint le seuil des 150 € offerts.'
+            : 'Offre : il me manque ' +
+              formatPrice(Math.ceil(missing / 100) * 100, cta.dataset.currency || 'EUR') +
+              ' pour les 150 € offerts.'
+        );
+      }
     }
 
     // URL du produit + configuration partageable (?cfg= maintenu par le configurateur)
