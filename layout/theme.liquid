@@ -802,12 +802,18 @@ document.addEventListener('DOMContentLoaded', function() {
       var link = e.target.closest('a[href*="wa.me"]');
       if (!link) return;
       var source = 'unknown';
-      if (link.classList.contains('whatsapp-float')) {
+      if (link.closest('.sticky-atc')) {
+        // Barre collante mobile : elle vit hors de .product, elle retombait
+        // donc en « unknown » — verifie sur le live le 01/08/2026.
+        source = 'barre_collante';
+      } else if (link.classList.contains('whatsapp-float')) {
         source = 'bouton_flottant';
       } else if (link.closest('#cart-whatsapp-popup') || link.closest('.cwp-card')) {
         source = 'popup_abandon_panier';
       } else if (link.closest('.dpop-container')) {
         source = 'popup_3d';
+      } else if (link.classList.contains('wheel-whatsapp-cta') || link.closest('.wheel-whatsapp-cta')) {
+        source = 'cta_fiche_produit';
       } else if (link.closest('.product') || link.closest('[data-product]')) {
         source = 'page_produit';
       } else {
@@ -825,6 +831,23 @@ document.addEventListener('DOMContentLoaded', function() {
         window.clarity('event', 'whatsapp_click');
         window.clarity('set', 'wa_source', source);
         window.clarity('set', 'wa_page', window.location.pathname.slice(0, 60));
+
+        // Prospect qui a configure vs simple prise de contact : c'est l'ecart
+        // entre les deux qui a de la valeur. Les CTA reecrivent leur href au
+        // clic en listant les options, chacune prefixee d'une puce « • » ;
+        // on laisse donc le tour de boucle se terminer avant de le lire.
+        // Le lien s'ouvrant dans un nouvel onglet, la page reste vivante.
+        setTimeout(function () {
+          try {
+            var href = link.getAttribute('href') || '';
+            var configure = decodeURIComponent(href).indexOf('•') > -1;
+            window.clarity('set', 'wa_config', configure ? 'avec_config' : 'sans_config');
+            if (configure) window.clarity('event', 'whatsapp_click_configure');
+            // Conserve l'enregistrement malgre l'echantillonnage : ces
+            // sessions sont les plus instructives du site.
+            window.clarity('upgrade', 'whatsapp_click');
+          } catch (err) {}
+        }, 0);
       }
     });
     </script>
