@@ -138,6 +138,13 @@
 
 @media screen and (max-width: 749px) {
   .promo-marquee { min-height: 34px; }
+
+  /* L'espacement étant plus serré sur mobile, le ruban est plus court : à
+     durée égale il défilerait deux fois moins vite que sur desktop. On
+     raccourcit donc le cycle pour conserver la même vitesse ressentie. */
+  .promo-marquee__track {
+    animation-duration: calc(var(--promo-marquee-duration, 40s) * 0.45);
+  }
   .promo-marquee__item {
     font-size: 11px;
     /* Sur mobile l'écran est étroit : une respiration plus mesurée suffit
