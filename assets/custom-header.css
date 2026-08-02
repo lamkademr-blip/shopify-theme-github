@@ -100,3 +100,58 @@ header.header,
 .faq-question-modern:focus {
   background: rgba(255, 255, 255, 0.04) !important;
 }
+
+/* ---- Fiches produits : accordeon "Description detaillee" (menu ferme) ---- */
+/* Les anciennes descriptions embarquaient leur propre <style> clair ; le chrome
+   de l'accordeon vit desormais ici, adapte au fond carbone. La police est
+   heritee du theme via .pdp-description-full (var(--font-body-family)). */
+.product-description-accordion {
+  width: 100%;
+  border: 1px solid #2a2a2e;
+  border-radius: 8px;
+  margin-top: 15px;
+  background: #17171a;
+  font-family: inherit;
+}
+.product-description-accordion summary {
+  list-style: none;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-weight: 600;
+  color: #f5f5f5;
+}
+.product-description-accordion summary::-webkit-details-marker {
+  display: none;
+}
+.product-description-accordion summary::after {
+  content: '▼';
+  transition: transform 0.3s ease;
+  color: #c9a96e;
+  font-size: 0.8em;
+}
+.product-description-accordion[open] summary::after {
+  transform: rotate(180deg);
+}
+.product-description-accordion .content {
+  padding: 15px;
+  background: #131316;
+  border-top: 1px solid #2a2a2e;
+  border-radius: 0 0 8px 8px;
+  color: #c9c9d1;
+}
+.product-description-accordion .content h2,
+.product-description-accordion .content h3,
+.product-description-accordion .content h4 {
+  color: #f5f5f5;
+}
+.product-description-accordion .content a:not(.whatsapp-cta-button) {
+  color: #8ab8ff;
+}
+@media (hover: hover) {
+  .product-description-accordion summary:hover {
+    background: rgba(255, 255, 255, 0.04);
+  }
+}
