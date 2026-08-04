@@ -1,0 +1,43 @@
+{%- comment -%}
+  Bandeau compact renvoyant vers la page partenariats (sections/partnership-page.liquid).
+  Utilisé en bas de la page Contact pour ne pas surcharger le formulaire SAV
+  avec du contenu de recrutement partenaires.
+{%- endcomment -%}
+
+<section class="prtb">
+  <div class="prtb__inner">
+    <p class="prtb__eyebrow">{{ section.settings.eyebrow | default: 'Partenariats' }}</p>
+    <h2 class="prtb__title">{{ section.settings.title }}</h2>
+    {%- if section.settings.text != blank -%}
+      <p class="prtb__text">{{ section.settings.text }}</p>
+    {%- endif -%}
+    <a href="{{ section.settings.link | default: '/pages/devenir-ambassadeur' }}" class="prtb__btn">
+      {{ section.settings.cta_label | default: 'Découvrir nos partenariats' }} &rarr;
+    </a>
+  </div>
+</section>
+
+{% style %}
+  .prtb { background: #17171a; border-top: 1px solid #2a2b2e; padding: 44px 20px; text-align: center; }
+  .prtb__inner { max-width: 560px; margin: 0 auto; }
+  .prtb__eyebrow { font-size: 12px; letter-spacing: 0.2em; color: #C9A96E; text-transform: uppercase; margin: 0 0 10px; }
+  .prtb__title { font-family: var(--font-heading-family), serif; font-weight: 400; font-size: clamp(20px, 4.5vw, 26px); color: #f5f5f5; margin: 0; }
+  .prtb__text { color: #b9b9b9; font-size: 14px; margin: 12px 0 0; }
+  .prtb__btn { display: inline-block; margin-top: 20px; padding: 13px 24px; min-height: 46px; font-size: 14px; font-weight: 600; letter-spacing: 0.03em; border-radius: 0; border: 1px solid #C9A96E; color: #C9A96E; text-decoration: none; }
+  .prtb__btn:hover { background: #C9A96E; color: #0e0e10; }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Bandeau partenariats",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Sur-titre", "default": "Partenariats" },
+    { "type": "text", "id": "title", "label": "Titre", "default": "Créateur de contenu ou professionnel de l'automobile ?" },
+    { "type": "textarea", "id": "text", "label": "Texte", "default": "Garages, préparateurs, revendeurs, créateurs de contenu auto : découvrez comment devenir partenaire Les As du Volant." },
+    { "type": "url", "id": "link", "label": "Lien (par défaut : page partenariats)" },
+    { "type": "text", "id": "cta_label", "label": "Texte du bouton", "default": "Découvrir nos partenariats" }
+  ],
+  "templates": ["page"],
+  "presets": [{ "name": "Bandeau partenariats" }]
+}
+{% endschema %}

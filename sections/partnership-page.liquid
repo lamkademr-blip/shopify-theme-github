@@ -1,0 +1,215 @@
+{%- comment -%}
+  Page partenariats — créateurs de contenu + professionnels (garage,
+  préparateur, revendeur). Design carbone aligné sur sections/landing-tiktok.liquid
+  (mêmes variables --prt-*, mêmes codes visuels). Autonome, préfixe .prt-.
+  Tous les CTA pointent vers WhatsApp (canal réel de conversion du site,
+  cf. modèle 90% WhatsApp) — pas de formulaire, pas de chiffres engageants :
+  chaque partenariat est étudié au cas par cas dans l'échange.
+{%- endcomment -%}
+
+{%- liquid
+  assign wa_number = section.settings.whatsapp_number | default: '33622510196'
+  assign pro_cards = section.blocks | where: 'type', 'carte_pro'
+-%}
+{%- capture wa_creator_msg -%}Bonjour, je crée du contenu automobile et je suis intéressé(e) par un partenariat avec Les As du Volant. Ma chaîne/compte : {%- endcapture -%}
+{%- capture wa_creator_link -%}https://wa.me/{{ wa_number }}?text={{ wa_creator_msg | url_encode | replace: '+', '%20' }}{%- endcapture -%}
+
+<div class="prt">
+  {%- comment -%} ===== HERO ===== {%- endcomment -%}
+  <section class="prt-hero">
+    <p class="prt-eyebrow">{{ section.settings.hero_eyebrow | default: 'Partenariats' }}</p>
+    <h1 class="prt-hero__title">{{ section.settings.hero_title }}</h1>
+    {%- if section.settings.hero_subtitle != blank -%}
+      <p class="prt-hero__subtitle">{{ section.settings.hero_subtitle }}</p>
+    {%- endif -%}
+  </section>
+
+  {%- comment -%} ===== CRÉATEURS DE CONTENU ===== {%- endcomment -%}
+  <section class="prt-creators">
+    <div class="prt-creators__text">
+      <p class="prt-label">{{ section.settings.creators_label | default: 'Créateurs de contenu' }}</p>
+      <h2 class="prt-h2 prt-h2--left">{{ section.settings.creators_title }}</h2>
+      <p class="prt-body">{{ section.settings.creators_text }}</p>
+      <ul class="prt-bullets">
+        {%- if section.settings.creators_bullet_1 != blank -%}<li>{{ section.settings.creators_bullet_1 }}</li>{%- endif -%}
+        {%- if section.settings.creators_bullet_2 != blank -%}<li>{{ section.settings.creators_bullet_2 }}</li>{%- endif -%}
+        {%- if section.settings.creators_bullet_3 != blank -%}<li>{{ section.settings.creators_bullet_3 }}</li>{%- endif -%}
+        {%- if section.settings.creators_bullet_4 != blank -%}<li>{{ section.settings.creators_bullet_4 }}</li>{%- endif -%}
+      </ul>
+      <a href="{{ wa_creator_link }}" class="prt-btn prt-btn--wa" target="_blank" rel="noopener">
+        {{ section.settings.creators_cta_label | default: "Discuter d'un partenariat créateur" }}
+      </a>
+    </div>
+  </section>
+
+  {%- comment -%} ===== PROFESSIONNELS ===== {%- endcomment -%}
+  {%- if pro_cards.size > 0 -%}
+    <section class="prt-pros">
+      <p class="prt-label prt-label--center">{{ section.settings.pros_label | default: 'Professionnels' }}</p>
+      <h2 class="prt-h2">{{ section.settings.pros_title }}</h2>
+      {%- if section.settings.pros_subtitle != blank -%}
+        <p class="prt-sub">{{ section.settings.pros_subtitle }}</p>
+      {%- endif -%}
+
+      <div class="prt-pros__grid">
+        {%- for block in pro_cards -%}
+          {%- assign card_index = forloop.index -%}
+          {%- capture wa_pro_msg -%}Bonjour, je suis {{ block.settings.title | strip_html }} et je souhaite discuter d'un partenariat avec Les As du Volant.{%- endcapture -%}
+          {%- capture wa_pro_link -%}https://wa.me/{{ wa_number }}?text={{ wa_pro_msg | url_encode | replace: '+', '%20' }}{%- endcapture -%}
+          <div class="prt-card" {{ block.shopify_attributes }}>
+            <span class="prt-card__num" aria-hidden="true">{{ card_index }}</span>
+            <h3 class="prt-card__title">{{ block.settings.title }}</h3>
+            <p class="prt-card__text">{{ block.settings.text }}</p>
+            <ul class="prt-card__bullets">
+              {%- if block.settings.bullet_1 != blank -%}<li>{{ block.settings.bullet_1 }}</li>{%- endif -%}
+              {%- if block.settings.bullet_2 != blank -%}<li>{{ block.settings.bullet_2 }}</li>{%- endif -%}
+              {%- if block.settings.bullet_3 != blank -%}<li>{{ block.settings.bullet_3 }}</li>{%- endif -%}
+            </ul>
+            <a href="{{ wa_pro_link }}" class="prt-card__cta" target="_blank" rel="noopener">
+              {{ section.settings.pros_cta_label | default: 'En discuter sur WhatsApp' }} &rarr;
+            </a>
+          </div>
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%} ===== NOTE DE FERMETURE ===== {%- endcomment -%}
+  <section class="prt-note">
+    <p>{{ section.settings.closing_text | default: "Chaque partenariat est étudié au cas par cas. Expliquez-nous votre projet sur WhatsApp, nous revenons vers vous rapidement." }}</p>
+  </section>
+</div>
+
+{% style %}
+  .prt { --prt-bg: #0e0e10; --prt-surface: #17171a; --prt-line: #2a2b2e; --prt-text: #f5f5f5; --prt-muted: #b9b9b9; --prt-gold: #C9A96E; --prt-wa: #25D366; }
+  .prt { background: var(--prt-bg); color: var(--prt-text); }
+  .prt a { color: inherit; text-decoration: none; }
+  .prt h1, .prt h2, .prt h3 { font-family: var(--font-heading-family), serif; font-weight: 400; margin: 0; }
+  .prt p { margin: 0; }
+  .prt section { padding: 48px 20px; max-width: 1000px; margin: 0 auto; }
+
+  .prt-hero { text-align: center; padding-bottom: 32px; }
+  .prt-eyebrow { font-size: 12px; letter-spacing: 0.22em; color: var(--prt-gold); text-transform: uppercase; margin-bottom: 10px; }
+  .prt-hero__title { font-size: clamp(28px, 6vw, 42px); line-height: 1.15; }
+  .prt-hero__subtitle { color: var(--prt-muted); font-size: 15px; margin: 14px auto 0; max-width: 560px; }
+
+  .prt-label { font-size: 12px; letter-spacing: 0.18em; color: var(--prt-gold); text-transform: uppercase; margin-bottom: 10px; }
+  .prt-label--center { text-align: center; }
+  .prt-h2 { font-size: clamp(22px, 5vw, 30px); text-align: center; margin-bottom: 6px; }
+  .prt-h2--left { text-align: left; }
+  .prt-sub { text-align: center; color: var(--prt-muted); font-size: 14px; margin: 6px auto 0; max-width: 520px; }
+  .prt-body { color: var(--prt-muted); font-size: 15px; line-height: 1.6; margin-top: 14px; max-width: 620px; }
+
+  .prt-creators { background: var(--prt-surface); border-top: 1px solid var(--prt-line); border-bottom: 1px solid var(--prt-line); max-width: none; }
+  .prt-creators__text { max-width: 620px; margin: 0 auto; }
+  .prt-bullets { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 8px; }
+  .prt-bullets li { font-size: 14px; color: var(--prt-text); padding-left: 18px; position: relative; }
+  .prt-bullets li::before { content: ''; position: absolute; left: 0; top: 8px; width: 6px; height: 6px; background: var(--prt-gold); }
+
+  .prt-btn { display: inline-block; margin-top: 22px; padding: 14px 26px; min-height: 48px; font-size: 14px; font-weight: 600; letter-spacing: 0.04em; border-radius: 0; }
+  .prt-btn--wa { background: transparent; color: var(--prt-wa); border: 1px solid var(--prt-wa); }
+  .prt-btn--wa:hover { background: var(--prt-wa); color: #0e0e10; }
+
+  .prt-pros__grid { display: grid; gap: 14px; margin-top: 28px; }
+  .prt-card { background: var(--prt-surface); border: 1px solid var(--prt-line); padding: 22px 20px; display: flex; flex-direction: column; transition: border-color 0.2s; }
+  .prt-card:hover { border-color: var(--prt-gold); }
+  .prt-card__num { font-family: var(--font-heading-family), serif; font-size: 30px; color: var(--prt-gold); line-height: 1; display: block; margin-bottom: 10px; }
+  .prt-card__title { font-size: 17px; margin-bottom: 8px; }
+  .prt-card__text { color: var(--prt-muted); font-size: 13px; line-height: 1.55; }
+  .prt-card__bullets { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 6px; }
+  .prt-card__bullets li { font-size: 13px; color: var(--prt-text); padding-left: 16px; position: relative; }
+  .prt-card__bullets li::before { content: ''; position: absolute; left: 0; top: 7px; width: 5px; height: 5px; background: var(--prt-gold); }
+  .prt-card__cta { margin-top: 18px; font-size: 13px; color: var(--prt-wa); font-weight: 600; }
+
+  .prt-note { text-align: center; max-width: 560px; }
+  .prt-note p { color: var(--prt-muted); font-size: 13px; }
+
+  @media (min-width: 750px) {
+    .prt-creators__text { text-align: left; }
+    .prt-pros__grid { grid-template-columns: repeat(3, 1fr); }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Page partenariats",
+  "tag": "div",
+  "settings": [
+    { "type": "header", "content": "Général" },
+    { "type": "text", "id": "whatsapp_number", "label": "Numéro WhatsApp (sans +)", "default": "33622510196" },
+    { "type": "textarea", "id": "closing_text", "label": "Note de fermeture", "default": "Chaque partenariat est étudié au cas par cas. Expliquez-nous votre projet sur WhatsApp, nous revenons vers vous rapidement." },
+
+    { "type": "header", "content": "En-tête" },
+    { "type": "text", "id": "hero_eyebrow", "label": "Sur-titre", "default": "Partenariats" },
+    { "type": "text", "id": "hero_title", "label": "Titre", "default": "Devenez partenaire Les As du Volant" },
+    { "type": "textarea", "id": "hero_subtitle", "label": "Sous-titre", "default": "Créateurs de contenu automobile ou professionnels du secteur : discutons de ce qu'on peut construire ensemble." },
+
+    { "type": "header", "content": "Créateurs de contenu" },
+    { "type": "text", "id": "creators_label", "label": "Étiquette", "default": "Créateurs de contenu" },
+    { "type": "text", "id": "creators_title", "label": "Titre", "default": "Vous parlez à une audience passionnée d'automobile ?" },
+    { "type": "textarea", "id": "creators_text", "label": "Texte", "default": "Les As du Volant travaille avec des créateurs qui partagent notre univers — sur-mesure, style, performance. Ce que nous proposons dépend de votre communauté et de votre contenu : on en discute ensemble, sans grille figée." },
+    { "type": "text", "id": "creators_bullet_1", "label": "Avantage 1", "default": "Code promo personnalisé pour votre communauté" },
+    { "type": "text", "id": "creators_bullet_2", "label": "Avantage 2", "default": "Volant sur-mesure configuré selon votre univers" },
+    { "type": "text", "id": "creators_bullet_3", "label": "Avantage 3", "default": "Visibilité sur nos réseaux et nos contenus" },
+    { "type": "text", "id": "creators_bullet_4", "label": "Avantage 4", "default": "Un interlocuteur direct, pas de formulaire à rallonge" },
+    { "type": "text", "id": "creators_cta_label", "label": "Texte du bouton", "default": "Discuter d'un partenariat créateur" },
+
+    { "type": "header", "content": "Professionnels" },
+    { "type": "text", "id": "pros_label", "label": "Étiquette", "default": "Professionnels" },
+    { "type": "text", "id": "pros_title", "label": "Titre", "default": "Vous êtes un professionnel de l'automobile ?" },
+    { "type": "textarea", "id": "pros_subtitle", "label": "Sous-titre", "default": "Garage, préparateur, revendeur — construisons un partenariat durable pour proposer du sur-mesure à vos clients." },
+    { "type": "text", "id": "pros_cta_label", "label": "Texte des boutons carte", "default": "En discuter sur WhatsApp" }
+  ],
+  "blocks": [
+    {
+      "type": "carte_pro",
+      "name": "Carte professionnel",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Titre" },
+        { "type": "textarea", "id": "text", "label": "Texte" },
+        { "type": "text", "id": "bullet_1", "label": "Point 1" },
+        { "type": "text", "id": "bullet_2", "label": "Point 2" },
+        { "type": "text", "id": "bullet_3", "label": "Point 3" }
+      ]
+    }
+  ],
+  "templates": ["page"],
+  "presets": [
+    {
+      "name": "Page partenariats",
+      "blocks": [
+        {
+          "type": "carte_pro",
+          "settings": {
+            "title": "Garage & installateur",
+            "text": "Vous posez des volants pour vos clients ? Devenez installateur partenaire : vos clients vous font confiance, nous vous faisons confiance.",
+            "bullet_1": "Tarifs préférentiels sur les commandes",
+            "bullet_2": "Référencement comme installateur partenaire",
+            "bullet_3": "Support dédié pour les cas particuliers (airbag, commandes au volant)"
+          }
+        },
+        {
+          "type": "carte_pro",
+          "settings": {
+            "title": "Préparateur automobile",
+            "text": "Vous personnalisez des véhicules pour vos clients ? Intégrez un volant sur-mesure à vos réalisations.",
+            "bullet_1": "Volants configurés aux couleurs de vos préparations",
+            "bullet_2": "Accès prioritaire aux nouvelles références",
+            "bullet_3": "Délais adaptés à vos plannings de préparation"
+          }
+        },
+        {
+          "type": "carte_pro",
+          "settings": {
+            "title": "Revendeur & boutique",
+            "text": "Vous avez une boutique physique ou en ligne dans l'univers auto ? Proposez nos volants sur-mesure à votre clientèle.",
+            "bullet_1": "Conditions revendeur étudiées selon volume",
+            "bullet_2": "Visuels et supports marketing fournis",
+            "bullet_3": "Stock ou expédition directe selon les références"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
