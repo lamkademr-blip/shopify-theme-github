@@ -194,6 +194,12 @@
       endcase
     when "collection"
       case collection.handle
+        when "volant-carbone"
+          assign alt_path = "/collections/carbon-fibre-steering-wheels"
+        when "volant-alcantara"
+          assign alt_path = "/collections/alcantara-steering-wheels"
+        when "volant-meplat"
+          assign alt_path = "/collections/flat-bottom-steering-wheels"
         when "volant-volkswagen"
           assign alt_path = "/collections/volkswagen-steering-wheels"
         when "volant-audi"
