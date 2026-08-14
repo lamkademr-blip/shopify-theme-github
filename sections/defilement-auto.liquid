@@ -110,7 +110,7 @@
         {% if block.type == "banner_item" %}
           <div class="banner-item">
             {% if block.settings.icon %}
-              <img src="{{ block.settings.icon | img_url: '50x50', crop: 'center' }}" class="banner-icon" alt="">
+              <img src="{{ block.settings.icon | img_url: '50x50', crop: 'center' }}" class="banner-icon" alt="{{ block.settings.text | strip_html | escape | truncate: 40 }}">
             {% endif %}
             {{ block.settings.text }}
           </div>

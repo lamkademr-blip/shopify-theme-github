@@ -832,7 +832,7 @@
                           {% for item in (1..custom_stars_cound) %}
                             <img
                               src="{{ stars_icon | image_url }}"
-                              alt="{{ stars_icon.alt }}"
+                              alt="{{ stars_icon.alt | default: 'Note 5 etoiles' }}"
                               {% if lazy %}
                                 loading="lazy"
                               {% endif %}

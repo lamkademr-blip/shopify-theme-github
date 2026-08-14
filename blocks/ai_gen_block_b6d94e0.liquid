@@ -120,7 +120,7 @@
             <div class="ai-partners-carousel__logo-{{ ai_gen_id }}">
               <img
                 src="{{ logo | image_url: width: 400 }}"
-                alt="{{ logo.alt | escape }}"
+                alt="{{ logo.alt | default: 'Logo partenaire' | escape }}"
                 loading="lazy"
                 width="{{ block.settings.logo_width }}"
                 height="{{ block.settings.logo_height }}"
@@ -143,7 +143,7 @@
             <div class="ai-partners-carousel__logo-{{ ai_gen_id }}">
               <img
                 src="{{ logo | image_url: width: 400 }}"
-                alt="{{ logo.alt | escape }}"
+                alt="{{ logo.alt | default: 'Logo partenaire' | escape }}"
                 loading="lazy"
                 width="{{ block.settings.logo_width }}"
                 height="{{ block.settings.logo_height }}"
