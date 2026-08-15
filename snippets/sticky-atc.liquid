@@ -146,8 +146,14 @@
   <div class="sticky-atc__inner">
     <div class="sticky-atc__info">
       <p class="sticky-atc__title">{{ product.title | escape }}</p>
+      {%- comment -%}
+        Le prix de base est passe en CENTIMES : money_without_currency rend
+        « 1 000,00 » des 1 000 €, que parseFloat lit comme 1. Un entier ne
+        depend d'aucun format d'affichage.
+      {%- endcomment -%}
       <p class="sticky-atc__price" id="StickyATCPrice"
-         data-base-price="{{ product.selected_or_first_available_variant.price | money_without_currency | strip }}">
+         data-base-cents="{{ product.selected_or_first_available_variant.price }}"
+         data-currency="{{ cart.currency.iso_code }}">
         <span class="sticky-atc__total">{{ product.selected_or_first_available_variant.price | money }}</span>
         <span class="sticky-atc__addons" style="display:none"></span>
       </p>
@@ -262,23 +268,42 @@
   var stickyPrice = document.getElementById('StickyATCPrice');
   if (!stickyPrice) return;
 
-  var basePrice = parseFloat(stickyPrice.getAttribute('data-base-price').replace(',', '.')) || 0;
+  var basePrice = (parseInt(stickyPrice.getAttribute('data-base-cents'), 10) || 0) / 100;
+  var currency = stickyPrice.getAttribute('data-currency') || 'EUR';
 
-  function parseAddons(text) {
-    if (!text) return 0;
-    var cleaned = text.replace(/[^\d.,]/g, '').replace(/\s/g, '');
-    cleaned = cleaned.replace(',', '.');
-    return parseFloat(cleaned) || 0;
+  /* « 299.80 € », « 1 299,80 € », « 1,299.80 € » → 1299.8.
+
+     Les deux conventions de milliers doivent etre gerees : l'app d'options
+     ecrit en format anglais (point decimal) alors que le theme affiche en
+     format francais. Un simple replace(',', '.') lit « 1,299.80 » comme
+     1.29 — soit 1 000 € qui disparaissent du total. */
+  function parseAmount(text) {
+    var raw = String(text == null ? '' : text).replace(/[^\d.,]/g, '');
+    if (!raw) return 0;
+    if (raw.indexOf('.') > -1 && raw.indexOf(',') > -1) {
+      // Le dernier separateur est le decimal, l'autre marque les milliers.
+      raw = raw.lastIndexOf('.') > raw.lastIndexOf(',')
+        ? raw.replace(/,/g, '')
+        : raw.replace(/\./g, '').replace(',', '.');
+    } else if (raw.indexOf(',') > -1) {
+      raw = /,\d{3}(\D|$)/.test(raw) ? raw.replace(/,/g, '') : raw.replace(',', '.');
+    }
+    var value = parseFloat(raw);
+    return isNaN(value) ? 0 : value;
   }
 
   function formatEUR(value) {
-    return value.toFixed(2).replace('.', ',') + ' €';
+    try {
+      return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: currency }).format(value);
+    } catch (e) {
+      return value.toFixed(2).replace('.', ',') + ' €';
+    }
   }
 
   function updateStickyPrice() {
     var addonsEl = document.getElementById('ymq-addons-price');
     var addonsText = addonsEl ? addonsEl.textContent.trim() : '';
-    var addonsValue = parseAddons(addonsText);
+    var addonsValue = parseAmount(addonsText);
     var total = basePrice + addonsValue;
 
     // Update the sticky price display

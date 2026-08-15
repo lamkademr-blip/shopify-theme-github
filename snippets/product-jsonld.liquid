@@ -35,8 +35,14 @@
   {%- endif -%}
   "offers": {
     "@type": "AggregateOffer",
-    "lowPrice": {{ product.price_min | money_without_currency | strip | replace: ' ', '' | replace: ',', '.' }},
-    "highPrice": {{ product.price_max | money_without_currency | strip | replace: ' ', '' | replace: ',', '.' }},
+    {%- comment -%}
+      Prix calcules depuis les centimes, jamais depuis money_without_currency :
+      des 1 000 €, ce filtre rend « 1 000,00 » (ou « 1.000,00 » selon le
+      format de la boutique) et le nettoyage produisait « 1.000.00 » — un
+      nombre JSON invalide, donc tout le balisage rejete par Google.
+    {%- endcomment -%}
+    "lowPrice": {{ product.price_min | divided_by: 100.0 }},
+    "highPrice": {{ product.price_max | divided_by: 100.0 }},
     "priceCurrency": {{ cart.currency.iso_code | json }},
     "offerCount": {{ product.variants.size }},
     "availability": "https://schema.org/{% if current_variant.available %}InStock{% else %}OutOfStock{% endif %}",

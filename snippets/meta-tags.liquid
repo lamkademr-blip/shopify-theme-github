@@ -27,7 +27,11 @@
 {%- endif -%}
 
 {%- if request.page_type == 'product' -%}
-  <meta property="og:price:amount" content="{{ product.price | money_without_currency | strip_html }}">
+  {%- comment -%}
+    Open Graph attend un nombre a point decimal : money_without_currency rend
+    « 990,00 », et « 1 000,00 » des le seuil des mille.
+  {%- endcomment -%}
+  <meta property="og:price:amount" content="{{ product.price | divided_by: 100.0 }}">
   <meta property="og:price:currency" content="{{ cart.currency.iso_code }}">
 {%- endif -%}
 

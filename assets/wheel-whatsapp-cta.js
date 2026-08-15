@@ -73,12 +73,22 @@
     }
   }
 
-  /** « + 49.90 € » ou « 1 234,56 € » → centimes (0 si non analysable). */
+  /** « + 49.90 € », « 1 234,56 € » ou « 1,234.56 € » → centimes (0 si non
+   *  analysable). Les deux conventions de milliers arrivent ici : l'app
+   *  d'options écrit ses prix en format anglais alors que le thème affiche
+   *  en français. Ne traiter que la convention française amputait le total
+   *  de 1 000 € dès que la configuration les dépassait. */
   function parsePriceCents(text) {
     var raw = (text || '').replace(/[^\d.,]/g, '');
     if (!raw) return 0;
-    if (raw.indexOf('.') > -1 && raw.indexOf(',') > -1) raw = raw.replace(/\./g, '');
-    raw = raw.replace(',', '.');
+    if (raw.indexOf('.') > -1 && raw.indexOf(',') > -1) {
+      // Le dernier séparateur est le décimal, l'autre marque les milliers.
+      raw = raw.lastIndexOf('.') > raw.lastIndexOf(',')
+        ? raw.replace(/,/g, '')
+        : raw.replace(/\./g, '').replace(',', '.');
+    } else if (raw.indexOf(',') > -1) {
+      raw = /,\d{3}(\D|$)/.test(raw) ? raw.replace(/,/g, '') : raw.replace(',', '.');
+    }
     var value = parseFloat(raw);
     return isNaN(value) ? 0 : Math.round(value * 100);
   }
