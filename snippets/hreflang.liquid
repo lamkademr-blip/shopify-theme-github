@@ -5,7 +5,8 @@
   sont mappées explicitement ci-dessous (source : hreflang-map.csv, miroir
   dans snippets/hreflang.liquid du thème UK — les deux fichiers DOIVENT
   rester symétriques, sinon Google ignore le cluster entier).
-  x-default pointe vers la page FR (marché principal).
+  x-default pointe vers la page UK : l'anglais est le repli naturel pour un
+  visiteur hors zone francophone. Le snippet UK DOIT dire la même chose.
   Les pages sans équivalent mappé n'émettent rien : un hreflang faux est
   pire qu'aucun. À l'ajout d'un produit/collection présent des deux côtés,
   ajouter la paire ici ET dans le snippet UK.
@@ -256,5 +257,5 @@
   -%}
   <link rel="alternate" hreflang="fr-FR" href="https://les-as-du-volant.com{{ self_path }}">
   <link rel="alternate" hreflang="en-GB" href="https://drivecustom.co.uk{{ alt_path }}">
-  <link rel="alternate" hreflang="x-default" href="https://les-as-du-volant.com{{ self_path }}">
+  <link rel="alternate" hreflang="x-default" href="https://drivecustom.co.uk{{ alt_path }}">
 {%- endif -%}
