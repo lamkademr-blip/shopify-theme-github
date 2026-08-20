@@ -208,6 +208,14 @@
   text-decoration-thickness: 1px;
 }
 
+/* Tarif public à venir : même poids visuel que le prix barré, sans la barre
+   qui signalerait à tort une réduction déjà acquise. */
+.bmwa__price-next {
+  font-size: 1.8rem;
+  color: var(--bmwa-dim);
+  white-space: nowrap;
+}
+
 .bmwa__price-save {
   padding: 0.5rem 1rem;
   border: 1px solid var(--bmwa-hairline);

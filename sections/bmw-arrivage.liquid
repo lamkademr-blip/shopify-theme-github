@@ -98,12 +98,28 @@
         <p class="bmwa__subtitle">{{ section.settings.subtitle }}</p>
       {%- endif -%}
 
+      {%- comment -%}
+        Deux façons d'afficher le second prix, et une seule est licite selon
+        le cas :
+        - « puis 899 € » quand 899 € est le tarif public À VENIR. Ce n'est pas
+          une annonce de réduction, donc pas de prix barré ;
+        - « au lieu de 899 € » barré uniquement si ce prix a réellement été
+          pratiqué (le plus bas des 30 derniers jours, art. L.112-1-1 du code
+          de la consommation).
+        Par défaut on est sur le premier cas.
+      {%- endcomment -%}
       <div class="bmwa__price">
         <span class="bmwa__price-now">{{ section.settings.price_now }}</span>
 
         {%- if section.settings.price_was != blank -%}
-          <span class="visually-hidden">{{ section.settings.price_was_label }}</span>
-          <s class="bmwa__price-was">{{ section.settings.price_was }}</s>
+          {%- if section.settings.price_compare_mode == 'reference' -%}
+            <span class="visually-hidden">{{ section.settings.price_was_label }}</span>
+            <s class="bmwa__price-was">{{ section.settings.price_was }}</s>
+          {%- else -%}
+            <span class="bmwa__price-next">
+              {{ section.settings.price_next_label }} {{ section.settings.price_was }}
+            </span>
+          {%- endif -%}
         {%- endif -%}
 
         {%- if section.settings.price_save != blank -%}
@@ -116,6 +132,16 @@
       </div>
 
       <ul class="bmwa__facts" role="list">
+        {%- if section.settings.fact_included != blank -%}
+          <li class="bmwa__fact">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <circle cx="12" cy="12" r="8.5"></circle>
+              <path d="m8.2 12.2 2.6 2.6 5-5.4"></path>
+            </svg>
+            <span>{{ section.settings.fact_included }}</span>
+          </li>
+        {%- endif -%}
+
         {%- if section.settings.fact_shipping != blank -%}
           <li class="bmwa__fact">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -148,15 +174,6 @@
           </li>
         {%- endif -%}
 
-        {%- if section.settings.fact_fitment != blank -%}
-          <li class="bmwa__fact">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <circle cx="12" cy="12" r="8.5"></circle>
-              <path d="m8.2 12.2 2.6 2.6 5-5.4"></path>
-            </svg>
-            <span>{{ section.settings.fact_fitment }}</span>
-          </li>
-        {%- endif -%}
       </ul>
 
       <div class="bmwa__actions">
@@ -343,32 +360,56 @@
     {
       "type": "text",
       "id": "price_was",
-      "label": "Prix barré",
-      "info": "À ne renseigner que si ce prix a réellement été pratiqué (prix de référence : le plus bas des 30 derniers jours). Laisser vide en cas de doute.",
+      "label": "Second prix",
       "default": "899 €"
+    },
+    {
+      "type": "select",
+      "id": "price_compare_mode",
+      "label": "Nature du second prix",
+      "info": "« Tarif public à venir » = simple information, affichage normal. « Prix pratiqué avant » barre le prix : c'est une annonce de réduction, réservée au cas où ce prix a réellement été appliqué (le plus bas des 30 derniers jours).",
+      "options": [
+        { "value": "future", "label": "Tarif public à venir" },
+        { "value": "reference", "label": "Prix pratiqué avant (barré)" }
+      ],
+      "default": "future"
+    },
+    {
+      "type": "text",
+      "id": "price_next_label",
+      "label": "Mot d'introduction du second prix",
+      "info": "Affiché avant le second prix en mode « tarif public à venir ».",
+      "default": "puis"
     },
     {
       "type": "text",
       "id": "price_was_label",
       "label": "Mention lue avant le prix barré",
-      "info": "Invisible à l'écran, lue par les lecteurs d'écran.",
+      "info": "Invisible à l'écran, lue par les lecteurs d'écran en mode « prix pratiqué avant ».",
       "default": "au lieu de"
     },
     {
       "type": "text",
       "id": "price_save",
-      "label": "Pastille d'économie",
-      "default": "300 € d'économie"
+      "label": "Pastille à côté du prix",
+      "default": "Prix de lancement"
     },
     {
       "type": "text",
       "id": "price_note",
       "label": "Précision sous le prix",
-      "default": "Tarif de lancement de l'arrivage."
+      "default": "Tarif de lancement, valable sur cet arrivage."
     },
     {
       "type": "header",
       "content": "Points clés"
+    },
+    {
+      "type": "text",
+      "id": "fact_included",
+      "label": "Contenu de l'offre",
+      "info": "Ce qui est livré pour le prix affiché. C'est la première chose que cherche un acheteur averti, et le point où les concurrents restent flous.",
+      "default": "Livré complet : airbag, boutons et palettes inclus"
     },
     {
       "type": "text",
@@ -387,12 +428,6 @@
       "id": "fact_stock",
       "label": "Stock",
       "default": "Quantités limitées, jusqu'à épuisement du stock"
-    },
-    {
-      "type": "text",
-      "id": "fact_fitment",
-      "label": "Compatibilité",
-      "default": "Compatible Série 3 et Série 5 (liste ci-dessous)"
     },
     {
       "type": "header",
