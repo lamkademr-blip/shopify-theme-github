@@ -11,7 +11,9 @@
   "sections": {
     "bmw_arrivage": {
       "type": "bmw-arrivage",
-      "settings": {}
+      "settings": {
+        "image": "shopify://shop_images/arrivage_bmw.jpg"
+      }
     },
     "1769011966061244b5": {
       "type": "_blocks",

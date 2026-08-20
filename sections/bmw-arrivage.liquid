@@ -63,7 +63,7 @@
     {%- if section.settings.image != blank -%}
       <div
         class="bmwa__media bmwa__media--{{ section.settings.media_style }}"
-        style="--bmwa-zoom: {{ zoom }}; --bmwa-focus: {{ section.settings.image_focus }}%;"
+        style="--bmwa-zoom: {{ zoom }}; --bmwa-focus: {{ section.settings.image_focus }}%; --bmwa-plate: {{ section.settings.plate_color }};"
       >
         {%- if section.settings.badge_text != blank -%}
           <p class="bmwa__flag">
@@ -303,6 +303,13 @@
         { "value": "ambiance", "label": "Photo d'ambiance" }
       ],
       "default": "packshot"
+    },
+    {
+      "type": "color",
+      "id": "plate_color",
+      "label": "Couleur de la plaque (packshot)",
+      "info": "À régler sur la teinte du fond de la photo, sinon des bandes apparaissent sur les côtés. Pour la photo actuelle : #d1d2d4.",
+      "default": "#d1d2d4"
     },
     {
       "type": "text",

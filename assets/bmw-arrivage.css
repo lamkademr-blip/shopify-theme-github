@@ -105,9 +105,13 @@
    en plaque claire. Le contraste avec la banderole sombre fait lire le
    visuel comme une fiche produit, et le volant est montré ENTIER (contain),
    jamais rogné — sur un packshot, le recadrage coupe toujours au mauvais
-   endroit. */
+   endroit.
+
+   La plaque reprend la teinte du fond de la photo (réglable dans l'éditeur) :
+   le cadre n'ayant pas le même format que le fichier, des bandes apparaissent
+   sur les côtés — invisibles tant que la couleur correspond. */
 .bmwa__media--packshot {
-  background: linear-gradient(160deg, #f4f3f1 0%, #e4e3e0 100%);
+  background: var(--bmwa-plate, #d1d2d4);
   border-color: rgba(255, 255, 255, 0.16);
 }
 
@@ -383,6 +387,7 @@
 .bmwa__compat-count {
   color: var(--bmwa-gold);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .bmwa__compat-count::before {
@@ -566,6 +571,10 @@
     aspect-ratio: 3 / 2;
   }
 
+  .bmwa__compat-count {
+    font-size: 1.2rem;
+  }
+
   .bmwa__title {
     font-size: clamp(2.9rem, 7.6vw, 3.6rem);
   }
@@ -601,6 +610,9 @@
   .bmwa__compat > summary {
     width: 100%;
     justify-content: space-between;
+    /* Libelle + compteur doivent tenir sur une ligne a 375 px. */
+    padding: 1.3rem 1.6rem;
+    font-size: 1.3rem;
   }
 
   .bmwa__compat-item {
