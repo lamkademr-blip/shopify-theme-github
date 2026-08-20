@@ -24,7 +24,10 @@
 
 {%- liquid
   assign wa_number = section.settings.whatsapp_number | default: '33622510196' | strip
-  assign wa_message = section.settings.whatsapp_message | strip
+  # strip retire les retours a la ligne du champ, puis on remet une espace :
+  # le message se termine par « ... : » et le client doit pouvoir completer
+  # sans avoir a en ajouter une lui-meme.
+  assign wa_message = section.settings.whatsapp_message | strip | append: ' '
   assign zoom = section.settings.image_zoom | divided_by: 100.0
 -%}
 
