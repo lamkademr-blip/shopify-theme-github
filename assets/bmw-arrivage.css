@@ -195,7 +195,10 @@
   font-weight: 300;
   line-height: 1.08;
   letter-spacing: 0.01em;
-  font-size: clamp(3.2rem, 6.4vw, 5rem);
+  /* Plafonne a 4.4rem : a 5rem le titre passait sur trois lignes dans la
+     colonne de droite (~560 px), ce qui repoussait le bouton WhatsApp sous
+     la ligne de flottaison d'un portable. */
+  font-size: clamp(3.2rem, 6.4vw, 4.4rem);
   color: var(--bmwa-text);
 }
 
@@ -537,7 +540,7 @@
 
 @media screen and (min-width: 990px) {
   .bmwa__inner {
-    padding: 7.2rem 5rem 4.8rem;
+    padding: 4.8rem 5rem 4.8rem;
     gap: 6.4rem;
   }
 
