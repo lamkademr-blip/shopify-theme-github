@@ -1,0 +1,591 @@
+/**
+ * Banderole « Nouvel arrivage BMW » — réservation anticipée sur WhatsApp
+ * Les As du Volant
+ *
+ * Palette alignée sur la DA du thème (fond #0e0e10, accent champagne #c9a96e,
+ * texte #f5f5f5, angles droits) et sur le vert WhatsApp déjà utilisé par les
+ * CTA des fiches produit (#25d366 + texte blanc, cf. wheel-whatsapp-cta.css).
+ *
+ * Contraintes tenues :
+ *  - zéro JavaScript (le panneau compatibilités est un <details> natif) ;
+ *  - une seule image, dimensionnée et préchargée côté section (LCP) ;
+ *  - aucune animation d'urgence, aucun compte à rebours.
+ *
+ * Rappel : la base rem du thème est 62.5% -> 1rem = 10px.
+ */
+
+/* Le thème pose déjà box-sizing: border-box globalement ; on le redit ici pour
+   que la section reste juste même si elle est réutilisée hors de base.css
+   (un summary en width: 100% déborderait sinon de ses paddings). */
+.bmwa,
+.bmwa *,
+.bmwa *::before,
+.bmwa *::after {
+  box-sizing: border-box;
+}
+
+.bmwa {
+  --bmwa-bg: #08080a;
+  --bmwa-surface: #101014;
+  --bmwa-gold: #c9a96e;
+  --bmwa-gold-light: #e8d5a8;
+  --bmwa-text: #f5f5f5;
+  --bmwa-dim: #a8a29a;
+  --bmwa-hairline: rgba(201, 169, 110, 0.22);
+  --bmwa-wa: #25d366;
+  --bmwa-wa-hover: #1da851;
+
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bmwa-bg);
+  color: var(--bmwa-text);
+  font-family: var(--font-body-family), sans-serif;
+}
+
+/* Texture carbone très discrète : deux trames croisées à faible opacité.
+   Zéro requête réseau, jamais bruyante. */
+.bmwa::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.022) 0 1px, transparent 1px 4px),
+    radial-gradient(120% 90% at 78% 25%, rgba(201, 169, 110, 0.1), transparent 60%);
+}
+
+.bmwa__inner {
+  position: relative;
+  max-width: var(--page-width, 120rem);
+  margin: 0 auto;
+  padding: 4rem 1.6rem 3.2rem;
+  display: grid;
+  gap: 2.8rem;
+}
+
+/* ==========================================================================
+   VISUEL
+   ========================================================================== */
+
+.bmwa__media {
+  position: relative;
+  overflow: hidden;
+  background: var(--bmwa-surface);
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--bmwa-hairline);
+}
+
+.bmwa__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Recadrage pilotable depuis l'éditeur : permet de sortir du cadre une
+     mention parasite (filigrane, arrière-plan) sans retoucher le fichier. */
+  object-position: 50% var(--bmwa-focus, 50%);
+  scale: var(--bmwa-zoom, 1);
+  display: block;
+}
+
+/* Vignettage : l'arrière-plan de la photo se fond dans le noir de la
+   banderole, ce qui rattrape une prise de vue non studio. */
+.bmwa__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(78% 78% at 50% 45%, transparent 38%, rgba(8, 8, 10, 0.72) 100%),
+    linear-gradient(to top, rgba(8, 8, 10, 0.55), transparent 42%);
+}
+
+.bmwa__flag {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.9rem 1.4rem;
+  background: rgba(8, 8, 10, 0.82);
+  border-right: 1px solid var(--bmwa-hairline);
+  border-bottom: 1px solid var(--bmwa-hairline);
+  font-size: 1.1rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bmwa-gold-light);
+}
+
+/* Filet tricolore M : signale l'univers sans surcharger la mise en page. */
+.bmwa__mbar {
+  display: inline-block;
+  width: 2.4rem;
+  height: 0.3rem;
+  flex-shrink: 0;
+  background: linear-gradient(
+    to right,
+    #0166b1 0 33.33%,
+    #4b2e83 33.33% 66.66%,
+    #e2001a 66.66% 100%
+  );
+}
+
+/* ==========================================================================
+   CONTENU
+   ========================================================================== */
+
+/* Colonne en flex uniquement pour pouvoir réordonner sur mobile : le bouton
+   WhatsApp doit remonter juste sous le prix, les points clés passant en
+   dessous. L'ordre visuel change, l'ordre du DOM (donc la lecture au clavier
+   et à la synthèse vocale) reste celui du contenu. */
+.bmwa__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.bmwa__eyebrow { order: 1; }
+.bmwa__title { order: 2; }
+.bmwa__subtitle { order: 3; }
+.bmwa__price { order: 4; }
+.bmwa__facts { order: 5; }
+.bmwa__actions { order: 6; }
+.bmwa__reassurance { order: 7; }
+
+.bmwa__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin: 0 0 1.4rem;
+  font-size: 1.2rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bmwa-gold);
+}
+
+.bmwa__title {
+  margin: 0 0 1.2rem;
+  font-family: var(--font-heading-family), serif;
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: 0.01em;
+  font-size: clamp(3.2rem, 6.4vw, 5rem);
+  color: var(--bmwa-text);
+}
+
+.bmwa__subtitle {
+  margin: 0 0 2.4rem;
+  max-width: 46ch;
+  font-size: 1.6rem;
+  line-height: 1.55;
+  color: var(--bmwa-dim);
+}
+
+/* --- Prix -------------------------------------------------------------- */
+
+.bmwa__price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 1.2rem 1.6rem;
+  padding: 2rem 0;
+  border-top: 1px solid var(--bmwa-hairline);
+  border-bottom: 1px solid var(--bmwa-hairline);
+  margin-bottom: 2.4rem;
+}
+
+.bmwa__price-now {
+  font-family: var(--font-heading-family), serif;
+  font-size: clamp(3.6rem, 7vw, 4.8rem);
+  line-height: 1;
+  color: var(--bmwa-gold-light);
+}
+
+.bmwa__price-was {
+  font-size: 1.8rem;
+  color: var(--bmwa-dim);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.bmwa__price-save {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--bmwa-hairline);
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bmwa-gold);
+  white-space: nowrap;
+}
+
+.bmwa__price-note {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 1.3rem;
+  color: var(--bmwa-dim);
+}
+
+/* --- Points clés ------------------------------------------------------- */
+
+.bmwa__facts {
+  list-style: none;
+  margin: 0 0 2.8rem;
+  padding: 0;
+  display: grid;
+  gap: 1.2rem;
+}
+
+.bmwa__fact {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: 1.2rem;
+  align-items: start;
+  font-size: 1.5rem;
+  line-height: 1.45;
+  color: var(--bmwa-text);
+}
+
+.bmwa__fact svg {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-top: 0.2rem;
+  fill: none;
+  stroke: var(--bmwa-gold);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.bmwa__fact strong {
+  font-weight: 600;
+}
+
+/* --- Appels à l'action ------------------------------------------------- */
+
+.bmwa__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  align-items: center;
+}
+
+.bmwa__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.7rem 2.8rem;
+  background: var(--bmwa-wa);
+  color: #fff;
+  border: 1px solid var(--bmwa-wa);
+  border-radius: 0;
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.bmwa__cta:hover,
+.bmwa__cta:focus-visible {
+  background: var(--bmwa-wa-hover);
+  border-color: var(--bmwa-wa-hover);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.bmwa__cta svg {
+  width: 2.2rem;
+  height: 2.2rem;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+.bmwa__reassurance {
+  margin: 1.6rem 0 0;
+  font-size: 1.3rem;
+  line-height: 1.5;
+  color: var(--bmwa-dim);
+}
+
+/* ==========================================================================
+   COMPATIBILITÉS — <details> natif, aucun JavaScript
+   ========================================================================== */
+
+.bmwa__compat {
+  position: relative;
+  max-width: var(--page-width, 120rem);
+  margin: 0 auto;
+  padding: 2.4rem 1.6rem 4rem;
+}
+
+/* Filet de séparation : rattache visuellement le dépliant à la banderole,
+   sinon le bouton flotte seul sous le visuel. */
+.bmwa__compat::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 1.6rem;
+  right: 1.6rem;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.bmwa__compat > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.3rem 2.2rem;
+  border: 1px solid var(--bmwa-hairline);
+  color: var(--bmwa-text);
+  font-size: 1.4rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  list-style: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.bmwa__compat > summary::-webkit-details-marker {
+  display: none;
+}
+
+.bmwa__compat-count {
+  color: var(--bmwa-gold);
+  font-variant-numeric: tabular-nums;
+}
+
+.bmwa__compat-count::before {
+  content: "· ";
+  color: var(--bmwa-dim);
+}
+
+.bmwa__compat > summary:hover,
+.bmwa__compat > summary:focus-visible {
+  border-color: var(--bmwa-gold);
+  background: rgba(201, 169, 110, 0.07);
+}
+
+.bmwa__compat > summary::after {
+  content: "";
+  width: 0.8rem;
+  height: 0.8rem;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 0.2s ease;
+}
+
+.bmwa__compat[open] > summary::after {
+  transform: translateY(2px) rotate(-135deg);
+}
+
+.bmwa__compat-panel {
+  margin-top: 2.4rem;
+  display: grid;
+  gap: 2.4rem;
+  /* Les deux moyeux n'ont pas le même nombre de véhicules : chaque encadré
+     s'arrête à sa dernière ligne au lieu de s'étirer sur un vide. */
+  align-items: start;
+}
+
+.bmwa__compat-col {
+  border: 1px solid var(--bmwa-hairline);
+  padding: 2.4rem;
+  background: rgba(16, 16, 20, 0.6);
+}
+
+.bmwa__compat-title {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-heading-family), serif;
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--bmwa-gold-light);
+}
+
+.bmwa__compat-sub {
+  margin: 0 0 1.8rem;
+  font-size: 1.3rem;
+  color: var(--bmwa-dim);
+}
+
+.bmwa__compat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Colonnes en largeurs fixes : chaque ligne est sa propre grille, des pistes
+   souples se recalculeraient ligne par ligne et les codes châssis ne
+   s'aligneraient plus dès qu'une année est absente. */
+.bmwa__compat-item {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr) 7.5rem;
+  gap: 0.4rem 1.6rem;
+  align-items: baseline;
+  padding: 0.9rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  font-size: 1.4rem;
+}
+
+.bmwa__compat-item:first-child {
+  border-top: 0;
+}
+
+.bmwa__compat-model {
+  color: var(--bmwa-text);
+}
+
+.bmwa__compat-codes {
+  color: var(--bmwa-gold);
+  font-variant-numeric: tabular-nums;
+}
+
+.bmwa__compat-years {
+  color: var(--bmwa-dim);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.bmwa__compat-note {
+  margin: 2rem 0 0;
+  font-size: 1.3rem;
+  line-height: 1.55;
+  color: var(--bmwa-dim);
+}
+
+.bmwa__compat-note a {
+  color: var(--bmwa-gold-light);
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media screen and (min-width: 750px) {
+  .bmwa__inner {
+    grid-template-columns: minmax(0, 44%) minmax(0, 1fr);
+    align-items: center;
+    gap: 4.8rem;
+    padding: 5.6rem 2.4rem 4rem;
+  }
+
+  /* Sans photo, le texte reprend toute la largeur mais reste en colonne
+     lisible plutôt que de s'étirer sur 1 200 px. */
+  .bmwa__inner--noimage {
+    grid-template-columns: minmax(0, 78rem);
+  }
+
+  .bmwa__media {
+    aspect-ratio: 1 / 1;
+  }
+
+  .bmwa__facts {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6rem 2.4rem;
+  }
+
+  .bmwa__compat {
+    padding: 2.4rem 2.4rem 5.6rem;
+  }
+
+  .bmwa__compat::before {
+    left: 2.4rem;
+    right: 2.4rem;
+  }
+
+  .bmwa__compat-panel {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .bmwa__inner {
+    padding: 7.2rem 5rem 4.8rem;
+    gap: 6.4rem;
+  }
+
+  .bmwa__compat {
+    padding: 3.2rem 5rem 7.2rem;
+  }
+
+  .bmwa__compat::before {
+    left: 5rem;
+    right: 5rem;
+  }
+}
+
+/* Sur petits écrans le visuel reste au-dessus mais ne mange pas tout l'écran :
+   le prix et le CTA doivent rester atteignables sans scroll profond. */
+@media screen and (max-width: 749px) {
+  /* Chaque pixel gagné au-dessus du bouton compte : sur un téléphone, le CTA
+     WhatsApp doit rester atteignable sans scroll profond. */
+  .bmwa__inner {
+    padding-top: 3.2rem;
+    gap: 2.4rem;
+  }
+
+  .bmwa__media {
+    aspect-ratio: 2 / 1;
+  }
+
+  .bmwa__title {
+    font-size: clamp(2.9rem, 7.6vw, 3.6rem);
+  }
+
+  .bmwa__subtitle {
+    margin-bottom: 2rem;
+  }
+
+  .bmwa__price {
+    padding: 1.6rem 0;
+    margin-bottom: 2rem;
+  }
+
+  /* Prix -> bouton -> réassurance -> points clés : le CTA remonte de trois
+     blocs, ce qui le ramène près du haut de l'écran sur un téléphone. */
+  .bmwa__actions {
+    order: 5;
+  }
+
+  .bmwa__reassurance {
+    order: 6;
+  }
+
+  .bmwa__facts {
+    order: 7;
+    margin: 2.8rem 0 0;
+  }
+
+  .bmwa__cta {
+    width: 100%;
+  }
+
+  .bmwa__compat > summary {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .bmwa__compat-item {
+    grid-template-columns: minmax(0, 1fr) 7.5rem;
+  }
+
+  /* Sur mobile la ligne passe sur deux niveaux : modele + annees, puis les
+     codes chassis en dessous, qui restent l'information de reference. */
+  .bmwa__compat-codes {
+    grid-row: 2;
+    grid-column: 1 / -1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bmwa__cta,
+  .bmwa__compat > summary::after {
+    transition: none;
+  }
+
+  .bmwa__cta:hover {
+    transform: none;
+  }
+}

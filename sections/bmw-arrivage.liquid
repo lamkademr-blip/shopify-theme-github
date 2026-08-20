@@ -1,0 +1,494 @@
+{%- comment -%}
+  Banderole « Nouvel arrivage BMW » — réservation anticipée sur WhatsApp.
+  Les As du Volant
+
+  Objectif unique : transformer un visiteur en conversation WhatsApp AVANT
+  l'arrivée du stock. Aucun ajout au panier, aucun paiement : 90 % des
+  commandes passent par WhatsApp (cf. décision produit du 28/07/2026), le
+  seul KPI de cette section est le clic wa.me.
+
+  Points d'attention :
+  - le tracking wa.me est global (snippets/whatsapp-tracking.liquid rendu dans
+    theme.liquid). La source remonte dans dataLayer via l'id de section :
+    nommer la section « bmw_arrivage » dans le template pour obtenir un libellé
+    lisible dans GA4/Clarity ;
+  - les compatibilités sont saisies en texte libre (une ligne par véhicule,
+    « Modèle | Codes châssis | Années ») : elles doivent rester la copie fidèle
+    de la fiche fournisseur, jamais une déduction ;
+  - le recadrage de la photo (zoom + point de focus) est réglable depuis
+    l'éditeur, ce qui permet de sortir du cadre un filigrane ou un arrière-plan
+    parasite sans passer par un logiciel de retouche.
+{%- endcomment -%}
+
+{{ 'bmw-arrivage.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign wa_number = section.settings.whatsapp_number | default: '33622510196' | strip
+  assign wa_message = section.settings.whatsapp_message | strip
+  assign zoom = section.settings.image_zoom | divided_by: 100.0
+-%}
+
+{%- capture wa_href -%}
+  https://wa.me/{{ wa_number }}?text={{ wa_message | url_encode | replace: '+', '%20' }}
+{%- endcapture -%}
+{%- assign wa_href = wa_href | strip -%}
+
+{%- comment -%}
+  Cette section est placée en tête de page d'accueil : son image devient le
+  LCP. On la précharge et on la sert en eager, sinon le gain de performance
+  obtenu le 30/07 sur la home serait effacé.
+{%- endcomment -%}
+{%- if section.settings.image != blank -%}
+  <link
+    rel="preload"
+    as="image"
+    href="{{ section.settings.image | image_url: width: 900 }}"
+    imagesrcset="{{ section.settings.image | image_url: width: 600 }} 600w, {{ section.settings.image | image_url: width: 900 }} 900w, {{ section.settings.image | image_url: width: 1200 }} 1200w"
+    imagesizes="(min-width: 750px) 44vw, 100vw"
+    fetchpriority="high"
+  >
+{%- endif -%}
+
+<aside class="bmwa" aria-label="{{ section.settings.title | escape }}">
+  <div class="bmwa__inner{% if section.settings.image == blank %} bmwa__inner--noimage{% endif %}">
+    {%- comment -%}
+      ===== Visuel =====
+      Tant qu'aucune photo n'est chargée, la colonne image disparaît au lieu
+      d'afficher un cadre vide : la banderole reste présentable en attendant
+      le visuel définitif.
+    {%- endcomment -%}
+    {%- if section.settings.image != blank -%}
+      <div
+        class="bmwa__media"
+        style="--bmwa-zoom: {{ zoom }}; --bmwa-focus: {{ section.settings.image_focus }}%;"
+      >
+        {%- if section.settings.badge_text != blank -%}
+          <p class="bmwa__flag">
+            <span class="bmwa__mbar" aria-hidden="true"></span>
+            {{ section.settings.badge_text }}
+          </p>
+        {%- endif -%}
+
+        {{
+          section.settings.image
+          | image_url: width: 1200
+          | image_tag:
+            widths: '600,900,1200',
+            sizes: '(min-width: 750px) 44vw, 100vw',
+            class: 'bmwa__img',
+            loading: 'eager',
+            fetchpriority: 'high',
+            alt: section.settings.image_alt
+        }}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ===== Offre ===== {%- endcomment -%}
+    <div class="bmwa__content">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="bmwa__eyebrow">
+          <span class="bmwa__mbar" aria-hidden="true"></span>
+          {{ section.settings.eyebrow }}
+        </p>
+      {%- endif -%}
+
+      <h2 class="bmwa__title">{{ section.settings.title }}</h2>
+
+      {%- if section.settings.subtitle != blank -%}
+        <p class="bmwa__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+
+      <div class="bmwa__price">
+        <span class="bmwa__price-now">{{ section.settings.price_now }}</span>
+
+        {%- if section.settings.price_was != blank -%}
+          <span class="visually-hidden">{{ section.settings.price_was_label }}</span>
+          <s class="bmwa__price-was">{{ section.settings.price_was }}</s>
+        {%- endif -%}
+
+        {%- if section.settings.price_save != blank -%}
+          <span class="bmwa__price-save">{{ section.settings.price_save }}</span>
+        {%- endif -%}
+
+        {%- if section.settings.price_note != blank -%}
+          <p class="bmwa__price-note">{{ section.settings.price_note }}</p>
+        {%- endif -%}
+      </div>
+
+      <ul class="bmwa__facts" role="list">
+        {%- if section.settings.fact_shipping != blank -%}
+          <li class="bmwa__fact">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M3 7h11v9H3z"></path>
+              <path d="M14 10h4l3 3v3h-7z"></path>
+              <circle cx="7" cy="18" r="1.8"></circle>
+              <circle cx="17" cy="18" r="1.8"></circle>
+            </svg>
+            <span>{{ section.settings.fact_shipping }}</span>
+          </li>
+        {%- endif -%}
+
+        {%- if section.settings.fact_arrival != blank -%}
+          <li class="bmwa__fact">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <rect x="3.5" y="5" width="17" height="15"></rect>
+              <path d="M3.5 10h17M8 3v4M16 3v4"></path>
+            </svg>
+            <span>{{ section.settings.fact_arrival }}</span>
+          </li>
+        {%- endif -%}
+
+        {%- if section.settings.fact_stock != blank -%}
+          <li class="bmwa__fact">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M4 8.5 12 4l8 4.5v7L12 20l-8-4.5z"></path>
+              <path d="M4 8.5 12 13l8-4.5M12 13v7"></path>
+            </svg>
+            <span>{{ section.settings.fact_stock }}</span>
+          </li>
+        {%- endif -%}
+
+        {%- if section.settings.fact_fitment != blank -%}
+          <li class="bmwa__fact">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <circle cx="12" cy="12" r="8.5"></circle>
+              <path d="m8.2 12.2 2.6 2.6 5-5.4"></path>
+            </svg>
+            <span>{{ section.settings.fact_fitment }}</span>
+          </li>
+        {%- endif -%}
+      </ul>
+
+      <div class="bmwa__actions">
+        <a class="bmwa__cta" href="{{ wa_href }}" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91C21.95 6.45 17.5 2 12.04 2Zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.17 8.17 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23a8.2 8.2 0 0 1 8.23 8.24c0 4.54-3.7 8.23-8.23 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.53.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.24-.01-.38.11-.5.11-.11.25-.29.37-.44.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.44-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.47c-.16 0-.43.06-.65.31-.22.24-.86.84-.86 2.05s.88 2.38 1 2.55c.13.16 1.73 2.64 4.19 3.7.59.26 1.04.41 1.4.52.59.19 1.12.16 1.55.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.08.15-1.18-.06-.11-.22-.17-.47-.29Z"></path>
+          </svg>
+          {{ section.settings.cta_label }}
+        </a>
+      </div>
+
+      {%- if section.settings.reassurance != blank -%}
+        <p class="bmwa__reassurance">{{ section.settings.reassurance }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- comment -%}
+    ===== Compatibilités =====
+    <details> natif : dépliable sans JavaScript, indexable, et surtout aucun
+    clic sortant. Le doute sur la compatibilité est traité sur place, puis
+    renvoyé vers WhatsApp — c'est là que se fait la vente.
+  {%- endcomment -%}
+  {%- if section.settings.compat_m3 != blank or section.settings.compat_m5 != blank -%}
+    {%- comment -%}
+      Nombre de véhicules annoncé dans le libellé : recompté à chaque rendu à
+      partir des listes, il ne peut donc pas se désynchroniser si le marchand
+      ajoute ou retire une ligne depuis l'éditeur.
+    {%- endcomment -%}
+    {%- assign compat_count = 0 -%}
+    {%- comment -%}
+      Les deux listes sont recollées avec un séparateur <br /> : après
+      newline_to_br, un simple split donne une ligne par véhicule, quel que
+      soit le nombre de retours à la ligne laissés en fin de champ.
+    {%- endcomment -%}
+    {%- assign count_lists = section.settings.compat_m3 | append: '<br />' | append: section.settings.compat_m5 -%}
+    {%- assign count_rows = count_lists | newline_to_br | split: '<br />' -%}
+    {%- for count_row in count_rows -%}
+      {%- assign count_line = count_row | strip -%}
+      {%- if count_line != blank -%}
+        {%- assign compat_count = compat_count | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    <details class="bmwa__compat">
+      <summary>
+        {{ section.settings.compat_summary }}
+        <span class="bmwa__compat-count">{{ compat_count }} modèles</span>
+      </summary>
+
+      <div class="bmwa__compat-panel">
+        {%- for group in (1..2) -%}
+          {%- liquid
+            if group == 1
+              assign group_title = section.settings.compat_m3_title
+              assign group_sub = section.settings.compat_m3_sub
+              assign group_rows = section.settings.compat_m3
+            else
+              assign group_title = section.settings.compat_m5_title
+              assign group_sub = section.settings.compat_m5_sub
+              assign group_rows = section.settings.compat_m5
+            endif
+          -%}
+
+          {%- if group_rows != blank -%}
+            <div class="bmwa__compat-col">
+              <h3 class="bmwa__compat-title">{{ group_title }}</h3>
+              {%- if group_sub != blank -%}
+                <p class="bmwa__compat-sub">{{ group_sub }}</p>
+              {%- endif -%}
+
+              <ul class="bmwa__compat-list" role="list">
+                {%- assign rows = group_rows | newline_to_br | split: '<br />' -%}
+                {%- for row in rows -%}
+                  {%- assign line = row | strip -%}
+                  {%- if line == blank -%}
+                    {%- continue -%}
+                  {%- endif -%}
+                  {%- assign cells = line | split: '|' -%}
+                  <li class="bmwa__compat-item">
+                    <span class="bmwa__compat-model">{{ cells[0] | strip }}</span>
+                    <span class="bmwa__compat-codes">{{ cells[1] | strip }}</span>
+                    <span class="bmwa__compat-years">{{ cells[2] | strip }}</span>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      {%- if section.settings.compat_note != blank -%}
+        <p class="bmwa__compat-note">
+          {{ section.settings.compat_note }}
+          <a href="{{ wa_href }}" target="_blank" rel="noopener">{{ section.settings.compat_note_link }}</a>
+        </p>
+      {%- endif -%}
+    </details>
+  {%- endif -%}
+</aside>
+
+{% schema %}
+{
+  "name": "Banderole arrivage BMW",
+  "tag": "section",
+  "class": "bmw-arrivage-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Visuel"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo du volant"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Texte alternatif de la photo",
+      "info": "Décrit la photo pour Google et les lecteurs d'écran.",
+      "default": "Volant BMW M Sport avec palettes au volant et surpiqûre tricolore"
+    },
+    {
+      "type": "range",
+      "id": "image_zoom",
+      "min": 100,
+      "max": 160,
+      "step": 2,
+      "unit": "%",
+      "label": "Zoom sur la photo",
+      "info": "Au-delà de 100 %, la photo est agrandie dans son cadre : utile pour faire sortir un filigrane ou un arrière-plan gênant.",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "image_focus",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Point de focus vertical",
+      "info": "0 % = haut de la photo, 100 % = bas.",
+      "default": 50
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Pastille sur la photo",
+      "default": "Réservation anticipée"
+    },
+    {
+      "type": "header",
+      "content": "Message"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Surtitre",
+      "default": "Nouvel arrivage BMW"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Volants BMW M Sport, arrivage de septembre"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Sous-titre",
+      "default": "Palettes au volant et surpiqûre tricolore M. Deux moyeux au choix : l'un pour la Série 3 et ses dérivés, l'autre pour la Série 5 et ses dérivés."
+    },
+    {
+      "type": "header",
+      "content": "Prix"
+    },
+    {
+      "type": "text",
+      "id": "price_now",
+      "label": "Prix affiché",
+      "default": "599 €"
+    },
+    {
+      "type": "text",
+      "id": "price_was",
+      "label": "Prix barré",
+      "info": "À ne renseigner que si ce prix a réellement été pratiqué (prix de référence : le plus bas des 30 derniers jours). Laisser vide en cas de doute.",
+      "default": "899 €"
+    },
+    {
+      "type": "text",
+      "id": "price_was_label",
+      "label": "Mention lue avant le prix barré",
+      "info": "Invisible à l'écran, lue par les lecteurs d'écran.",
+      "default": "au lieu de"
+    },
+    {
+      "type": "text",
+      "id": "price_save",
+      "label": "Pastille d'économie",
+      "default": "300 € d'économie"
+    },
+    {
+      "type": "text",
+      "id": "price_note",
+      "label": "Précision sous le prix",
+      "default": "Tarif de lancement de l'arrivage."
+    },
+    {
+      "type": "header",
+      "content": "Points clés"
+    },
+    {
+      "type": "text",
+      "id": "fact_shipping",
+      "label": "Expédition",
+      "default": "Expédié sous 24 à 48 h après réception du stock"
+    },
+    {
+      "type": "text",
+      "id": "fact_arrival",
+      "label": "Arrivage",
+      "default": "Arrivage attendu début septembre 2026"
+    },
+    {
+      "type": "text",
+      "id": "fact_stock",
+      "label": "Stock",
+      "default": "Quantités limitées, jusqu'à épuisement du stock"
+    },
+    {
+      "type": "text",
+      "id": "fact_fitment",
+      "label": "Compatibilité",
+      "default": "Compatible Série 3 et Série 5 (liste ci-dessous)"
+    },
+    {
+      "type": "header",
+      "content": "Appel à l'action WhatsApp"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Libellé du bouton",
+      "default": "Réserver mon volant sur WhatsApp"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "Numéro WhatsApp",
+      "info": "Format international sans « + » ni espaces.",
+      "default": "33622510196"
+    },
+    {
+      "type": "textarea",
+      "id": "whatsapp_message",
+      "label": "Message pré-rempli",
+      "info": "Il s'affiche déjà écrit dans WhatsApp : le client n'a plus qu'à compléter et envoyer.",
+      "default": "Bonjour, je souhaite réserver un volant BMW de l'arrivage à 599 €. Mon modèle et son année : "
+    },
+    {
+      "type": "textarea",
+      "id": "reassurance",
+      "label": "Mention rassurante sous le bouton",
+      "default": "Réservation sans engagement : nous vérifions la compatibilité avec votre modèle, puis nous vous prévenons dès l'arrivée du stock."
+    },
+    {
+      "type": "header",
+      "content": "Compatibilités"
+    },
+    {
+      "type": "text",
+      "id": "compat_summary",
+      "label": "Libellé du dépliant",
+      "default": "Voir les modèles compatibles"
+    },
+    {
+      "type": "text",
+      "id": "compat_m3_title",
+      "label": "Titre colonne 1",
+      "default": "Moyeu M3"
+    },
+    {
+      "type": "text",
+      "id": "compat_m3_sub",
+      "label": "Sous-titre colonne 1",
+      "default": "Série 3 et modèles au même moyeu"
+    },
+    {
+      "type": "textarea",
+      "id": "compat_m3",
+      "label": "Liste colonne 1",
+      "info": "Une ligne par véhicule, au format : Modèle | Codes châssis | Années. Copie fidèle de la fiche fournisseur.",
+      "default": "Série 1 | F20 / F21 / F40 | 2013-2019\nSérie 2 | F22 / F23 / F44 / F45 | 2016-2019\nSérie 3 | F30 / F31 / F35 | 2013-2019\nSérie 4 | F32 / F33 / F36 | 2013-2019\nX1 | F48 / F49 | 2016-2021\nX2 | F39 | \nX3 | F25 | 2012-2017\nX4 | F26 | 2014-2018\nX5 | F15 | 2008-2018\nX6 | F16 | 2008-2019\nM2 | F87 | 2016-2019\nM3 | F80 | 2013-2019\nM4 | F82 / F83 | 2014-2019\nGT | F34 | "
+    },
+    {
+      "type": "text",
+      "id": "compat_m5_title",
+      "label": "Titre colonne 2",
+      "default": "Moyeu M5"
+    },
+    {
+      "type": "text",
+      "id": "compat_m5_sub",
+      "label": "Sous-titre colonne 2",
+      "default": "Série 5 et modèles au même moyeu"
+    },
+    {
+      "type": "textarea",
+      "id": "compat_m5",
+      "label": "Liste colonne 2",
+      "info": "Une ligne par véhicule, au format : Modèle | Codes châssis | Années. Copie fidèle de la fiche fournisseur.",
+      "default": "Série 5 | F10 / F11 / F18 | 2011-2017\nSérie 6 | F06 / F12 / F13 | 2011-2016\nSérie 7 | F01 / F02 / F03 | 2009-2015\nM5 | F10 / F90 | 2011-2017\nM6 | F06 / F12 / F13 | 2011-2016\nM8 | F91 / F92 / F93 | \nSérie 5 GT | F07 | 2010-2017"
+    },
+    {
+      "type": "textarea",
+      "id": "compat_note",
+      "label": "Note sous les listes",
+      "default": "Compatibilités communiquées par le fournisseur, identifiées par le code châssis (visible sur la carte grise, repère D.2). Un doute sur votre modèle ?"
+    },
+    {
+      "type": "text",
+      "id": "compat_note_link",
+      "label": "Libellé du lien de la note",
+      "default": "Faites-la vérifier sur WhatsApp avant de réserver."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banderole arrivage BMW"
+    }
+  ]
+}
+{% endschema %}

@@ -9,6 +9,10 @@
  */
 {
   "sections": {
+    "bmw_arrivage": {
+      "type": "bmw-arrivage",
+      "settings": {}
+    },
     "1769011966061244b5": {
       "type": "_blocks",
       "blocks": {
@@ -502,6 +506,7 @@
     }
   },
   "order": [
+    "bmw_arrivage",
     "1769011966061244b5",
     "titre_7xhXj8",
     "1768995084527ed5d7",
