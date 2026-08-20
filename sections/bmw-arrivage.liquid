@@ -62,7 +62,7 @@
     {%- endcomment -%}
     {%- if section.settings.image != blank -%}
       <div
-        class="bmwa__media"
+        class="bmwa__media bmwa__media--{{ section.settings.media_style }}"
         style="--bmwa-zoom: {{ zoom }}; --bmwa-focus: {{ section.settings.image_focus }}%;"
       >
         {%- if section.settings.badge_text != blank -%}
@@ -294,11 +294,22 @@
       "label": "Photo du volant"
     },
     {
+      "type": "select",
+      "id": "media_style",
+      "label": "Type de photo",
+      "info": "« Packshot » : photo détourée sur fond clair, affichée entière sur une plaque claire. « Ambiance » : photo de mise en situation, cadrée au plus juste et fondue dans le fond sombre.",
+      "options": [
+        { "value": "packshot", "label": "Packshot sur fond clair" },
+        { "value": "ambiance", "label": "Photo d'ambiance" }
+      ],
+      "default": "packshot"
+    },
+    {
       "type": "text",
       "id": "image_alt",
       "label": "Texte alternatif de la photo",
       "info": "Décrit la photo pour Google et les lecteurs d'écran.",
-      "default": "Volant BMW M Sport avec palettes au volant et surpiqûre tricolore"
+      "default": "Volant BMW M Sport en cuir perforé, avec airbag, boutons multifonctions et palettes de vitesse"
     },
     {
       "type": "range",
@@ -348,7 +359,7 @@
       "type": "textarea",
       "id": "subtitle",
       "label": "Sous-titre",
-      "default": "Palettes au volant et surpiqûre tricolore M. Deux moyeux au choix : l'un pour la Série 3 et ses dérivés, l'autre pour la Série 5 et ses dérivés."
+      "default": "Cuir perforé sur les poignées, cuir lisse en haut et en bas, palettes de vitesse longues. Deux moyeux au choix : l'un pour la Série 3 et ses dérivés, l'autre pour la Série 5 et ses dérivés."
     },
     {
       "type": "header",

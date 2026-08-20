@@ -87,9 +87,10 @@
   display: block;
 }
 
-/* Vignettage : l'arrière-plan de la photo se fond dans le noir de la
-   banderole, ce qui rattrape une prise de vue non studio. */
-.bmwa__media::after {
+/* --- Photo d'ambiance ---------------------------------------------------
+   Vignettage : l'arrière-plan se fond dans le noir de la banderole, ce qui
+   rattrape une prise de vue non studio. */
+.bmwa__media--ambiance::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -97,6 +98,27 @@
   background:
     radial-gradient(78% 78% at 50% 45%, transparent 38%, rgba(8, 8, 10, 0.72) 100%),
     linear-gradient(to top, rgba(8, 8, 10, 0.55), transparent 42%);
+}
+
+/* --- Packshot -----------------------------------------------------------
+   Une photo studio sur fond clair ne se fond pas dans le noir : on l'assume
+   en plaque claire. Le contraste avec la banderole sombre fait lire le
+   visuel comme une fiche produit, et le volant est montré ENTIER (contain),
+   jamais rogné — sur un packshot, le recadrage coupe toujours au mauvais
+   endroit. */
+.bmwa__media--packshot {
+  background: linear-gradient(160deg, #f4f3f1 0%, #e4e3e0 100%);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.bmwa__media--packshot .bmwa__img {
+  object-fit: contain;
+  object-position: 50% 50%;
+}
+
+.bmwa__media--packshot .bmwa__flag {
+  background: rgba(12, 12, 14, 0.9);
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
 .bmwa__flag {
@@ -536,6 +558,12 @@
 
   .bmwa__media {
     aspect-ratio: 2 / 1;
+  }
+
+  /* En packshot le volant est affiche entier : un cadre trop plat le
+     reduirait a une vignette au milieu d'une plaque vide. */
+  .bmwa__media--packshot {
+    aspect-ratio: 3 / 2;
   }
 
   .bmwa__title {
