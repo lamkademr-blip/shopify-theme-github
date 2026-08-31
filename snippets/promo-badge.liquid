@@ -13,6 +13,16 @@
   - show_deadline  : affiche le compte à rebours en jours (défaut : true)
 {% endcomment %}
 
+{%- comment -%}
+  Fenêtre de la campagne : passé l'échéance (snippets/promo-deadline.liquid),
+  ce composant ne rend plus rien. Aucune intervention manuelle à l'échéance.
+{%- endcomment -%}
+{%- capture promo_deadline -%}{%- render 'promo-deadline' -%}{%- endcapture -%}
+{%- assign promo_deadline = promo_deadline | strip -%}
+{%- assign promo_now_ts = 'now' | date: '%s' | plus: 0 -%}
+{%- assign promo_end_ts = promo_deadline | plus: 0 -%}
+{%- if promo_now_ts < promo_end_ts -%}
+
 {{ 'promo-ete150.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
@@ -45,3 +55,4 @@
     {%- endif -%}
   </div>
 </div>
+{%- endif -%}

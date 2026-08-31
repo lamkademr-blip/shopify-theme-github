@@ -714,17 +714,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
     {%- comment -%}
       Campagne « L'Été Grand Tourisme » — 150 € offerts dès 1 000 €.
-      Le seuil et l'échéance sont centralisés ici : une seule ligne à changer
-      pour prolonger, arrêter ou modifier l'offre.
+      Le seuil est fixé ici ; l'échéance vient de snippets/promo-deadline.liquid,
+      source unique partagée avec le bandeau, l'encart fiche et la barre panier.
+      Passé l'échéance, ni la config ni le script ne sont plus servis : la ligne
+      promo du CTA WhatsApp (assets/wheel-whatsapp-cta.js) disparaît avec eux.
     {%- endcomment -%}
-    <script>
-      window.PROMO_ETE150 = {
-        threshold: 100000,
-        deadline: '2026-08-31T21:59:59Z',
-        currency: '{{ cart.currency.iso_code }}'
-      };
-    </script>
-    {{ 'promo-ete150.js' | asset_url | script_tag }}
+    {%- capture promo_deadline -%}{%- render 'promo-deadline' -%}{%- endcapture -%}
+    {%- assign promo_deadline = promo_deadline | strip -%}
+    {%- assign promo_now_ts = 'now' | date: '%s' | plus: 0 -%}
+    {%- assign promo_end_ts = promo_deadline | plus: 0 -%}
+    {%- if promo_now_ts < promo_end_ts -%}
+      <script>
+        window.PROMO_ETE150 = {
+          threshold: 100000,
+          deadline: {{ promo_end_ts | times: 1000 }},
+          currency: '{{ cart.currency.iso_code }}'
+        };
+      </script>
+      {{ 'promo-ete150.js' | asset_url | script_tag }}
+    {%- endif -%}
 
     <!-- Judge.me French translation -->
     <script>

@@ -10,6 +10,16 @@
   assets/promo-ete150.js la resynchronise après chaque mutation du panier.
 {% endcomment %}
 
+{%- comment -%}
+  Fenêtre de la campagne : passé l'échéance (snippets/promo-deadline.liquid),
+  ce composant ne rend plus rien. Aucune intervention manuelle à l'échéance.
+{%- endcomment -%}
+{%- capture promo_deadline -%}{%- render 'promo-deadline' -%}{%- endcapture -%}
+{%- assign promo_deadline = promo_deadline | strip -%}
+{%- assign promo_now_ts = 'now' | date: '%s' | plus: 0 -%}
+{%- assign promo_end_ts = promo_deadline | plus: 0 -%}
+{%- if promo_now_ts < promo_end_ts -%}
+
 {{ 'promo-ete150.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
@@ -58,3 +68,4 @@
     <div class="promo-progress__fill" data-promo-progress-fill style="width: {{ ratio }}%;"></div>
   </div>
 </div>
+{%- endif -%}

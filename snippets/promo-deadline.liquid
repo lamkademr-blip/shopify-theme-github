@@ -1,0 +1,27 @@
+{%- comment -%}
+  Échéance de la campagne « L'Été Grand Tourisme » (code ETE150).
+  Les As du Volant
+
+  SOURCE UNIQUE de la fin de l'offre : ce fichier ne produit qu'un horodatage
+  Unix en secondes. Tous les composants promo le lisent et s'effacent d'eux-mêmes
+  une fois l'instant passé — bandeau défilant du header, encart des fiches
+  produit, barre de progression du panier, ligne promo du CTA WhatsApp et script
+  front. Aucune intervention manuelle n'est nécessaire à l'échéance.
+
+  Pour prolonger, arrêter ou relancer l'offre : changer la seule ligne de
+  chiffres ci-dessous, et rien d'autre dans le thème.
+
+  Valeur actuelle : 1788213599 = 2026-08-31 21:59:59 UTC = 31 août 23h59 Paris.
+  Obtenir un nouvel horodatage : date -u -d '2026-08-31T21:59:59Z' +%s
+
+  ⚠ Un horodatage, pas une date ISO : le filtre `date` de Liquid n'est jamais
+  appelé sur cette valeur, donc aucun risque qu'un parsing raté éteigne la
+  campagne avant l'heure.
+
+  ⚠ Doit correspondre au `endsAt` du code de réduction dans Shopify. Une valeur
+  plus tardive ici = le site promet une remise que le checkout refuse.
+
+  Le Liquid est évalué à la génération de la page : le cache de pages Shopify
+  peut laisser survivre le dispositif quelques minutes après l'heure.
+{%- endcomment -%}
+1788213599
