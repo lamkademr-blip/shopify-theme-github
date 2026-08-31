@@ -732,6 +732,20 @@ document.addEventListener('DOMContentLoaded', function() {
         };
       </script>
       {{ 'promo-ete150.js' | asset_url | script_tag }}
+    {%- else -%}
+      {%- comment -%}
+        Filet de sécurité : la synchro GitHub → Shopify saute parfois un
+        fichier et le laisse figé à sa version précédente, sans erreur. Si un
+        composant promo n'avait pas reçu son garde d'échéance, il continuerait
+        d'annoncer une remise que le checkout refuse. Ce style le masque quoi
+        qu'il arrive, depuis un fichier dont on a vérifié la synchro.
+      {%- endcomment -%}
+      <style>
+        .promo-marquee,
+        .promo-marquee-section,
+        .promo-badge,
+        .promo-progress { display: none !important; }
+      </style>
     {%- endif -%}
 
     <!-- Judge.me French translation -->

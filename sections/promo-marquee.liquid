@@ -20,6 +20,8 @@
 {%- comment -%}
   Fenêtre de la campagne : passé l'échéance (snippets/promo-deadline.liquid),
   ce composant ne rend plus rien. Aucune intervention manuelle à l'échéance.
+  Un filet de sécurité en CSS dans layout/theme.liquid masque le bandeau
+  même si ce fichier venait à rester figé côté Shopify.
 {%- endcomment -%}
 {%- capture promo_deadline -%}{%- render 'promo-deadline' -%}{%- endcapture -%}
 {%- assign promo_deadline = promo_deadline | strip -%}
