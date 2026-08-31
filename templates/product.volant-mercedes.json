@@ -555,12 +555,17 @@
         "padding_top": 20,
         "padding_bottom": 20
       }
+    },
+    "airbag_digital": {
+      "type": "airbag-digital",
+      "settings": {}
     }
   },
   "order": [
     "breadcrumb_top",
     "main",
     "description_detaillee_ldv",
+    "airbag_digital",
     "custom_liquid_FAaKFw",
     "17732462714c7bcd30",
     "1773245839b9e8a97c",

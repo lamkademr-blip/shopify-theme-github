@@ -486,12 +486,17 @@
         "padding_top": 20,
         "padding_bottom": 20
       }
+    },
+    "airbag_digital": {
+      "type": "airbag-digital",
+      "settings": {}
     }
   },
   "order": [
     "breadcrumb_top",
     "main",
     "description_detaillee_ldv",
+    "airbag_digital",
     "testimonials_carousel_bkQKaq",
     "product_faq_EYPp3w",
     "judge_me_reviews_apps",

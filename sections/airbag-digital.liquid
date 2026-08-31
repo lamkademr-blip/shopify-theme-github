@@ -1,0 +1,398 @@
+{%- comment -%}
+  Couvercle d'airbag digital — module d'option posé sous la description des fiches volant.
+  Les As du Volant · 31/08/2026
+
+  Choix d'emplacement : fiches produits plutôt que page d'accueil. C'est un accessoire
+  de complément, pas une destination : personne ne cherche « couvercle airbag digital »,
+  mais le visiteur d'une fiche volant est déjà en train de composer son volant. Les
+  fiches portent aussi l'essentiel du trafic (SEO + Ads) là où la home n'en prend qu'une
+  fraction, et la home est déjà occupée par la banderole arrivage BMW + le hero.
+
+  Contraintes tenues :
+   - un seul clic sortant, vers WhatsApp (cf. audit Clarity : la fuite, c'est le nombre
+     de sorties, pas le panier) ;
+   - vidéo chargée seulement si le module entre dans l'écran (preload="none" +
+     IntersectionObserver) — 234 Ko qui ne coûtent rien à qui ne descend pas ;
+   - aucun prix affiché tant que le tarif n'est pas arrêté (réglage price_text) ;
+   - aucune affirmation de compatibilité ni d'homologation : le doute part en conversation ;
+   - CSS et JS inline dans la section pour qu'ils se déploient avec elle (une synchro
+     GitHub -> Shopify peut déployer un .liquid sans son .css, déjà constaté).
+
+  Source de tracking wa.me : `.airbagd` -> « airbag_digital » (branche explicite dans
+  layout/theme.liquid ; sans elle le repli renverrait l'id de section préfixé par le
+  template, illisible et instable).
+{%- endcomment -%}
+
+{%- assign abd_title = product.title | default: '' -%}
+{%- assign abd_title_dc = abd_title | downcase -%}
+{%- assign abd_show = false -%}
+{%- if product == blank -%}
+  {%- assign abd_show = true -%}
+{%- elsif abd_title_dc contains 'volant' or abd_title_dc contains 'airbag' -%}
+  {%- assign abd_show = true -%}
+{%- endif -%}
+
+{%- if abd_show -%}
+
+{%- assign abd_model = abd_title
+  | remove: 'Volant Personnalisé' | remove: 'Volant personnalisé'
+  | remove: 'Volant Custom' | remove: 'Volant' | remove: 'volant'
+  | strip -%}
+
+{%- capture abd_msg -%}
+Bonjour, je voudrais des informations sur le couvercle d'airbag digital (écran personnalisable).{% if abd_model != blank %} Mon véhicule : {{ abd_model }}.{% endif %} Le visuel que je voudrais afficher : {% endcapture -%}
+
+{%- assign abd_phone = section.settings.whatsapp_number | default: '33622510196' -%}
+{%- assign abd_video = 'couvercle-airbag-digital.mp4' | file_url -%}
+{%- assign abd_poster = 'couvercle-airbag-digital-poster.jpg' | file_url -%}
+
+{%- style -%}
+  .airbagd,
+  .airbagd *,
+  .airbagd *::before,
+  .airbagd *::after { box-sizing: border-box; }
+
+  /* Palette alignée sur la DA carbone/champagne du thème (fond #0e0e10,
+     accent #c9a96e) et sur le vert WhatsApp des CTA fiches (#25d366).
+     Rappel : base rem du thème à 62.5% -> 1rem = 10px. */
+  .airbagd {
+    --abd-bg: #08080a;
+    --abd-surface: #101014;
+    --abd-gold: #c9a96e;
+    --abd-text: #f5f5f5;
+    --abd-dim: #a8a29a;
+    --abd-hairline: rgba(201, 169, 110, 0.22);
+    --abd-wa: #25d366;
+    --abd-wa-hover: #1da851;
+
+    background-color: var(--abd-bg);
+    color: var(--abd-text);
+    font-family: var(--font-body-family), sans-serif;
+    padding: 4.8rem 2rem;
+  }
+
+  .airbagd__inner {
+    max-width: 100rem;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 34rem) minmax(0, 1fr);
+    gap: 4rem;
+    align-items: center;
+  }
+
+  /* Le média garde son carré réservé avant même que la vidéo soit chargée :
+     pas de saut de mise en page quand elle arrive. */
+  .airbagd__media {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    background-color: #0b0b0d;
+    border: 1px solid var(--abd-hairline);
+    overflow: hidden;
+  }
+
+  .airbagd__video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-color: #0b0b0d;
+  }
+
+  /* Bouton lecture : seul état visible quand l'animation est désactivée
+     (prefers-reduced-motion) ou quand la lecture auto est refusée. */
+  .airbagd__play {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    padding: 0;
+    background: rgba(8, 8, 10, 0.35);
+    color: var(--abd-text);
+    cursor: pointer;
+  }
+  .airbagd[data-paused="true"] .airbagd__play { display: flex; }
+  .airbagd__play svg { width: 6.4rem; height: 6.4rem; filter: drop-shadow(0 2px 8px rgba(0,0,0,.6)); }
+
+  .airbagd__eyebrow {
+    display: inline-block;
+    margin: 0 0 1.2rem;
+    padding: 0.5rem 1.1rem;
+    border: 1px solid var(--abd-hairline);
+    color: var(--abd-gold);
+    font-size: 1.1rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .airbagd__title {
+    margin: 0 0 1.4rem;
+    font-size: 3rem;
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: 0;
+    color: var(--abd-text);
+  }
+
+  .airbagd__lead {
+    margin: 0 0 2rem;
+    font-size: 1.6rem;
+    line-height: 1.6;
+    color: var(--abd-dim);
+  }
+
+  .airbagd__points {
+    margin: 0 0 2rem;
+    padding: 0;
+    list-style: none;
+  }
+  .airbagd__points li {
+    position: relative;
+    margin-bottom: 1rem;
+    padding-left: 2.4rem;
+    font-size: 1.5rem;
+    line-height: 1.5;
+  }
+  .airbagd__points li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.8rem;
+    width: 1rem;
+    height: 1px;
+    background-color: var(--abd-gold);
+  }
+
+  .airbagd__price {
+    margin: 0 0 2rem;
+    font-size: 1.6rem;
+    color: var(--abd-gold);
+  }
+
+  .airbagd__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.6rem 2.8rem;
+    background-color: var(--abd-wa);
+    color: #ffffff !important;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+  }
+  .airbagd__cta:hover,
+  .airbagd__cta:focus { background-color: var(--abd-wa-hover); color: #ffffff !important; }
+  .airbagd__cta svg { width: 2rem; height: 2rem; flex: 0 0 auto; fill: currentColor; }
+
+  .airbagd__note {
+    margin: 1.6rem 0 0;
+    font-size: 1.3rem;
+    line-height: 1.5;
+    color: var(--abd-dim);
+  }
+
+  @media (max-width: 989px) {
+    .airbagd__inner { grid-template-columns: 1fr; gap: 2.8rem; }
+    .airbagd__media { max-width: 34rem; margin: 0 auto; width: 100%; }
+    .airbagd { padding: 4rem 1.6rem; }
+    .airbagd__title { font-size: 2.4rem; }
+    .airbagd__cta { width: 100%; justify-content: center; }
+  }
+{%- endstyle -%}
+
+<div class="airbagd" data-paused="true">
+  <div class="airbagd__inner">
+
+    <div class="airbagd__media">
+      <video
+        class="airbagd__video"
+        width="560"
+        height="560"
+        poster="{{ abd_poster }}"
+        muted
+        loop
+        playsinline
+        preload="none"
+        disablepictureinpicture
+        aria-label="{{ section.settings.video_alt | default: 'Couvercle d’airbag digital allumé : un écran rond affiche successivement un logo animé puis une illustration en couleur' | escape }}">
+        <source src="{{ abd_video }}" type="video/mp4">
+      </video>
+      <button type="button" class="airbagd__play" aria-label="Lire la vidéo du couvercle d’airbag digital">
+        <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+          <circle cx="32" cy="32" r="30" fill="none" stroke="currentColor" stroke-width="2" opacity=".7"/>
+          <path d="M26 21l18 11-18 11z" fill="currentColor"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="airbagd__body">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="airbagd__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+
+      <h2 class="airbagd__title">{{ section.settings.heading | default: 'Le couvercle d’airbag digital' }}</h2>
+
+      <p class="airbagd__lead">{{ section.settings.lead }}</p>
+
+      {%- assign abd_points = section.settings.points | newline_to_br | split: '<br />' -%}
+      {%- if abd_points.size > 0 -%}
+        <ul class="airbagd__points">
+          {%- for abd_point in abd_points -%}
+            {%- assign abd_point_clean = abd_point | strip -%}
+            {%- if abd_point_clean != blank -%}
+              <li>{{ abd_point_clean }}</li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- if section.settings.price_text != blank -%}
+        <p class="airbagd__price">{{ section.settings.price_text }}</p>
+      {%- endif -%}
+
+      <a class="airbagd__cta"
+         href="https://wa.me/{{ abd_phone }}?text={{ abd_msg | strip | url_encode }}%20"
+         rel="nofollow">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.16c-.24.68-1.42 1.32-1.95 1.36-.5.05-.96.23-3.24-.68-2.73-1.08-4.47-3.86-4.6-4.04-.13-.18-1.1-1.47-1.1-2.8 0-1.33.7-1.98.95-2.25.25-.27.54-.34.72-.34.18 0 .36 0 .52.01.17.01.39-.06.61.47.24.55.8 1.9.87 2.04.07.14.11.3.02.48-.09.18-.14.29-.27.45-.14.16-.29.35-.41.47-.14.14-.28.29-.12.56.16.27.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.21 1.37.27.14.43.11.59-.07.16-.18.68-.79.86-1.06.18-.27.36-.23.61-.14.25.09 1.59.75 1.87.89.27.14.45.2.52.32.07.11.07.64-.17 1.32z"/>
+        </svg>
+        {{ section.settings.cta_label | default: 'Demander le couvercle digital sur WhatsApp' }}
+      </a>
+
+      {%- if section.settings.note != blank -%}
+        <p class="airbagd__note">{{ section.settings.note }}</p>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+<script>
+  (function () {
+    var root = document.currentScript && document.currentScript.previousElementSibling;
+    if (!root || !root.classList || !root.classList.contains('airbagd')) {
+      root = document.querySelector('.airbagd');
+    }
+    if (!root) return;
+
+    var video = root.querySelector('.airbagd__video');
+    var play = root.querySelector('.airbagd__play');
+    if (!video) return;
+
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function start() {
+      // preload="none" : la source n'est demandee qu'ici, donc les 234 Ko ne
+      // partent que pour les visiteurs qui descendent jusqu'au module.
+      if (video.preload !== 'auto') video.preload = 'auto';
+      var p = video.play();
+      if (p && typeof p.catch === 'function') {
+        p.catch(function () { root.setAttribute('data-paused', 'true'); });
+      }
+    }
+
+    video.addEventListener('playing', function () { root.setAttribute('data-paused', 'false'); });
+    video.addEventListener('pause', function () { root.setAttribute('data-paused', 'true'); });
+
+    if (play) {
+      play.addEventListener('click', function () {
+        if (video.paused) { start(); } else { video.pause(); }
+      });
+    }
+
+    // Sans IntersectionObserver (vieux navigateurs) ou en mouvement reduit :
+    // on laisse l'affiche et le bouton lecture, rien ne se telecharge tout seul.
+    if (reduced || !('IntersectionObserver' in window)) return;
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { start(); }
+        else if (!video.paused) { video.pause(); }
+      });
+    }, { threshold: 0.4 });
+
+    io.observe(root);
+  })();
+</script>
+
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Couvercle airbag digital",
+  "tag": "section",
+  "class": "airbag-digital-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Ne s'affiche que sur les fiches dont le titre contient « volant » ou « airbag » (et partout ailleurs qu'une fiche produit). La vidéo et son affiche sont prises dans les Fichiers : couvercle-airbag-digital.mp4 et couvercle-airbag-digital-poster.jpg."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Sur-titre",
+      "default": "Nouveauté · option"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Titre",
+      "default": "Le couvercle d’airbag digital"
+    },
+    {
+      "type": "textarea",
+      "id": "lead",
+      "label": "Accroche",
+      "default": "Un écran couleur au centre du volant, à la place du logo d’origine. Il joue une séquence animée à l’allumage, puis affiche le visuel de votre choix."
+    },
+    {
+      "type": "textarea",
+      "id": "points",
+      "label": "Points clés",
+      "info": "Une ligne par point.",
+      "default": "Visuel au choix : logo, blason, illustration, initiales ou message\nSéquence animée au démarrage, puis affichage fixe\nModule électronique intégré au couvercle, alimenté par deux fils\nÀ commander avec votre volant sur-mesure ou séparément"
+    },
+    {
+      "type": "text",
+      "id": "price_text",
+      "label": "Ligne tarif",
+      "info": "Laissée vide tant que le tarif n’est pas arrêté. Exemple : « À partir de 249 € en supplément ».",
+      "default": ""
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Libellé du bouton",
+      "default": "Demander le couvercle digital sur WhatsApp"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "Numéro WhatsApp",
+      "info": "Sans le +, ex. 33622510196.",
+      "default": "33622510196"
+    },
+    {
+      "type": "textarea",
+      "id": "note",
+      "label": "Mention sous le bouton",
+      "default": "Nouveauté : la compatibilité avec votre modèle, le délai et le tarif sont confirmés avec vous avant toute commande."
+    },
+    {
+      "type": "text",
+      "id": "video_alt",
+      "label": "Description de la vidéo",
+      "info": "Lue par les lecteurs d’écran.",
+      "default": "Couvercle d’airbag digital allumé : un écran rond affiche successivement un logo animé puis une illustration en couleur"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Couvercle airbag digital"
+    }
+  ]
+}
+{% endschema %}

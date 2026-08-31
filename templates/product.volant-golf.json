@@ -594,12 +594,17 @@
         "padding_top": 20,
         "padding_bottom": 20
       }
+    },
+    "airbag_digital": {
+      "type": "airbag-digital",
+      "settings": {}
     }
   },
   "order": [
     "breadcrumb_top",
     "main",
     "description_detaillee_ldv",
+    "airbag_digital",
     "custom_liquid_xWEYpM",
     "product_faq_KxC99k",
     "judge_me_reviews_apps",

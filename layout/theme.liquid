@@ -837,6 +837,12 @@ document.addEventListener('DOMContentLoaded', function() {
         source = 'popup_3d';
       } else if (link.classList.contains('wheel-whatsapp-cta') || link.closest('.wheel-whatsapp-cta')) {
         source = 'cta_fiche_produit';
+      } else if (link.closest('.airbagd')) {
+        // Module « couvercle d'airbag digital » des fiches volant. Il vit hors
+        // de .product, il retomberait donc sur le repli plus bas, qui rendrait
+        // « template--XXXXXXXX__airbag_digital » : illisible dans GA4/Clarity et
+        // instable puisque l'id du template change s'il est recree.
+        source = 'airbag_digital';
       } else if (link.closest('.product') || link.closest('[data-product]')) {
         source = 'page_produit';
       } else if (link.closest('.bmwa')) {
