@@ -180,6 +180,24 @@ Bonjour, je voudrais des informations sur le couvercle d'airbag digital (écran 
   }
   .airbagd__minibtn:hover,
   .airbagd__minibtn:focus-visible { border-color: var(--abd-gold); }
+  /* Tant que rien ne tourne (lecture auto refusee, mouvement reduit, video pas
+     encore lancee), chaque vignette porte un triangle de lecture : l'etat fige
+     ne doit jamais etre un cul-de-sac. */
+  .airbagd__minibtn { position: relative; }
+  .airbagd--minis[data-paused="true"] .airbagd__minibtn::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    transform: translate(-35%, -50%);
+    border-left: 1.8rem solid rgba(245, 245, 245, 0.92);
+    border-top: 1.1rem solid transparent;
+    border-bottom: 1.1rem solid transparent;
+    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.7));
+    pointer-events: none;
+  }
   .airbagd__minibtn video {
     display: block;
     width: 100%;
@@ -492,6 +510,20 @@ Bonjour, je voudrais des informations sur le couvercle d'airbag digital (écran 
     }
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
+
+    // Un refus de lecture auto est souvent temporaire : page ouverte dans un
+    // onglet d'arriere-plan, economie d'energie, onglet non encore regarde. Le
+    // drapeau est donc leve des que la page redevient visible ou que le
+    // visiteur touche quoi que ce soit — sinon les vignettes resteraient figees
+    // pour tout le reste de la visite (constate le 01/09/2026).
+    function retry() { autoBlocked = false; sync(); }
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'visible') retry();
+    });
+    ['pointerdown', 'touchstart', 'keydown'].forEach(function (ev) {
+      window.addEventListener(ev, retry, { passive: true });
+    });
+
     setTimeout(sync, 0);
   })();
 </script>
