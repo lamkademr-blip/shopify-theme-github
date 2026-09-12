@@ -5,7 +5,7 @@
 {%- endcomment -%}
 
 {%- liquid
-  assign wa_number = section.settings.whatsapp_number | default: '33622510196'
+  assign wa_number = section.settings.whatsapp_number | default: '33644650200'
   assign wa_msg = 'Bonjour, je viens de TikTok/Instagram et je souhaite personnaliser mon volant. Ma voiture : '
 -%}
 {%- capture wa_link -%}https://wa.me/{{ wa_number }}?text={{ wa_msg | url_encode | replace: '+', '%20' }}{%- endcapture -%}
@@ -463,7 +463,7 @@
     { "type": "header", "content": "CTA final" },
     { "type": "text", "id": "final_title", "label": "Titre", "default": "Votre volant n'attend que vous" },
     { "type": "textarea", "id": "final_text", "label": "Texte", "default": "Configuration en ligne en 2 minutes. Visuel 3D offert avant réalisation." },
-    { "type": "text", "id": "whatsapp_number", "label": "Numéro WhatsApp (sans +)", "default": "33622510196" }
+    { "type": "text", "id": "whatsapp_number", "label": "Numéro WhatsApp (sans +)", "default": "33644650200" }
   ],
   "blocks": [
     {

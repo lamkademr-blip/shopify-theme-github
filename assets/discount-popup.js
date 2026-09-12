@@ -9,7 +9,7 @@
   var EXIT_INTENT_MIN_MS = 8000;
   var COOKIE_NAME = '_lav_dpop_shown';
   var COOKIE_DAYS = 30;
-  var WHATSAPP_NUMBER = '33622510196';
+  var WHATSAPP_NUMBER = '33644650200';
 
   var pageLoadTime = Date.now();
   var waitingForConsent = false;

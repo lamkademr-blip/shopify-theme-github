@@ -23,7 +23,7 @@
 {{ 'bmw-arrivage.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
-  assign wa_number = section.settings.whatsapp_number | default: '33622510196' | strip
+  assign wa_number = section.settings.whatsapp_number | default: '33644650200' | strip
   # strip retire les retours a la ligne du champ, puis on remet une espace :
   # le message se termine par « ... : » et le client doit pouvoir completer
   # sans avoir a en ajouter une lui-meme.
@@ -465,7 +465,7 @@
       "id": "whatsapp_number",
       "label": "Numéro WhatsApp",
       "info": "Format international sans « + » ni espaces.",
-      "default": "33622510196"
+      "default": "33644650200"
     },
     {
       "type": "textarea",
