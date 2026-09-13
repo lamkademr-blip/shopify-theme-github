@@ -50,6 +50,8 @@
         'ep.link_url': href.slice(0, 400),
         'ep.page_path': location.pathname
       });
+      // Source d'acquisition (snippets/wa-attribution.liquid) : google-ads-pmax, meta-ads-ig, google, direct…
+      if (typeof window.lavWaRef === 'function') p.set('ep.wa_ref', window.lavWaRef());
       var s = sessionParams();
       if (s) { p.set('sid', s.sid); p.set('sct', s.sct); p.set('seg', '1'); }
       var url = 'https://www.google-analytics.com/g/collect?' + p.toString();
@@ -70,7 +72,12 @@
     try { if (typeof fbq === 'function') fbq('trackCustom', 'WhatsAppClick', { link_url: href }); } catch (e) {}
     try {
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event: 'whatsapp_click', whatsapp_link: href, page_path: location.pathname });
+      window.dataLayer.push({
+        event: 'whatsapp_click',
+        whatsapp_link: href,
+        page_path: location.pathname,
+        wa_ref: typeof window.lavWaRef === 'function' ? window.lavWaRef() : ''
+      });
     } catch (e) {}
   }, true);
 })();

@@ -1,0 +1,157 @@
+{%- comment -%}
+  Source d'acquisition ajoutée aux messages WhatsApp (« Réf. : google-ads-pmax »).
+
+  90 % des commandes se concluent sur WhatsApp : ni Shopify ni Google Ads ne
+  voient la vente. La référence permet de savoir, conversation par
+  conversation, si le client est venu d'une publicité.
+
+  1. Captation (à chaque chargement de page, rendu tôt dans le <head>) :
+     - gclid / gbraid / wbraid, ou utm_source=google + utm_medium payant
+       → « google-ads », suffixé du réseau lu dans utm_content={network}
+       (x → pmax, g → search, ytv → youtube, d → display)
+     - utm_source fb / ig / facebook / instagram + utm_medium payant
+       → « meta-ads-fb » / « meta-ads-ig » ; fbclid seul → « facebook-instagram »
+       (Meta l'ajoute aussi aux liens non sponsorisés : pub ou pas, on ne sait pas)
+     - autre utm_source → sa valeur (ex. « tiktok »), suffixée « -ads » si payant
+     - sinon référent externe : google → « google » (référencement naturel),
+       instagram, facebook, tiktok, youtube, bing… ; autre site → son domaine
+     Aucune donnée n'est stockée hors du libellé et de sa date (pas de gclid).
+
+  2. Règle d'attribution (localStorage, 30 jours) : un clic publicitaire des
+     30 derniers jours l'emporte sur une visite naturelle ultérieure. Sinon,
+     dernière source non directe des 30 jours. Sinon « direct ».
+
+  3. Ajout au message : écouteur de clic sur WINDOW en phase de bouillonnement.
+     Il passe donc APRÈS le gestionnaire de document de
+     assets/wheel-whatsapp-cta.js, qui réécrit le href au clic — la référence
+     n'est pas écrasée. La navigation n'a lieu qu'une fois tous les écouteurs
+     exécutés. Les messages « à compléter » (se terminant par une espace,
+     ex. « Ma voiture : ») reçoivent la référence en tête pour laisser le
+     curseur à la fin.
+
+  Expose window.lavWaRef() pour le tracking (Clarity wa_ref, GA4 ep.wa_ref).
+{%- endcomment -%}
+<script>
+(function () {
+  'use strict';
+  var KEY = 'lav_wa_ref';
+  var TTL = 30 * 24 * 3600 * 1000;
+  var PAID_MEDIUMS = /^(cpc|ppc|paid|paid[_-]?social|paidsocial|ads?|display|sponsored)$/;
+  var memory = null;
+
+  function clean(value) {
+    return String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 30);
+  }
+
+  function googleNetwork(content) {
+    var map = { x: 'pmax', g: 'search', s: 'search-partenaires', ytv: 'youtube', yt: 'youtube', vp: 'youtube', d: 'display' };
+    return map[String(content || '').toLowerCase()] || '';
+  }
+
+  /** Source de la visite en cours : { ref, paid } ou null (navigation interne / direct). */
+  function detect() {
+    var p;
+    try { p = new URLSearchParams(window.location.search); } catch (e) { return null; }
+    var source = (p.get('utm_source') || '').toLowerCase();
+    var medium = (p.get('utm_medium') || '').toLowerCase();
+    var paid = PAID_MEDIUMS.test(medium);
+
+    if (p.get('gclid') || p.get('gbraid') || p.get('wbraid') || (source === 'google' && paid)) {
+      var net = googleNetwork(p.get('utm_content'));
+      return { ref: 'google-ads' + (net ? '-' + net : ''), paid: true };
+    }
+    if (source) {
+      // Paramètre Meta non remplacé ({{site_source_name}} laissé tel quel).
+      if (source.indexOf('{') > -1) return { ref: paid ? 'meta-ads' : 'facebook-instagram', paid: paid };
+      if (/^(ig|instagram)$/.test(source)) return { ref: paid ? 'meta-ads-ig' : 'instagram', paid: paid };
+      if (/^(fb|facebook)$/.test(source)) return { ref: paid ? 'meta-ads-fb' : 'facebook', paid: paid };
+      if (/^(msg|messenger|an|meta)$/.test(source)) return { ref: paid ? 'meta-ads' : 'facebook-instagram', paid: paid };
+      return { ref: clean(source) + (paid ? '-ads' : ''), paid: paid };
+    }
+    if (p.get('fbclid')) return { ref: 'facebook-instagram', paid: false };
+    if (p.get('ttclid')) return { ref: 'tiktok-ads', paid: true };
+    if (p.get('msclkid')) return { ref: 'bing-ads', paid: true };
+
+    var host = '';
+    try { host = document.referrer ? new URL(document.referrer).hostname.replace(/^www\./, '') : ''; } catch (e) {}
+    if (!host || host === window.location.hostname.replace(/^www\./, '') || /les-as-du-volant\.com$|myshopify\.com$|shopify\.com$/.test(host)) {
+      return null;
+    }
+    var known = [
+      [/(^|\.)google\./, 'google'], [/instagram\./, 'instagram'], [/facebook\.|fb\.com$/, 'facebook'],
+      [/tiktok\./, 'tiktok'], [/youtube\.|youtu\.be$/, 'youtube'], [/bing\./, 'bing'],
+      [/chatgpt\.|openai\./, 'chatgpt'], [/perplexity\./, 'perplexity'], [/whatsapp\./, 'whatsapp']
+    ];
+    for (var i = 0; i < known.length; i++) {
+      if (known[i][0].test(host)) return { ref: known[i][1], paid: false };
+    }
+    return { ref: clean(host), paid: false };
+  }
+
+  function load() {
+    try { return JSON.parse(window.localStorage.getItem(KEY)) || {}; } catch (e) { return memory || {}; }
+  }
+
+  function save(state) {
+    memory = state;
+    try { window.localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  var state = load();
+  var touch = detect();
+  if (touch) {
+    var entry = { ref: touch.ref, ts: Date.now() };
+    if (touch.paid) state.paid = entry;
+    else state.organic = entry;
+    save(state);
+  }
+
+  window.lavWaRef = function () {
+    var s = load();
+    var now = Date.now();
+    if (s.paid && now - s.paid.ts < TTL) return s.paid.ref;
+    if (s.organic && now - s.organic.ts < TTL) return s.organic.ref;
+    return 'direct';
+  };
+
+  /** Ajoute la référence au paramètre text d'un lien wa.me / api.whatsapp.com. */
+  function withRef(href, ref) {
+    var line = 'Réf. : ' + ref;
+    var hashAt = href.indexOf('#');
+    var hash = hashAt > -1 ? href.slice(hashAt) : '';
+    if (hashAt > -1) href = href.slice(0, hashAt);
+    var qAt = href.indexOf('?');
+    var base = qAt > -1 ? href.slice(0, qAt) : href;
+    var others = [];
+    var text = '';
+    (qAt > -1 ? href.slice(qAt + 1).split('&') : []).forEach(function (part) {
+      if (part.indexOf('text=') === 0) {
+        try { text = decodeURIComponent(part.slice(5).replace(/\+/g, '%20')); } catch (e) { text = part.slice(5); }
+      } else if (part) {
+        others.push(part);
+      }
+    });
+    if (text.indexOf('Réf. : ') > -1) return null; // déjà ajoutée (second clic sur un lien statique)
+
+    if (!text) text = 'Bonjour Les As du Volant,\n\n' + line;
+    else if (/\s$/.test(text)) text = line + '\n\n' + text; // message à compléter : curseur laissé à la fin
+    else text = text + '\n\n' + line;
+
+    others.push('text=' + encodeURIComponent(text));
+    return base + '?' + others.join('&') + hash;
+  }
+
+  window.addEventListener('click', function (e) {
+    var link = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!link) return;
+    var href = link.getAttribute('href') || '';
+    if (!/^https?:\/\/(wa\.me|api\.whatsapp\.com)\//.test(href)) return;
+    var ref = window.lavWaRef();
+    try {
+      var next = withRef(href, ref);
+      if (next) link.setAttribute('href', next);
+    } catch (err) {}
+    try { if (typeof window.clarity === 'function') window.clarity('set', 'wa_ref', ref); } catch (err) {}
+  });
+})();
+</script>
