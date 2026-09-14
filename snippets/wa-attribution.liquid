@@ -16,6 +16,9 @@
      - utm_source fb / ig / facebook / instagram + utm_medium payant
        → « meta-ads-fb » / « meta-ads-ig » ; fbclid seul → « facebook-instagram »
        (Meta l'ajoute aussi aux liens non sponsorisés : pub ou pas, on ne sait pas)
+     - srsltid (fiches Shopping GRATUITES / résultats produits Merchant Center,
+       sans gclid ni gad_*) → « google-shopping » : non payant, à distinguer du
+       référencement naturel « google »
      - autre utm_source → sa valeur (ex. « tiktok »), suffixée « -ads » si payant
      - sinon référent externe : google → « google » (référencement naturel),
        instagram, facebook, tiktok, youtube, bing… ; autre site → son domaine
@@ -72,6 +75,7 @@
       if (/^(msg|messenger|an|meta)$/.test(source)) return { ref: paid ? 'meta-ads' : 'facebook-instagram', paid: paid };
       return { ref: clean(source) + (paid ? '-ads' : ''), paid: paid };
     }
+    if (p.get('srsltid')) return { ref: 'google-shopping', paid: false };
     if (p.get('fbclid')) return { ref: 'facebook-instagram', paid: false };
     if (p.get('ttclid')) return { ref: 'tiktok-ads', paid: true };
     if (p.get('msclkid')) return { ref: 'bing-ads', paid: true };
