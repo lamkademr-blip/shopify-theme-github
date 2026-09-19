@@ -202,7 +202,46 @@
       lines.push('', 'Lien : ' + url);
     }
 
+    // Image de la forme choisie (question « Forme du Volant ») : l'équipe
+    // voit d'un coup d'œil la forme demandée sans rouvrir la fiche.
+    var shapeImage = readShapeImage(form);
+    if (shapeImage) lines.push('', 'Image de la forme : ' + shapeImage);
+
     return lines.join('\n');
+  }
+
+  /**
+   * URL de l'image de la forme cochée dans l'app d'options YMQ.
+   *
+   * La question existe sous plusieurs blocs conditionnels (« 2. Forme du
+   * Volant-1-17 », « -1-35 »… selon le modèle choisi en question 1) : seul
+   * le bloc visible compte, les blocs masqués gardent une valeur cochée par
+   * défaut. L'image est posée en background de l'étiquette du choix ; on
+   * retire le redimensionnement (&width=200&height=200) pour envoyer
+   * l'image en taille réelle. « Forme des palettes » n'est pas concernée.
+   */
+  function readShapeImage(form) {
+    var scope = form.querySelector('.ymq-options-box') ? form : document;
+    var boxes = scope.querySelectorAll('.ymq-options-box[data-label]');
+    for (var i = 0; i < boxes.length; i++) {
+      var box = boxes[i];
+      if (!/forme du volant/i.test(box.dataset.label) || box.offsetParent === null) continue;
+      var input = box.querySelector('input:checked');
+      if (!input) continue;
+      var label = box.querySelector('label[for="' + input.id + '"]');
+      var src = '';
+      var bg = label && label.style.backgroundImage.match(/url\(["']?([^"')]+)["']?\)/);
+      if (bg) {
+        src = bg[1];
+      } else {
+        var img = label && label.querySelector('img');
+        src = img ? img.getAttribute('src') : '';
+      }
+      if (!src) continue;
+      if (src.indexOf('//') === 0) src = 'https:' + src;
+      return src.replace(/[?&](width|height)=\d+/g, '').replace(/^([^?]*)&/, '$1?');
+    }
+    return '';
   }
 
   /**
