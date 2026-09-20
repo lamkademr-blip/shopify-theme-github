@@ -61,6 +61,8 @@
       if (!variant) return null;
       return {
         price: variant.price,
+        // Photo propre a la variante quand elle en a une (repli d'image du message).
+        image: variant.image || '',
         // Paires « Nom d'option : valeur », omises pour la variante par défaut.
         options: map.hasOnlyDefaultVariant
           ? []
@@ -202,10 +204,17 @@
       lines.push('', 'Lien : ' + url);
     }
 
-    // Image de la forme choisie (question « Forme du Volant ») : l'équipe
-    // voit d'un coup d'œil la forme demandée sans rouvrir la fiche.
+    // Visuel en fin de message : l'équipe voit d'un coup d'œil ce qui est
+    // demandé sans rouvrir la fiche. Image de la forme cochée quand la fiche
+    // pose la question du modèle, sinon photo principale de la fiche, pour
+    // que le message porte toujours un visuel.
     var shapeImage = readShapeImage(form);
-    if (shapeImage) lines.push('', 'Image de la forme : ' + shapeImage);
+    if (shapeImage) {
+      lines.push('', 'Image de la forme : ' + shapeImage);
+    } else {
+      var productImage = readProductImage(cta, variant);
+      if (productImage) lines.push('', 'Photo du produit : ' + productImage);
+    }
 
     return lines.join('\n');
   }
@@ -238,10 +247,25 @@
         src = img ? img.getAttribute('src') : '';
       }
       if (!src) continue;
-      if (src.indexOf('//') === 0) src = 'https:' + src;
-      return src.replace(/[?&](width|height)=\d+/g, '').replace(/^([^?]*)&/, '$1?');
+      return toAbsolute(src.replace(/[?&](width|height)=\d+/g, '').replace(/^([^?]*)&/, '$1?'));
     }
     return '';
+  }
+
+  /**
+   * Repli quand la fiche ne pose pas la question du modèle (donc pas celle
+   * de la forme) : photo héros de la fiche sur le CDN Shopify — celle de la
+   * variante sélectionnée si elle en a une, sinon l'image principale du
+   * produit, rendue en attribut par le snippet du CTA.
+   */
+  function readProductImage(cta, variant) {
+    var src = (variant && variant.image) || cta.dataset.productImage || '';
+    return src ? toAbsolute(src) : '';
+  }
+
+  /** URL CDN sans protocole (« //cdn.shopify.com/… ») vers https. */
+  function toAbsolute(src) {
+    return src.indexOf('//') === 0 ? 'https:' + src : src;
   }
 
   /**

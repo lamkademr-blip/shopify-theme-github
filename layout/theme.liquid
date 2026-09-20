@@ -662,6 +662,7 @@ document.addEventListener('DOMContentLoaded', function() {
        data-phone="33644650200"
        data-product-title="{{ product.title | escape }}"
        data-product-url="{{ shop.url }}{{ product.url }}"
+       data-product-image="{{ product.featured_image | image_url: width: 1600 | escape }}"
        data-price-cents="{{ product.selected_or_first_available_variant.price | default: 0 }}"
        data-currency="{{ cart.currency.iso_code }}"
        aria-label="Envoyer ma configuration sur WhatsApp"
