@@ -204,17 +204,12 @@
       lines.push('', 'Lien : ' + url);
     }
 
-    // Visuel en fin de message : l'équipe voit d'un coup d'œil ce qui est
-    // demandé sans rouvrir la fiche. Image de la forme cochée quand la fiche
-    // pose la question du modèle, sinon photo principale de la fiche, pour
-    // que le message porte toujours un visuel.
-    var shapeImage = readShapeImage(form);
-    if (shapeImage) {
-      lines.push('', 'Image de la forme : ' + shapeImage);
-    } else {
-      var productImage = readProductImage(cta, variant);
-      if (productImage) lines.push('', 'Photo du produit : ' + productImage);
-    }
+    // Image de référence en fin de message, TOUJOURS sous le même libellé :
+    // elle sert de base à la génération IA du visuel renvoyé au client, et un
+    // libellé unique permet de la retrouver sans distinguer les cas. Forme
+    // cochée quand la fiche pose la question, sinon photo héros de la fiche.
+    var refImage = readShapeImage(form) || readProductImage(cta, variant);
+    if (refImage) lines.push('', 'Image de la forme : ' + refImage);
 
     return lines.join('\n');
   }
@@ -254,9 +249,10 @@
 
   /**
    * Repli quand la fiche ne pose pas la question du modèle (donc pas celle
-   * de la forme) : photo héros de la fiche sur le CDN Shopify — celle de la
-   * variante sélectionnée si elle en a une, sinon l'image principale du
-   * produit, rendue en attribut par le snippet du CTA.
+   * de la forme), ou qu'aucune forme n'est encore cochée : photo héros de la
+   * fiche sur le CDN Shopify — celle de la variante sélectionnée si elle en a
+   * une, sinon l'image principale du produit, rendue en attribut par le
+   * snippet du CTA.
    */
   function readProductImage(cta, variant) {
     var src = (variant && variant.image) || cta.dataset.productImage || '';
