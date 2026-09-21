@@ -847,12 +847,12 @@ document.addEventListener('DOMContentLoaded', function() {
         source = 'airbag_digital';
       } else if (link.closest('.product') || link.closest('[data-product]')) {
         source = 'page_produit';
-      } else if (link.closest('.bmwa')) {
-        // Banderole arrivage BMW. Sans cette branche, le repli ci-dessous
-        // renverrait « template--28385632944454__bmw_arrivage » : Shopify
-        // prefixe l'id de section par celui du template, qui change si le
-        // template est recree. Le libelle serait illisible et instable.
-        source = 'banderole_bmw';
+      } else if (link.closest('.bmwl')) {
+        // Bande liquidation BMW des fiches Serie 3 / Serie 5. Sans cette
+        // branche, le repli ci-dessous renverrait « template--…__bmw_liquidation » :
+        // Shopify prefixe l'id de section par celui du template, qui change si
+        // le template est recree. Le libelle serait illisible et instable.
+        source = 'bande_bmw_liquidation';
       } else {
         var section = link.closest('[id^="shopify-section-"]');
         if (section) source = section.id.replace('shopify-section-', '').slice(0, 60);

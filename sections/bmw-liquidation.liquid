@@ -1,0 +1,226 @@
+{%- comment -%}
+  Bande « Liquidation totale » BMW — fiches volant Série 3 et Série 5.
+  Les As du Volant
+
+  Posée dans templates/product.volant-bmw.json, que partagent TOUTES les fiches
+  volant BMW : elle ne s'affiche que sur les produits dont le handle figure dans
+  le réglage « Fiches concernées ». Ajouter ou retirer une fiche se fait donc
+  depuis l'éditeur, sans toucher au code.
+
+  Seul KPI : le clic wa.me. La source remonte comme « bande_bmw_liquidation »
+  grâce à la branche .bmwl de theme.liquid (l'id de section brut serait préfixé
+  par celui du template, illisible dans GA4/Clarity).
+{%- endcomment -%}
+
+{%- liquid
+  assign show = false
+  if product
+    assign handles = section.settings.product_handles | split: ','
+    for h in handles
+      assign h_clean = h | strip
+      if h_clean == product.handle
+        assign show = true
+        break
+      endif
+    endfor
+  endif
+-%}
+
+{%- if show or request.design_mode -%}
+  {%- liquid
+    assign wa_number = section.settings.whatsapp_number | default: '33644650200' | strip
+    assign wa_message = section.settings.whatsapp_message | replace: '[produit]', product.title | strip | append: ' '
+  -%}
+  {%- capture wa_href -%}
+    https://wa.me/{{ wa_number }}?text={{ wa_message | url_encode | replace: '+', '%20' }}
+  {%- endcapture -%}
+
+  {%- style -%}
+    .bmwl, .bmwl * { box-sizing: border-box; }
+    .bmwl {
+      --bmwl-bg: #08080a; --bmwl-gold: #c9a96e; --bmwl-text: #f5f5f5;
+      --bmwl-dim: #b9b2a8; --bmwl-line: rgba(201, 169, 110, 0.28);
+      --bmwl-red: #d7263d; --bmwl-wa: #25d366; --bmwl-wa-hover: #1da851;
+      background:
+        repeating-linear-gradient(45deg, rgba(255,255,255,.022) 0 1px, transparent 1px 4px),
+        repeating-linear-gradient(-45deg, rgba(255,255,255,.022) 0 1px, transparent 1px 4px),
+        var(--bmwl-bg);
+      color: var(--bmwl-text);
+      border-top: 1px solid var(--bmwl-line);
+      border-bottom: 1px solid var(--bmwl-line);
+      font-family: var(--font-body-family), sans-serif;
+    }
+    .bmwl__inner {
+      max-width: var(--page-width, 120rem); margin: 0 auto;
+      padding: 1.6rem; display: grid; gap: 1.4rem 2rem;
+      grid-template-columns: 9.6rem 1fr; align-items: center;
+    }
+    .bmwl__media {
+      width: 9.6rem; aspect-ratio: 1; overflow: hidden;
+      background: {{ section.settings.plate_color }};
+      border: 1px solid var(--bmwl-line);
+    }
+    .bmwl__img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .bmwl__flag {
+      display: inline-block; margin: 0 0 .6rem; padding: .3rem .8rem;
+      background: var(--bmwl-red); color: #fff; font-weight: 700;
+      font-size: 1.2rem; letter-spacing: .12em; text-transform: uppercase;
+    }
+    .bmwl__title { margin: 0; font-size: 1.8rem; line-height: 1.25; color: var(--bmwl-text); font-weight: 700; }
+    .bmwl__points { list-style: none; margin: .6rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; font-size: 1.35rem; color: var(--bmwl-dim); }
+    .bmwl__points li::before { content: "✓"; color: var(--bmwl-gold); margin-right: .5rem; font-weight: 700; }
+    .bmwl__price { color: var(--bmwl-gold); font-size: 2.2rem; font-weight: 700; white-space: nowrap; }
+    .bmwl__cta {
+      grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: .8rem;
+      min-height: 4.8rem; padding: 1.2rem 2rem; background: var(--bmwl-wa); color: #fff;
+      font-weight: 700; font-size: 1.5rem; text-decoration: none; letter-spacing: .02em;
+      transition: background-color .2s ease;
+    }
+    .bmwl__cta:hover, .bmwl__cta:focus-visible { background: var(--bmwl-wa-hover); color: #fff; }
+    .bmwl__cta svg { width: 2rem; height: 2rem; flex: none; }
+    .bmwl__editor-note { grid-column: 1 / -1; margin: 0; font-size: 1.2rem; color: var(--bmwl-gold); }
+    @media screen and (min-width: 750px) {
+      .bmwl__inner { grid-template-columns: 12rem 1fr auto; padding: 1.8rem 5rem; }
+      .bmwl__media { width: 12rem; }
+      .bmwl__title { font-size: 2.2rem; }
+      .bmwl__cta { grid-column: auto; }
+    }
+  {%- endstyle -%}
+
+  <aside class="bmwl" aria-label="{{ section.settings.flag | escape }}">
+    <div class="bmwl__inner">
+      {%- if section.settings.image != blank -%}
+        <div class="bmwl__media">
+          {{
+            section.settings.image
+            | image_url: width: 480
+            | image_tag:
+              widths: '240,360,480',
+              sizes: '(min-width: 750px) 120px, 96px',
+              class: 'bmwl__img',
+              loading: 'eager',
+              alt: section.settings.image_alt
+          }}
+        </div>
+      {%- endif -%}
+
+      <div class="bmwl__content">
+        {%- if section.settings.flag != blank -%}
+          <p class="bmwl__flag">{{ section.settings.flag }}</p>
+        {%- endif -%}
+        <p class="bmwl__title">
+          {{ section.settings.title }}
+          {%- if section.settings.price != blank %} <span class="bmwl__price">{{ section.settings.price }}</span>{%- endif -%}
+        </p>
+        <ul class="bmwl__points">
+          {%- if section.settings.point_1 != blank -%}<li>{{ section.settings.point_1 }}</li>{%- endif -%}
+          {%- if section.settings.point_2 != blank -%}<li>{{ section.settings.point_2 }}</li>{%- endif -%}
+        </ul>
+      </div>
+
+      <a
+        class="bmwl__cta"
+        href="{{ wa_href | strip }}"
+        target="_blank"
+        rel="noopener"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12.04 2a9.9 9.9 0 0 0-8.5 14.98L2 22l5.16-1.5A9.93 9.93 0 1 0 12.04 2Zm0 18.1a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.06.89.9-2.98-.2-.31a8.18 8.18 0 1 1 6.84 3.73Zm4.5-6.12c-.25-.12-1.46-.72-1.69-.8-.23-.09-.39-.13-.56.12-.16.25-.64.8-.78.97-.14.16-.29.18-.54.06a6.7 6.7 0 0 1-3.3-2.88c-.25-.43.25-.4.71-1.33.08-.16.04-.3-.02-.43l-.76-1.83c-.2-.48-.4-.41-.56-.42h-.48a.92.92 0 0 0-.66.31 2.78 2.78 0 0 0-.87 2.07 4.83 4.83 0 0 0 1.01 2.56 11.04 11.04 0 0 0 4.23 3.74c1.58.68 2.2.74 2.99.62.48-.07 1.46-.6 1.67-1.18.2-.58.2-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
+        {{ section.settings.cta_label }}
+      </a>
+
+      {%- if request.design_mode and show == false -%}
+        <p class="bmwl__editor-note">Aperçu éditeur : cette bande est masquée sur ce produit (handle absent de « Fiches concernées »).</p>
+      {%- endif -%}
+    </div>
+  </aside>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Bande liquidation BMW",
+  "tag": "section",
+  "class": "section-bmw-liquidation",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "product_handles",
+      "label": "Fiches concernées",
+      "info": "Handles des produits, séparés par des virgules. La bande est masquée sur toutes les autres fiches du template.",
+      "default": "volant-personnalise-bmw-serie-trois, volant-personnalise-bmw-serie-cinq, volant-personnalise-bmw-serie-3, volant-personnalise-bmw-serie-5"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo du volant"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Texte alternatif de la photo",
+      "default": "Volant BMW livré complet avec airbag, boutons et palettes"
+    },
+    {
+      "type": "color",
+      "id": "plate_color",
+      "label": "Fond derrière la photo",
+      "info": "Doit valoir la teinte du fond de la photo, sinon des bandes apparaissent sur les côtés.",
+      "default": "#d1d2d4"
+    },
+    {
+      "type": "text",
+      "id": "flag",
+      "label": "Pastille",
+      "default": "Liquidation totale"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Accroche",
+      "default": "Livré complet : airbag, boutons et palettes inclus pour"
+    },
+    {
+      "type": "text",
+      "id": "price",
+      "label": "Prix",
+      "default": "599 €"
+    },
+    {
+      "type": "text",
+      "id": "point_1",
+      "label": "Point clé 1",
+      "default": "En stock"
+    },
+    {
+      "type": "text",
+      "id": "point_2",
+      "label": "Point clé 2",
+      "default": "Livraison 24/48h"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Texte du bouton",
+      "default": "Commander sur WhatsApp"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_number",
+      "label": "Numéro WhatsApp",
+      "info": "Format international sans + ni espaces.",
+      "default": "33644650200"
+    },
+    {
+      "type": "textarea",
+      "id": "whatsapp_message",
+      "label": "Message pré-rempli",
+      "info": "[produit] est remplacé par le nom de la fiche.",
+      "default": "Bonjour, je suis intéressé par l'offre liquidation à 599 € sur le [produit] (livré complet : airbag, boutons et palettes). Mon modèle et son année :"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bande liquidation BMW"
+    }
+  ]
+}
+{% endschema %}
