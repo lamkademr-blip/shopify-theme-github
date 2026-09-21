@@ -1,16 +1,18 @@
 {%- comment -%}
-  Bande « Déstockage » BMW — fiches volant Série 3 et Série 5.
+  Bande « Déstockage » BMW — toutes les fiches volant BMW.
   Les As du Volant
 
-  Posée dans templates/product.volant-bmw.json, que partagent TOUTES les fiches
-  volant BMW : elle ne s'affiche que sur les produits dont le handle figure dans
-  le réglage « Fiches concernées ». Ajouter ou retirer une fiche se fait donc
-  depuis l'éditeur, sans toucher au code.
+  Posée dans product.volant-bmw.json, product.json et product.volant-mercedes.json
+  (quelques fiches BMW vivent sur ces deux derniers). Elle s'affiche sur tout
+  produit dont le titre contient « BMW » et dont le handle commence par
+  « volant » (les accessoires BMW sont donc exclus), sauf les handles listés
+  dans « Fiches exclues ».
 
   Compatibilités : deux listes (moyeu M3 / moyeu M5), copie fidèle de la fiche
-  fournisseur, jamais une déduction. La fiche affiche la liste de SON moyeu :
-  M5 si son handle figure dans « Fiches moyeu M5 », M3 sinon. Dépliant <details>
-  natif : zéro JS, zéro clic sortant.
+  fournisseur, jamais une déduction. Une fiche listée dans « Fiches moyeu M3 »
+  ou « Fiches moyeu M5 » n'affiche que la liste de son moyeu ; les autres
+  (Série E, F, G…) affichent les deux. Dépliant <details> natif : zéro JS,
+  zéro clic sortant.
 
   Seul KPI : le clic wa.me. La source remonte comme « bande_bmw_liquidation »
   grâce à la branche .bmwl de theme.liquid (l'id de section brut serait préfixé
@@ -20,21 +22,34 @@
 {%- liquid
   assign show = false
   if product
-    assign handles = section.settings.product_handles | split: ','
-    for h in handles
-      assign h_clean = h | strip
-      if h_clean == product.handle
-        assign show = true
-        break
-      endif
-    endfor
+    assign title_lc = product.title | downcase
+    assign handle_start = product.handle | slice: 0, 6
+    if title_lc contains 'bmw' and handle_start == 'volant'
+      assign show = true
+      assign excluded = section.settings.excluded_handles | split: ','
+      for h in excluded
+        assign h_clean = h | strip
+        if h_clean == product.handle
+          assign show = false
+          break
+        endif
+      endfor
+    endif
   endif
 -%}
 
 {%- if show or request.design_mode -%}
   {%- liquid
     assign wa_number = section.settings.whatsapp_number | default: '33644650200' | strip
-    assign hub = 'm3'
+    assign hub = 'both'
+    assign m3_handles = section.settings.m3_handles | split: ','
+    for h in m3_handles
+      assign h_clean = h | strip
+      if h_clean == product.handle
+        assign hub = 'm3'
+        break
+      endif
+    endfor
     assign m5_handles = section.settings.m5_handles | split: ','
     for h in m5_handles
       assign h_clean = h | strip
@@ -43,13 +58,17 @@
         break
       endif
     endfor
-    if hub == 'm5'
-      assign compat_title = section.settings.compat_m5_title
-      assign compat_rows = section.settings.compat_m5
-    else
-      assign compat_title = section.settings.compat_m3_title
-      assign compat_rows = section.settings.compat_m3
-    endif
+    case hub
+      when 'm3'
+        assign compat_title = section.settings.compat_m3_title
+        assign compat_rows = section.settings.compat_m3
+      when 'm5'
+        assign compat_title = section.settings.compat_m5_title
+        assign compat_rows = section.settings.compat_m5
+      else
+        assign compat_title = section.settings.compat_both_title
+        assign compat_rows = section.settings.compat_m3 | append: '<br />' | append: section.settings.compat_m5
+    endcase
     assign wa_message = section.settings.whatsapp_message | replace: '[produit]', product.title | strip | append: ' '
   -%}
   {%- capture wa_href -%}
@@ -109,6 +128,7 @@
     .bmwl__compat[open] summary::after { content: "–"; }
     .bmwl__compat-count { font-weight: 400; color: var(--bmwl-dim); font-size: 1.3rem; }
     .bmwl__compat-sub { margin: 1rem 0 .6rem; font-size: 1.3rem; color: var(--bmwl-dim); }
+    .bmwl__compat-heading { margin: 1.4rem 0 .2rem; font-size: 1.3rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--bmwl-text); }
     .bmwl__compat-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0 2.4rem; }
     .bmwl__compat-item {
       display: grid; grid-template-columns: 8.5rem 1fr auto; gap: 1rem; align-items: baseline;
@@ -189,18 +209,44 @@
           {%- if compat_title != blank -%}
             <p class="bmwl__compat-sub">{{ compat_title }}</p>
           {%- endif -%}
-          <ul class="bmwl__compat-list" role="list">
-            {%- for row in rows -%}
-              {%- assign line = row | strip -%}
-              {%- if line == blank -%}{%- continue -%}{%- endif -%}
-              {%- assign cells = line | split: '|' -%}
-              <li class="bmwl__compat-item">
-                <span class="bmwl__compat-model">{{ cells[0] | strip }}</span>
-                <span class="bmwl__compat-codes">{{ cells[1] | strip }}</span>
-                <span class="bmwl__compat-years">{{ cells[2] | strip }}</span>
-              </li>
-            {%- endfor -%}
-          </ul>
+          {%- comment -%}
+            Deux groupes au plus. Sur une fiche rattachée à un moyeu, seul le
+            sien s'affiche, sans intertitre ; sinon les deux, chacun titré,
+            pour que le client sache quelle version demander.
+          {%- endcomment -%}
+          {%- for group in (1..2) -%}
+            {%- liquid
+              if group == 1
+                if hub == 'm5'
+                  continue
+                endif
+                assign group_rows = section.settings.compat_m3
+                assign group_heading = section.settings.compat_m3_heading
+              else
+                if hub == 'm3'
+                  continue
+                endif
+                assign group_rows = section.settings.compat_m5
+                assign group_heading = section.settings.compat_m5_heading
+              endif
+              assign group_lines = group_rows | newline_to_br | split: '<br />'
+            -%}
+            {%- if hub == 'both' and group_heading != blank -%}
+              <p class="bmwl__compat-heading">{{ group_heading }}</p>
+            {%- endif -%}
+            <ul class="bmwl__compat-list" role="list">
+              {%- for row in group_lines -%}
+                {%- assign line = row | strip -%}
+                {%- if line == blank -%}{%- continue -%}{%- endif -%}
+                {%- assign cells = line | split: '|' -%}
+                <li class="bmwl__compat-item">
+                  <span class="bmwl__compat-model">{{ cells[0] | strip }}</span>
+                  <span class="bmwl__compat-codes">{{ cells[1] | strip }}</span>
+                  <span class="bmwl__compat-years">{{ cells[2] | strip }}</span>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endfor -%}
           {%- if section.settings.compat_note != blank -%}
             <p class="bmwl__compat-note">
               {{ section.settings.compat_note }}
@@ -211,7 +257,7 @@
       {%- endif -%}
 
       {%- if request.design_mode and show == false -%}
-        <p class="bmwl__editor-note">Aperçu éditeur : cette bande est masquée sur ce produit (handle absent de « Fiches concernées »).</p>
+        <p class="bmwl__editor-note">Aperçu éditeur : cette bande est masquée sur ce produit (ce n'est pas un volant BMW, ou son handle est dans « Fiches exclues »).</p>
       {%- endif -%}
     </div>
   </aside>
@@ -225,17 +271,23 @@
   "settings": [
     {
       "type": "textarea",
-      "id": "product_handles",
-      "label": "Fiches concernées",
-      "info": "Handles des produits, séparés par des virgules. La bande est masquée sur toutes les autres fiches du template.",
-      "default": "volant-personnalise-bmw-serie-trois, volant-personnalise-bmw-serie-cinq, volant-personnalise-bmw-serie-3, volant-personnalise-bmw-serie-5"
+      "id": "excluded_handles",
+      "label": "Fiches exclues",
+      "info": "La bande s'affiche sur tous les produits dont le titre contient « BMW » et le handle commence par « volant ». Handles à exclure, séparés par des virgules."
+    },
+    {
+      "type": "textarea",
+      "id": "m3_handles",
+      "label": "Fiches moyeu M3",
+      "info": "Handles des fiches qui n'affichent que la liste moyeu M3.",
+      "default": "volant-bmw-serie-un, volant-personnalise-bmw-serie-trois, volant-personnalise-bmw-serie-3, volant-personnalise-bmw-serie-quatre, volant-personnalise-bmw-m-deux, volant-personnalise-bmw-m-trois, volant-personnalise-bmw-m-quatre, volant-personnalise-bmw-x-deux, volant-personnalise-bmw-x3, volant-personnalise-bmw-x-trois, volant-personnalise-bmw-x-quatre, volant-personnalise-bmw-x-cinq, volant-personnalise-bmw-x-six"
     },
     {
       "type": "textarea",
       "id": "m5_handles",
       "label": "Fiches moyeu M5",
-      "info": "Handles des fiches qui affichent la liste moyeu M5. Toutes les autres affichent la liste moyeu M3.",
-      "default": "volant-personnalise-bmw-serie-cinq, volant-personnalise-bmw-serie-5"
+      "info": "Handles des fiches qui n'affichent que la liste moyeu M5. Les fiches absentes des deux listes affichent les deux.",
+      "default": "volant-personnalise-bmw-serie-cinq, volant-personnalise-bmw-serie-5, volant-personnalise-bmw-m-cinq, volant-personnalise-bmw-m-huit"
     },
     {
       "type": "image_picker",
@@ -318,8 +370,15 @@
     {
       "type": "text",
       "id": "compat_m3_title",
-      "label": "Intro liste moyeu M3",
-      "default": "Même moyeu que la Série 3 : ce volant se monte aussi sur ces modèles."
+      "label": "Intro fiches moyeu M3",
+      "default": "Ce volant se monte sur toutes ces BMW (même moyeu) :"
+    },
+    {
+      "type": "text",
+      "id": "compat_m3_heading",
+      "label": "Intertitre liste moyeu M3",
+      "info": "Affiché seulement sur les fiches qui montrent les deux listes.",
+      "default": "Version Série 3 (moyeu M3)"
     },
     {
       "type": "textarea",
@@ -331,8 +390,21 @@
     {
       "type": "text",
       "id": "compat_m5_title",
-      "label": "Intro liste moyeu M5",
-      "default": "Même moyeu que la Série 5 : ce volant se monte aussi sur ces modèles."
+      "label": "Intro fiches moyeu M5",
+      "default": "Ce volant se monte sur toutes ces BMW (même moyeu) :"
+    },
+    {
+      "type": "text",
+      "id": "compat_m5_heading",
+      "label": "Intertitre liste moyeu M5",
+      "info": "Affiché seulement sur les fiches qui montrent les deux listes.",
+      "default": "Version Série 5 (moyeu M5)"
+    },
+    {
+      "type": "text",
+      "id": "compat_both_title",
+      "label": "Intro fiches qui montrent les deux listes",
+      "default": "Le volant existe en deux versions selon le moyeu de votre BMW. Il se monte uniquement sur ces modèles :"
     },
     {
       "type": "textarea",

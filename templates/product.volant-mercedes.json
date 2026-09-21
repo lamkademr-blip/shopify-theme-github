@@ -9,6 +9,12 @@
  */
 {
   "sections": {
+    "bmw_liquidation": {
+      "type": "bmw-liquidation",
+      "settings": {
+        "image": "shopify://shop_images/arrivage_bmw.jpg"
+      }
+    },
     "reels_insta_F6PiHF": {
       "type": "reels-insta",
       "blocks": {
@@ -563,6 +569,7 @@
   },
   "order": [
     "breadcrumb_top",
+    "bmw_liquidation",
     "main",
     "description_detaillee_ldv",
     "airbag_digital",
