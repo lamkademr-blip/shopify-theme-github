@@ -60,6 +60,7 @@
       var variant = idInput && map.variants[idInput.value];
       if (!variant) return null;
       return {
+        id: idInput.value,
         price: variant.price,
         // Photo propre a la variante quand elle en a une (repli d'image du message).
         image: variant.image || '',
@@ -163,6 +164,10 @@
     var qtyInput = form.elements.namedItem('quantity');
     var qty = qtyInput && parseInt(qtyInput.value, 10) > 0 ? parseInt(qtyInput.value, 10) : 1;
     lines.push('Quantité : ' + qty);
+
+    // Identifiant de la variante : l'automatisation des devis (Make) s'en sert
+    // pour créer le brouillon de commande Shopify sur le bon article.
+    if (variant && variant.id) lines.push('Code article : ' + variant.id);
 
     // Prix total = (prix de la variante courante + suppléments des options
     // payantes) × quantité (repli : prix rendu côté serveur ; ligne omise
