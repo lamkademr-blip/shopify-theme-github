@@ -92,16 +92,6 @@
         '</div>' +
         '<button class="dpop-close" aria-label="Fermer">&times;</button>' +
         '<div class="dpop-inner">' +
-          '<div class="dpop-wheel-scene">' +
-            '<div class="dpop-wheel">' +
-              '<div class="dpop-wheel-inner">' +
-                '<div class="dpop-wheel-center">' +
-                  '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 2c4.41 0 8 3.59 8 8h-5.1c-.56-1.18-1.76-2-3.15-2s-2.58.82-3.15 2H4c0-4.41 3.59-8 8-8zm-1.5 8c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5zM4.26 14h4.59c.33.72.9 1.31 1.65 1.65v4.09c-3.03-.65-5.42-2.83-6.24-5.74zm9.24 5.74v-4.09c.75-.34 1.31-.93 1.65-1.65h4.59c-.82 2.91-3.21 5.09-6.24 5.74z"/></svg>' +
-                '</div>' +
-              '</div>' +
-            '</div>' +
-            '<div class="dpop-3d-badge">-10%</div>' +
-          '</div>' +
           '<h2 class="dpop-title"><span class="dpop-highlight">10 % offerts</span> sur votre première commande</h2>' +
           '<p class="dpop-subtitle">Votre code de bienvenue, valable sur <strong>tous nos volants et options</strong>.</p>' +
           '<button type="button" class="dpop-code" aria-label="Copier le code ' + PROMO_CODE + '">' +
