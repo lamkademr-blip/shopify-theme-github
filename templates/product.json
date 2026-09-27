@@ -147,8 +147,8 @@
     }
   },
   "order": [
-    "bmw_liquidation",
     "main",
+    "bmw_liquidation",
     "description_detaillee_ldv",
     "airbag_digital",
     "judge_me_reviews_apps",
