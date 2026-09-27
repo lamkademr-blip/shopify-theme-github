@@ -705,10 +705,9 @@ document.addEventListener('DOMContentLoaded', function() {
     </style>
 
     {%- comment -%}
-      Pop-up « Recevoir mon visuel 3D » (12 s ou exit intent) : désactivé sur
-      les pages produit, pour la même raison que le popup ci-dessus. Le CTA
-      WhatsApp persistant du configurateur (snippets/wheel-whatsapp-cta.liquid)
-      porte désormais cette proposition en continu, sans interrompre le choix.
+      Pop-up de bienvenue « -10 % sur la première commande » (code BIENVENUE10,
+      12 s ou exit intent) : désactivé sur les pages produit, pour la même
+      raison que le popup ci-dessus — ne pas interrompre la configuration.
     {%- endcomment -%}
     {%- unless request.page_type == 'product' -%}
       {{ 'discount-popup.js' | asset_url | script_tag }}
@@ -836,7 +835,7 @@ document.addEventListener('DOMContentLoaded', function() {
       } else if (link.closest('#cart-whatsapp-popup') || link.closest('.cwp-card')) {
         source = 'popup_abandon_panier';
       } else if (link.closest('.dpop-container')) {
-        source = 'popup_3d';
+        source = 'popup_bienvenue10';
       } else if (link.classList.contains('wheel-whatsapp-cta') || link.closest('.wheel-whatsapp-cta')) {
         source = 'cta_fiche_produit';
       } else if (link.closest('.airbagd')) {

@@ -282,6 +282,39 @@
   margin-top: -10px;
 }
 
+/* --- Code promo copiable --- */
+.dpop-code {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  max-width: 300px;
+  margin: 18px auto 20px;
+  padding: 12px 16px;
+  background: rgba(201, 169, 110, 0.08);
+  border: 1.5px dashed #c9a96e;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+.dpop-code:hover { background: rgba(201, 169, 110, 0.16); }
+.dpop-code-value {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #000000;
+}
+.dpop-code-action {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #a9885a;
+}
+.dpop-code--copied { border-style: solid; }
+.dpop-code--copied .dpop-code-action { color: #1e9e4f; }
+
 /* --- Bouton WhatsApp --- */
 .dpop-wa-button {
   display: inline-flex;

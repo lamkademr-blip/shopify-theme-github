@@ -2650,17 +2650,19 @@ menu-drawer + .header__search {
   }
 }
 
-/* Bouton d'achat — noir mat, immobile (DA carbone & champagne) */
+/* Bouton d'achat — graphite + filet champagne, immobile (DA carbone & champagne).
+   Le noir #121212 se confondait avec le fond carbone #0e0e10. Le vert WhatsApp reste
+   le seul aplat de couleur : l'ajout au panier est l'action secondaire. */
 .product-form__submit.button,
 .product-form__submit.button.button--full-width,
 .product-form__submit.button.button--primary,
 .product-form__submit.button.button--secondary {
-  border: 0 !important;
+  border: 1px solid #c9a96e !important;
   outline: none !important;
   box-shadow: none !important;
-  background: #121212 !important;
+  background: #26272b !important;
   border-radius: 0 !important;
-  color: #ffffff !important;
+  color: #c9a96e !important;
   padding: 15px 25px !important;
   font-weight: 600 !important;
   letter-spacing: 0.04em !important;
@@ -2670,15 +2672,22 @@ menu-drawer + .header__search {
 
 .product-form__submit.button:hover,
 .product-form__submit.button:focus {
-  background: #2a2b2e !important;
+  background: #c9a96e !important;
+  color: #0e0e10 !important;
   transform: none !important;
   box-shadow: none !important;
-  border: 0 !important;
+  border: 1px solid #c9a96e !important;
   outline: 0 !important;
 }
 
+.product-form__submit.button:focus-visible {
+  outline: 2px solid #c9a96e !important;
+  outline-offset: 3px !important;
+}
+
 .product-form__submit.button:active {
-  background: #000000 !important;
+  background: #b8975c !important;
+  color: #0e0e10 !important;
   transform: none !important;
   box-shadow: none !important;
 }
