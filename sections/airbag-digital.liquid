@@ -45,6 +45,8 @@
 {%- assign abd_show = false -%}
 {%- if product == blank -%}
   {%- assign abd_show = true -%}
+{%- elsif product.type == 'Accessoire intérieur' -%}
+  {%- comment -%} Accessoires : leur titre contient « Volant » mais le module ne les concerne pas. {%- endcomment -%}
 {%- elsif abd_title_dc contains 'volant' or abd_title_dc contains 'airbag' -%}
   {%- assign abd_show = true -%}
 {%- endif -%}
