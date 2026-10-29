@@ -163,7 +163,9 @@
       Le href de repli suffit sans JS ; avec JS, le gestionnaire délégué de
       assets/wheel-whatsapp-cta.js reconstruit le message complet (options de
       variante, propriétés du configurateur, quantité, total) au moment du clic.
+      Masqué sur les accessoires (type « Accessoire intérieur ») : achat direct.
     {%- endcomment -%}
+    {%- unless product.type == 'Accessoire intérieur' -%}
     <a class="sticky-atc__wa"
        href="https://wa.me/33644650200?text={{ 'Bonjour Les As du Volant, je souhaite vous envoyer ma configuration : ' | append: product.title | url_encode }}"
        target="_blank"
@@ -181,6 +183,7 @@
       </svg>
       <span class="sticky-atc__wa-label">Envoyer</span>
     </a>
+    {%- endunless -%}
     <button class="sticky-atc__btn" id="StickyATCBtn"
       {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}>
       {%- if product.selected_or_first_available_variant.available -%}

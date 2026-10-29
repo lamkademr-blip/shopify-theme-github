@@ -73,8 +73,11 @@
           {%- comment -%}
             Bouton WhatsApp « Envoyez votre configuration » — rendu uniquement
             sur les produits configurables (voir snippets/wheel-whatsapp-cta.liquid).
+            Masqué sur les accessoires (type « Accessoire intérieur ») : achat direct.
           {%- endcomment -%}
-          {% render 'wheel-whatsapp-cta', product: product, product_form_id: product_form_id %}
+          {%- unless product.type == 'Accessoire intérieur' -%}
+            {% render 'wheel-whatsapp-cta', product: product, product_form_id: product_form_id %}
+          {%- endunless -%}
           <button
             id="ProductSubmitButton-{{ section_id }}"
             type="submit"
