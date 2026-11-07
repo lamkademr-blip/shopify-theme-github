@@ -1,8 +1,9 @@
 {% comment %}
   Tracking des clics WhatsApp (KPI n°1 du site).
   Envoie l'evenement "whatsapp_click" :
-  - a GA4 (G-RC5CZ6CH3R) via Measurement Protocol, en reutilisant les cookies _ga
-    poses par le canal Google & YouTube de Shopify (meme visiteur, meme session)
+  - a GA4 (G-RC5CZ6CH3R) via une commande gtag traitee par les balises de GTM
+    (meme visiteur, meme session que la visite issue de l'annonce)
+  - a Google Ads en conversion directe si ADS_SEND_TO est renseigne
   - au pixel Meta si present (trackCustom WhatsAppClick)
   - dans dataLayer (exploitable par GTM si installe un jour)
 {% endcomment %}
@@ -11,52 +12,36 @@
   var MEASUREMENT_ID = 'G-RC5CZ6CH3R';
   var sent = {};
 
-  function cookie(name) {
-    var m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
-    return m ? decodeURIComponent(m[1]) : '';
-  }
+  // Libelle de l'action de conversion Google Ads « Clic WhatsApp » (balise
+  // AW-16932208147). Vide = seul GA4 recoit le clic (import whatsapp_click).
+  var ADS_SEND_TO = '';
 
-  function clientId() {
-    var ga = cookie('_ga'); // GA1.1.123456789.1712345678
-    var m = ga.match(/\d+\.\d+$/);
-    if (m) return m[0];
-    var rnd = Math.floor(Math.random() * 1e9) + '.' + Math.floor(Date.now() / 1000);
-    return rnd;
-  }
+  // Commande gtag poussee dans dataLayer : les balises Google chargees par
+  // GTM-NM8MP8B7 la traitent avec LEUR identifiant visiteur et LEUR session,
+  // donc GA4 relie le clic a la visite issue de l'annonce (gclid).
+  // Avant le 07/11/2026, un hit /g/collect fait main lisait le cookie _ga,
+  // absent du site : cid aleatoire, sans session -> 0 conversion importee.
+  // Le consentement est gere par le Consent Mode des balises elles-memes.
+  function g() { window.dataLayer = window.dataLayer || []; window.dataLayer.push(arguments); }
 
-  function sessionParams() {
-    var st = cookie('_ga_' + MEASUREMENT_ID.replace('G-', '')); // GS1.1.<sid>.<sct>...
-    var m = st.match(/^GS\d+\.\d+\.(\d+)\.(\d+)/);
-    return m ? { sid: m[1], sct: m[2] } : null;
-  }
-
-  function consentOk() {
+  function sendGoogle(href) {
     try {
-      var cp = window.Shopify && window.Shopify.customerPrivacy;
-      if (cp && typeof cp.analyticsProcessingAllowed === 'function') {
-        return cp.analyticsProcessingAllowed() !== false;
-      }
-    } catch (e) {}
-    return true; // pas d'API de consentement configuree -> comportement identique au reste du site
-  }
-
-  function sendGA4(href) {
-    if (!consentOk()) return;
-    try {
-      var p = new URLSearchParams({
-        v: '2', tid: MEASUREMENT_ID, cid: clientId(),
-        en: 'whatsapp_click',
-        dl: location.href, dt: document.title,
-        'ep.link_url': href.slice(0, 400),
-        'ep.page_path': location.pathname
+      var ref = typeof window.lavWaRef === 'function' ? window.lavWaRef() : '';
+      g('event', 'whatsapp_click', {
+        send_to: MEASUREMENT_ID,
+        link_url: href.slice(0, 400),
+        page_path: location.pathname,
+        wa_ref: ref,
+        transport_type: 'beacon'
       });
-      // Source d'acquisition (snippets/wa-attribution.liquid) : google-ads-pmax, meta-ads-ig, google, direct…
-      if (typeof window.lavWaRef === 'function') p.set('ep.wa_ref', window.lavWaRef());
-      var s = sessionParams();
-      if (s) { p.set('sid', s.sid); p.set('sct', s.sct); p.set('seg', '1'); }
-      var url = 'https://www.google-analytics.com/g/collect?' + p.toString();
-      if (navigator.sendBeacon) { navigator.sendBeacon(url); }
-      else { (new Image()).src = url; }
+      if (ADS_SEND_TO) {
+        g('event', 'conversion', {
+          send_to: ADS_SEND_TO,
+          value: 40,
+          currency: 'EUR',
+          transport_type: 'beacon'
+        });
+      }
     } catch (e) {}
   }
 
@@ -68,7 +53,7 @@
     var key = href + '|' + Math.floor(Date.now() / 2000);
     if (sent[key]) return;
     sent[key] = true;
-    sendGA4(a.href || href);
+    sendGoogle(a.href || href);
     try { if (typeof fbq === 'function') fbq('trackCustom', 'WhatsAppClick', { link_url: href }); } catch (e) {}
     try {
       window.dataLayer = window.dataLayer || [];
