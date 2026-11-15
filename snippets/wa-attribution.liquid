@@ -22,7 +22,8 @@
      - autre utm_source → sa valeur (ex. « tiktok »), suffixée « -ads » si payant
      - sinon référent externe : google → « google » (référencement naturel),
        instagram, facebook, tiktok, youtube, bing… ; autre site → son domaine
-     Aucune donnée n'est stockée hors du libellé et de sa date (pas de gclid).
+     Le libellé et sa date sont stockés. Le click ID Google (gclid / gbraid /
+     wbraid) est stocké à part, 90 jours, sauf refus du marketing (voir 4).
 
   2. Règle d'attribution (localStorage, 30 jours) : un clic publicitaire des
      30 derniers jours l'emporte sur une visite naturelle ultérieure. Sinon,
@@ -36,7 +37,17 @@
      ex. « Ma voiture : ») reçoivent la référence en tête pour laisser le
      curseur à la fin.
 
-  Expose window.lavWaRef() pour le tracking (Clarity wa_ref, GA4 ep.wa_ref).
+  4. Code de vente (depuis le 15/11/2026, import hors ligne « Vente WhatsApp ») :
+     à l'arrivée par une annonce, le click ID Google est gardé 90 jours
+     (localStorage lav_gclid) avec un code court de 6 caractères. Au clic
+     WhatsApp, la Réf. devient « Réf. : google-ads · K7M2QX » et le couple
+     code ↔ click ID part vers le webhook Make 4112450 (scénario 8597112,
+     data store 260198). À la vente, le code lu dans la conversation retrouve
+     le gclid à importer dans Google Ads. Si le visiteur a refusé le
+     marketing (Shopify customerPrivacy), rien n'est stocké ni envoyé.
+
+  Expose window.lavWaRef() pour le tracking (Clarity wa_ref, GA4 ep.wa_ref)
+  et window.lavWaCode() (code de vente, '' sans clic Google Ads).
 {%- endcomment -%}
 <script>
 (function () {
@@ -45,6 +56,87 @@
   var TTL = 30 * 24 * 3600 * 1000;
   var PAID_MEDIUMS = /^(cpc|ppc|paid|paid[_-]?social|paidsocial|ads?|display|sponsored)$/;
   var memory = null;
+  var GCLID_KEY = 'lav_gclid';
+  var GCLID_TTL = 90 * 24 * 3600 * 1000;
+  var HOOK = 'https://hook.eu1.make.com/pm24o9350uo5u87hr32c1k75pz39ldi9';
+  var CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var hookSent = {};
+
+  /** false seulement si le visiteur a refusé le marketing. */
+  function marketingOk() {
+    try {
+      var cp = window.Shopify && window.Shopify.customerPrivacy;
+      if (cp && typeof cp.marketingAllowed === 'function') return cp.marketingAllowed() !== false;
+    } catch (e) {}
+    return true;
+  }
+
+  function newCode() {
+    var out = '';
+    var rnd = null;
+    try { rnd = window.crypto.getRandomValues(new Uint32Array(6)); } catch (e) {}
+    for (var i = 0; i < 6; i++) {
+      var n = rnd ? rnd[i] : Math.floor(Math.random() * 4294967296);
+      out += CODE_CHARS.charAt(n % CODE_CHARS.length);
+    }
+    return out;
+  }
+
+  function loadClick() {
+    try {
+      var c = JSON.parse(window.localStorage.getItem(GCLID_KEY));
+      if (c && c.id && c.code && Date.now() - c.ts < GCLID_TTL) return c;
+    } catch (e) {}
+    return null;
+  }
+
+  function dropClick() {
+    try { window.localStorage.removeItem(GCLID_KEY); } catch (e) {}
+  }
+
+  /** Garde le click ID Google de l'URL (dernier clic d'annonce gagnant). */
+  function captureClick() {
+    var p;
+    try { p = new URLSearchParams(window.location.search); } catch (e) { return; }
+    var types = ['gclid', 'gbraid', 'wbraid'];
+    for (var i = 0; i < types.length; i++) {
+      var id = p.get(types[i]);
+      if (!id || id.length < 10 || id.length > 300) continue;
+      if (!marketingOk()) { dropClick(); return; }
+      var prev = loadClick();
+      var entry = { id: id, type: types[i], ts: Date.now(), code: prev && prev.id === id ? prev.code : newCode() };
+      if (prev && prev.id === id) entry.ts = prev.ts;
+      try { window.localStorage.setItem(GCLID_KEY, JSON.stringify(entry)); } catch (e) {}
+      return;
+    }
+  }
+
+  window.lavWaCode = function () {
+    var c = loadClick();
+    return c ? c.code : '';
+  };
+
+  /** Envoie le couple code ↔ click ID au registre Make (une fois par page). */
+  function sendClick(ref) {
+    var c = loadClick();
+    if (!c) return;
+    if (!marketingOk()) { dropClick(); return; }
+    if (hookSent[c.code]) return;
+    hookSent[c.code] = true;
+    try {
+      var body = new URLSearchParams({
+        code: c.code,
+        click_id: c.id,
+        click_id_type: c.type,
+        click_ts: String(Math.floor(c.ts / 1000)),
+        ref: ref,
+        page: window.location.pathname.slice(0, 200),
+        boutique: 'FR'
+      });
+      if (navigator.sendBeacon) navigator.sendBeacon(HOOK, body);
+      else fetch(HOOK, { method: 'POST', body: body, mode: 'no-cors', keepalive: true });
+    } catch (e) {}
+  }
 
   function clean(value) {
     return String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 30);
@@ -105,6 +197,7 @@
     try { window.localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
   }
 
+  captureClick();
   var state = load();
   var touch = detect();
   if (touch) {
@@ -123,8 +216,8 @@
   };
 
   /** Ajoute la référence au paramètre text d'un lien wa.me / api.whatsapp.com. */
-  function withRef(href, ref) {
-    var line = 'Réf. : ' + ref;
+  function withRef(href, ref, code) {
+    var line = 'Réf. : ' + ref + (code ? ' · ' + code : '');
     var hashAt = href.indexOf('#');
     var hash = hashAt > -1 ? href.slice(hashAt) : '';
     if (hashAt > -1) href = href.slice(0, hashAt);
@@ -155,8 +248,10 @@
     var href = link.getAttribute('href') || '';
     if (!/^https?:\/\/(wa\.me|api\.whatsapp\.com)\//.test(href)) return;
     var ref = window.lavWaRef();
+    var code = marketingOk() ? window.lavWaCode() : '';
+    if (code) sendClick(ref);
     try {
-      var next = withRef(href, ref);
+      var next = withRef(href, ref, code);
       if (next) link.setAttribute('href', next);
     } catch (err) {}
     try { if (typeof window.clarity === 'function') window.clarity('set', 'wa_ref', ref); } catch (err) {}
