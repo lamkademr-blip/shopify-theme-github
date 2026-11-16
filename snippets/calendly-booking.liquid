@@ -1,0 +1,43 @@
+{%- comment -%}
+  Lien « Réserver un appel » : ouvre Calendly en pop-up, pré-rempli.
+  Toujours SECONDAIRE au bouton WhatsApp (90 % des commandes passent par WhatsApp).
+
+  Le script Calendly (~2,7 Mo) n'est chargé qu'au premier clic, par
+  assets/calendly-booking.js, qui envoie aussi calendly_open / calendly_slot /
+  calendly_booked à GA4, Clarity et Meta.
+
+  Paramètres :
+  - product (facultatif) : pré-remplit la question a1 « Votre véhicule »
+  - product_form_id (facultatif) : la configuration en cours part dans a2
+  - source : fiche_haut | fiche_config | accueil | non_liste… (suivi)
+  - label (facultatif) : texte du bouton
+  - style : button (contour, défaut) | link (lien souligné, sans note)
+
+  ── URL DE L'ÉVÉNEMENT ─────────────────────────────────────────────────
+  Modifier UNIQUEMENT la ligne ci-dessous si l'événement Calendly change.
+{%- endcomment -%}
+{%- assign calendly_url = 'https://calendly.com/lamkademr/appel-conseiller-volant-15-min' -%}
+{%- assign cal_style = style | default: 'button' -%}
+{%- assign cal_label = label | default: 'Préférez un appel ? Réservez 15 min avec un conseiller' -%}
+
+{{ 'calendly-booking.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'calendly-booking.js' | asset_url }}" defer="defer"></script>
+
+<div class="lav-cal lav-cal--{{ cal_style }}">
+  <button
+    type="button"
+    class="lav-cal__btn"
+    data-calendly-open
+    data-url="{{ calendly_url }}"
+    data-source="{{ source | default: 'fiche_config' }}"
+    data-vehicle="{{ product.title | escape }}"
+    data-handle="{{ product.handle }}"
+    data-form-id="{{ product_form_id }}"
+  >
+    <svg class="lav-cal__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    <span>{{ cal_label }}</span>
+  </button>
+  {%- if cal_style != 'link' -%}
+    <p class="lav-cal__note">Gratuit · sans engagement · on vous appelle sur WhatsApp</p>
+  {%- endif -%}
+</div>

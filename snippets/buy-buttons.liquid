@@ -77,6 +77,8 @@
           {%- endcomment -%}
           {%- unless product.type == 'Accessoire intérieur' -%}
             {% render 'wheel-whatsapp-cta', product: product, product_form_id: product_form_id %}
+            {%- comment -%} Alternative au WhatsApp : appel de 15 min réservé (Calendly, pop-up pré-rempli). {%- endcomment -%}
+            {% render 'calendly-booking', product: product, product_form_id: product_form_id, source: 'fiche_config' %}
           {%- endunless -%}
           <button
             id="ProductSubmitButton-{{ section_id }}"

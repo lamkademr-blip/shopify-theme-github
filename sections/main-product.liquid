@@ -117,6 +117,11 @@
                   -%}
                 </div>
                 <p class="price-anchoring">Garantie 5 ans incluse · Livraison offerte · Base d'origine constructeur</p>
+                {%- comment -%} Aide humaine AVANT les ~25 groupes d'options du configurateur :
+                  le visiteur qui hésite dès le prix n'atteint jamais le bouton WhatsApp du bas. {%- endcomment -%}
+                {%- unless product.type == 'Accessoire intérieur' -%}
+                  {% render 'calendly-booking', product: product, product_form_id: product_form_id, source: 'fiche_haut', style: 'link', label: "Besoin d'aide pour choisir ? Un conseiller vous appelle (15 min)" %}
+                {%- endunless -%}
                 {%- comment -%} Offre en cours, juste sous le prix : c'est là que le
                   visiteur évalue le montant, donc là que la remise pèse le plus. {%- endcomment -%}
                 {%- render 'promo-badge' -%}

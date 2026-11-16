@@ -20,11 +20,16 @@
     "partenariats_bandeau": {
       "type": "partnership-banner",
       "settings": {}
+    },
+    "calendly": {
+      "type": "calendly-inline",
+      "settings": {}
     }
   },
   "order": [
     "main",
     "form",
+    "calendly",
     "partenariats_bandeau"
   ]
 }
