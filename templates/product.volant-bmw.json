@@ -390,10 +390,6 @@
         "padding_bottom": 20
       }
     },
-    "airbag_digital": {
-      "type": "airbag-digital",
-      "settings": {}
-    },
     "custom_liquid_qPyTzU": {
       "type": "custom-liquid",
       "name": "t:sections.custom-liquid.presets.name",
@@ -702,7 +698,6 @@
     "main",
     "bmw_liquidation",
     "description_detaillee_ldv",
-    "airbag_digital",
     "custom_liquid_qPyTzU",
     "product_faq_tzxDYc",
     "17452778107ddc7743",
