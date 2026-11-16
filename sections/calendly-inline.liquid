@@ -51,14 +51,20 @@
         window.lavCalInline(box).catch(function () {});
       })();
     }
+    function near() { return box.getBoundingClientRect().top < window.innerHeight + 600; }
     if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (entries) {
         if (entries.some(function (x) { return x.isIntersecting; })) { start(); io.disconnect(); }
       }, { rootMargin: '600px 0px' });
       io.observe(box);
-    } else {
-      start();
     }
+    // Filet de sécurité si l'observateur ne se déclenche pas (vu dans certains
+    // navigateurs intégrés) : contrôle au défilement, au toucher et au chargement.
+    function check() { if (!started && near()) start(); }
+    window.addEventListener('scroll', check, { passive: true });
+    box.addEventListener('pointerenter', start, { once: true });
+    box.addEventListener('touchstart', start, { once: true, passive: true });
+    if (document.readyState === 'complete') check(); else window.addEventListener('load', check);
   })();
 </script>
 
