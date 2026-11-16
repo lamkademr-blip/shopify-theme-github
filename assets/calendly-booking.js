@@ -81,6 +81,17 @@
     return out.join(' / ').slice(0, 900);
   }
 
+  /**
+   * Masque le nom de l'organisateur (compte personnel) dans le pop-up et
+   * l'intégré : hide_event_type_details=1 retire nom + photo + durée/lieu,
+   * le titre de l'événement reste visible. Le nom ne doit pas apparaître.
+   */
+  function calUrl(url) {
+    var u = new URL(url, location.href);
+    u.searchParams.set('hide_event_type_details', '1');
+    return u.toString();
+  }
+
   function utm(source, campaign) {
     return {
       utmSource: 'site',
@@ -98,7 +109,7 @@
       var u = utm(lastSource, q.get('utm_campaign') || location.pathname);
       if (q.get('utm_source')) u.utmSource = q.get('utm_source');
       if (q.get('utm_medium')) u.utmMedium = q.get('utm_medium');
-      window.Calendly.initInlineWidget({ url: box.dataset.url, parentElement: box, resize: true, utm: u });
+      window.Calendly.initInlineWidget({ url: calUrl(box.dataset.url), parentElement: box, resize: true, utm: u });
     });
   };
 
@@ -119,14 +130,14 @@
     load().then(function () {
       btn.removeAttribute('aria-busy');
       window.Calendly.initPopupWidget({
-        url: btn.dataset.url,
+        url: calUrl(btn.dataset.url),
         prefill: { customAnswers: answers },
         utm: utm(lastSource, btn.dataset.handle)
       });
     }).catch(function () {
       // Script bloqué (bloqueur, réseau) : on ouvre la page Calendly directement.
       btn.removeAttribute('aria-busy');
-      window.open(btn.dataset.url, '_blank', 'noopener');
+      window.open(calUrl(btn.dataset.url), '_blank', 'noopener');
     });
   });
 
