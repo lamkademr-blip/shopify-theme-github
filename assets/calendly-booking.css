@@ -18,3 +18,24 @@
   text-align: left; justify-content: flex-start;
   text-decoration: underline; text-underline-offset: .3rem;
 }
+
+/* Croix du pop-up Calendly : widget.css la masque (display:none) sur mobile,
+   où il ne reste que la bande sombre au-dessus du calendrier pour fermer,
+   ce que personne ne devine. On la force visible partout, dans un rond
+   sombre pour rester lisible sur la bande comme sur le calendrier blanc. */
+.calendly-overlay .calendly-popup-close {
+  display: block !important;
+  position: fixed !important;
+  top: max(8px, env(safe-area-inset-top, 0px)) !important;
+  right: 12px !important;
+  width: 36px !important;
+  height: 36px !important;
+  z-index: 10001 !important;
+  background-color: rgba(0, 0, 0, .75) !important;
+  background-size: 14px 14px !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  border: 1px solid rgba(255, 255, 255, .5);
+  border-radius: 50%;
+  cursor: pointer;
+}
