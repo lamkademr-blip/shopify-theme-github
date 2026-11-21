@@ -16,6 +16,9 @@
       </h1>
       
       {%- if section.settings.show_collection_description and collection.description != blank -%}
+        {%- if collection.handle contains 'volant' -%}
+          <p class="ldv-landing-link" style="margin:.4rem 0 1rem;font-size:1.4rem;"><a href="/pages/personnalisation" style="color:#c9a96e;">Composer mon volant sur-mesure en ligne &rarr;</a></p>
+        {%- endif -%}
         <div class="collection-hero__description-container">
           {% assign words = collection.description | strip_html | split: ' ' %}
           {% assign word_count = words | size %}

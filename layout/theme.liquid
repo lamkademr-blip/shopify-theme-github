@@ -33,6 +33,10 @@
         {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
       {% endif %}
     </title>
+    {%- comment -%} Pages 2+ de collection/blog/recherche : hors index, liens suivis (audit SEO 21/11/2026). {%- endcomment -%}
+    {%- if current_page > 1 -%}
+      <meta name="robots" content="noindex,follow">
+    {%- endif -%}
 
     {% if template.name == 'index' %}
       <meta name="description" content="Volant personnalisé sur mesure pour Audi, BMW, Mercedes, Porsche, Tesla : cuir, Alcantara, carbone. Visuel 3D avant réalisation, garantie 5 ans.">

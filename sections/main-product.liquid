@@ -732,6 +732,27 @@
       endif
     -%}
 
+    {%- if product.title contains 'olant' -%}
+      {%- liquid
+        assign brand_collection = nil
+        assign skip_handles = 'volant-carbone,volant-alcantara,volant-meplat,volant-chauffant,volant-cuir,volant-led,volant-personnalise,volant-sport'
+        for c in product.collections
+          if c.handle contains 'volant-'
+            unless skip_handles contains c.handle
+              assign brand_collection = c
+              break
+            endunless
+          endif
+        endfor
+      -%}
+      <nav class="ldv-related-links" aria-label="Liens utiles" style="margin-top:1.6rem;display:flex;flex-wrap:wrap;gap:.6rem 1.6rem;font-size:1.4rem;">
+        {%- if brand_collection -%}
+          <a href="{{ brand_collection.url }}" style="color:#c9a96e;">Voir tous les modèles : {{ brand_collection.title | escape }} &rarr;</a>
+        {%- endif -%}
+        <a href="/pages/personnalisation" style="color:#c9a96e;">Composer mon volant sur-mesure &rarr;</a>
+      </nav>
+    {%- endif -%}
+
     {%- comment -%}
       Balisage Product de Dawn retire le 21/11/2026 : il doublonnait celui de
       snippets/product-jsonld.liquid et publiait le champ Vendor comme marque.
