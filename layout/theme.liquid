@@ -35,12 +35,13 @@
     </title>
 
     {% if template.name == 'index' %}
-      <meta name="description" content="Volant personnalisé sur mesure pour Audi, BMW, Mercedes, Porsche, Tesla et toutes les marques. Cuir, Alcantara, carbone. Visuel 3D validé avant réalisation, livraison offerte, garantie 5 ans.">
+      <meta name="description" content="Volant personnalisé sur mesure pour Audi, BMW, Mercedes, Porsche, Tesla : cuir, Alcantara, carbone. Visuel 3D avant réalisation, garantie 5 ans.">
     {% elsif page_description %}
       <meta name="description" content="{{ page_description | escape }}">
     {% endif %}
 
     {% render 'breadcrumb-jsonld' %}
+    {% render 'collection-faq-jsonld' %}
 
     {% render 'meta-tags' %}
 

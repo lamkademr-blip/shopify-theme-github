@@ -25,7 +25,8 @@
   "description": {{ product_description | json }},
   "brand": {
     "@type": "Brand",
-    "name": {{ product.vendor | default: shop.name | json }}
+    {%- comment -%} Jamais product.vendor : il contient le nom du titulaire du compte. {%- endcomment -%}
+    "name": {{ shop.name | default: "Les As du Volant" | json }}
   },
   {%- if current_variant.sku != blank -%}
   "sku": {{ current_variant.sku | json }},

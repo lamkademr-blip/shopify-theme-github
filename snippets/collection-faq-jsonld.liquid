@@ -1,0 +1,55 @@
+{%- comment -%}
+  FAQPage (JSON-LD) des pages collection, construit depuis la FAQ déjà
+  affichée dans la description de la collection : un <h2> « Questions
+  fréquentes » (ou « Foire aux questions ») suivi de paires <h3>question</h3>
+  + paragraphes de réponse, jusqu'au <h2> suivant.
+  Rien n'est émis si la description n'a pas de FAQ, ni sur les pages 2+.
+  Ajouté le 21/11/2026 (audit SEO vs NTech).
+{%- endcomment -%}
+{%- if request.page_type == 'collection' and current_page == 1 -%}
+  {%- liquid
+    assign desc = collection.description
+    assign marker = ''
+    if desc contains '>Questions fr'
+      assign marker = '>Questions fr'
+    elsif desc contains '>Foire aux questions'
+      assign marker = '>Foire aux questions'
+    elsif desc contains '>FAQ'
+      assign marker = '>FAQ'
+    endif
+
+    assign entities = ''
+    if marker != ''
+      assign after_marker = desc | split: marker | last
+      assign after_parts = after_marker | split: '</h2>'
+      assign faq_body = after_parts[1] | split: '<h2' | first
+      assign chunks = faq_body | split: '<h3'
+
+      for chunk in chunks offset: 1
+        assign chunk_parts = chunk | split: '</h3>'
+        if chunk_parts.size < 2
+          continue
+        endif
+        assign question = '<h3' | append: chunk_parts[0] | append: '</h3>' | strip_html | replace: '&nbsp;', ' ' | replace: '&amp;', '&' | strip_newlines | strip
+        assign answer = chunk_parts[1] | replace: '</p>', ' ' | replace: '<br>', ' ' | strip_html | replace: '&nbsp;', ' ' | replace: '&amp;', '&' | strip_newlines | strip
+        if question == blank or answer == blank
+          continue
+        endif
+        unless entities == ''
+          assign entities = entities | append: ','
+        endunless
+        comment
+          json calculé à part : chaîné après un append, il s'appliquerait à toute la chaîne.
+        endcomment
+        assign q_json = question | json
+        assign a_json = answer | json
+        assign entities = entities | append: '{"@type":"Question","name":' | append: q_json | append: ',"acceptedAnswer":{"@type":"Answer","text":' | append: a_json | append: '}}'
+      endfor
+    endif
+  -%}
+  {%- if entities != '' -%}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{{ entities }}]}
+</script>
+  {%- endif -%}
+{%- endif -%}

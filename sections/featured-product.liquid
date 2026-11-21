@@ -477,9 +477,7 @@
     endif
   -%}
 
-  <script type="application/ld+json">
-    {{ product | structured_data }}
-  </script>
+  {%- comment -%} Balisage Product retire (21/11/2026) : la marque doit rester celle de la boutique, pas le champ Vendor. {%- endcomment -%}
 
   {% if product.media.size > 0 %}
     <script src="{{ 'product-modal.js' | asset_url }}" defer="defer"></script>
