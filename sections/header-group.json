@@ -81,27 +81,11 @@
             "open_new_tab": false
           }
         },
-        "brand_nissan": {
-          "type": "brand",
-          "settings": {
-            "brand_name": "Nissan",
-            "brand_url": "/collections/volant-nissan",
-            "open_new_tab": false
-          }
-        },
         "brand_lamborghini": {
           "type": "brand",
           "settings": {
             "brand_name": "Lamborghini",
             "brand_url": "/collections/volant-lamborghini",
-            "open_new_tab": false
-          }
-        },
-        "brand_renault": {
-          "type": "brand",
-          "settings": {
-            "brand_name": "Renault",
-            "brand_url": "/collections/volant-renault",
             "open_new_tab": false
           }
         },
@@ -129,9 +113,7 @@
         "brand_porsche",
         "brand_tesla",
         "brand_ford",
-        "brand_nissan",
         "brand_lamborghini",
-        "brand_renault",
         "brand_seat",
         "brand_volkswagen"
       ],
