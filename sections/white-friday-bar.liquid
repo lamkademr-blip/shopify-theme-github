@@ -1,0 +1,53 @@
+{%- comment -%}
+  Bandeau White Friday 2026 — Les As du Volant
+  Groupe header, au-dessus de la barre des marques.
+
+  - S'éteint seul à l'échéance de snippets/white-friday-deadline.liquid.
+  - Un seul clic sortant, vers WhatsApp (90 % des commandes). La Réf.
+    d'acquisition est ajoutée au message par snippets/wa-attribution.liquid :
+    ne pas écrire de « Réf. : » ici, cela bloquerait l'ajout automatique.
+  - CSS inline : une synchro GitHub → Shopify peut livrer un .liquid sans son .css.
+{%- endcomment -%}
+{%- capture wf_deadline -%}{%- render 'white-friday-deadline' -%}{%- endcapture -%}
+{%- assign wf_end_ts = wf_deadline | strip | plus: 0 -%}
+{%- assign wf_now_ts = 'now' | date: '%s' | plus: 0 -%}
+{%- if wf_now_ts < wf_end_ts -%}
+  {%- liquid
+    assign wf_msg = section.settings.wa_message | url_encode
+    assign wf_href = 'https://wa.me/' | append: section.settings.wa_number | append: '?text=' | append: wf_msg
+  -%}
+  <style>
+    .wfb{background:#0d0d0f;color:#f3ead7;border-bottom:1px solid rgba(201,169,106,.35);font-size:13px;line-height:1.35;letter-spacing:.02em}
+    .wfb__link{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 12px;padding:9px 16px;color:inherit;text-decoration:none;text-align:center}
+    .wfb__tag{color:#c9a96a;font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:12px}
+    .wfb__sep{width:4px;height:4px;border-radius:50%;background:#c9a96a;opacity:.7}
+    .wfb__cta{text-decoration:underline;text-underline-offset:3px;font-weight:600}
+    .wfb__link:hover .wfb__cta{color:#c9a96a}
+    @media (max-width:749px){.wfb{font-size:12px}.wfb__sep--opt,.wfb__opt{display:none}}
+  </style>
+  <div class="wfb" role="region" aria-label="Offre White Friday">
+    <a class="wfb__link" href="{{ wf_href }}" target="_blank" rel="noopener">
+      <span class="wfb__tag">White Friday</span>
+      <span>{{ section.settings.text }}</span>
+      <span class="wfb__sep wfb__sep--opt" aria-hidden="true"></span>
+      <span class="wfb__opt">{{ section.settings.until }}</span>
+      <span class="wfb__sep" aria-hidden="true"></span>
+      <span class="wfb__cta">{{ section.settings.cta }}</span>
+    </a>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Bandeau White Friday",
+  "class": "wfb-section",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    { "type": "text", "id": "text", "label": "Message", "default": "2 options offertes sur votre volant, jusqu'à 400 €" },
+    { "type": "text", "id": "until", "label": "Échéance affichée", "info": "La date réelle d'extinction est dans snippets/white-friday-deadline.liquid.", "default": "Jusqu'au 31 décembre" },
+    { "type": "text", "id": "cta", "label": "Texte du lien", "default": "J'en profite" },
+    { "type": "text", "id": "wa_number", "label": "Numéro WhatsApp (format international sans +)", "default": "33644650200" },
+    { "type": "textarea", "id": "wa_message", "label": "Message WhatsApp pré-rempli", "default": "Bonjour, je souhaite profiter de l'offre White Friday (2 options offertes) pour mon volant. Mon véhicule : " }
+  ]
+}
+{% endschema %}

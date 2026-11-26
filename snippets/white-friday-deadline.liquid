@@ -1,0 +1,18 @@
+{%- comment -%}
+  Échéance de l'offre White Friday 2026 (deux options offertes, jusqu'à 400 €).
+  Les As du Volant
+
+  SOURCE UNIQUE de la fin de l'offre : ce fichier ne produit qu'un horodatage
+  Unix en secondes. Le bandeau du header (sections/white-friday-bar.liquid) et
+  l'encart des fiches volant (snippets/white-friday-pdp.liquid) le lisent et
+  s'effacent d'eux-mêmes une fois l'instant passé.
+
+  Valeur actuelle : 1798757999 = 2026-12-31 22:59:59 UTC = 31 décembre 23h59 Paris.
+  Nouvel horodatage : date -u -d '2026-12-31T22:59:59Z' +%s
+
+  ⚠ Un horodatage, pas une date ISO : aucun parsing, donc aucun risque
+  d'extinction prématurée silencieuse.
+  ⚠ Classes CSS en wf-* et non promo-* : layout/theme.liquid masque tout
+  .promo-* depuis la fin de l'offre ETE150.
+{%- endcomment -%}
+1798757999

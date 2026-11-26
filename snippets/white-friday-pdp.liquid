@@ -1,0 +1,28 @@
+{%- comment -%}
+  Encart White Friday 2026 sous le prix des fiches volant — Les As du Volant
+  Rendu par sections/main-product.liquid, à côté de promo-badge.
+
+  - Fiches volant uniquement : titre contenant « volant », hors accessoires
+    et calandres (qui partagent templates/product.json).
+  - Informatif : pas de lien. Le CTA WhatsApp du configurateur reste le seul
+    clic sortant de la fiche.
+  - S'éteint seul à l'échéance de snippets/white-friday-deadline.liquid.
+  - Classes wf-* et non promo-* (masquées par theme.liquid depuis ETE150).
+{%- endcomment -%}
+{%- capture wf_deadline -%}{%- render 'white-friday-deadline' -%}{%- endcapture -%}
+{%- assign wf_end_ts = wf_deadline | strip | plus: 0 -%}
+{%- assign wf_now_ts = 'now' | date: '%s' | plus: 0 -%}
+{%- assign wf_title = product.title | downcase -%}
+{%- if wf_now_ts < wf_end_ts and wf_title contains 'volant' and product.type != 'Accessoire' and product.type != 'Accessoire intérieur' and product.type != 'Calandre' -%}
+  <style>
+    .wfpdp{margin:14px 0 6px;padding:14px 16px;border:1px solid rgba(201,169,106,.55);border-radius:6px;background:linear-gradient(135deg,rgba(201,169,106,.10),rgba(201,169,106,.02))}
+    .wfpdp__tag{display:inline-block;margin-bottom:6px;color:#c9a96a;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+    .wfpdp__title{margin:0 0 4px;font-size:16px;font-weight:700;line-height:1.3}
+    .wfpdp__text{margin:0;font-size:14px;line-height:1.45;opacity:.85}
+  </style>
+  <div class="wfpdp" role="note" aria-label="Offre White Friday">
+    <span class="wfpdp__tag">White Friday · jusqu'au 31 décembre</span>
+    <p class="wfpdp__title">2 options offertes sur ce volant</p>
+    <p class="wfpdp__text">Jusqu'à 400 € de valeur ajoutée, sans rien changer au prix du volant. Le montant dépend de votre configuration.</p>
+  </div>
+{%- endif -%}

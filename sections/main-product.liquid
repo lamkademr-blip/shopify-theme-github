@@ -125,6 +125,7 @@
                 {%- comment -%} Offre en cours, juste sous le prix : c'est là que le
                   visiteur évalue le montant, donc là que la remise pèse le plus. {%- endcomment -%}
                 {%- render 'promo-badge' -%}
+                {%- render 'white-friday-pdp', product: product -%}
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
                     <span>{{ 'products.product.volume_pricing.note' | t }}</span>

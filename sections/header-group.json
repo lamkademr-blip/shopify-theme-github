@@ -11,6 +11,10 @@
   "name": "t:sections.header.name",
   "type": "header",
   "sections": {
+    "white_friday_bar": {
+      "type": "white-friday-bar",
+      "settings": {}
+    },
     "header": {
       "type": "header",
       "settings": {
@@ -123,6 +127,7 @@
     }
   },
   "order": [
+    "white_friday_bar",
     "brand_bar",
     "header"
   ]
